@@ -1,5 +1,8 @@
 import pandas,numpy
 from sklearn import model_selection
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+
 from sklearn.linear_model import LogisticRegression
 
 def classifier():
@@ -33,7 +36,7 @@ def classifier():
     print(type(Y[0]))
     seed = 7
     kfold = model_selection.KFold(n_splits=10, random_state=seed)#k-fold cross validation,senza il seed le metriche variano ad ogni esecuzione
-    model = LogisticRegression()#scelta del modello
+    model = RandomForestClassifier(n_estimators=50,random_state=seed)#scelta del modello
     scoring = 'accuracy'#impostare la metrica
     """
     possibili scoring:
