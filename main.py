@@ -49,7 +49,7 @@ if __name__=='__main__':
     models=list_models(name_models)
     results = []
     names = []
-    seed=70
+    seed=7
     scoring = {'accuracy': 'accuracy',
                'precision_macro': 'precision_macro',
                'recall_micro': 'recall_macro'}
