@@ -12,24 +12,25 @@ def classifier():
     #il dataset deve essere numerico
     print("dataset:\n",dataframe)
     array = dataframe.values #matrice con tutti i dati,array[i]==riga i==esempio i
+    print(array)
     X = array[:,0:9]#come array ma senza la colonna con le label
     Y = array[:,9] #array di label
     for i in range(len(Y)):
         if Y[i]=='positive':
-            Y[i]=numpy.float64(1)
+            Y[i]=1
         else:
-            Y[i]=numpy.float64(0)
+            Y[i]=0
     Y = Y.astype('float64')
     print(len(X))
     print(len(X[:,0]))#numero righe
     for i in range(len(X[:,0])):
         for j in range(len(X[0,:])):
             if X[i][j]=='x':
-                X[i][j]= numpy.float64(1)
+                X[i][j]= numpy.float(1)
             elif X[i][j]=='o':
-                X[i][j] =numpy.float64(0)
+                X[i][j] =numpy.float(0)
             else:
-                X[i][j]=numpy.float64(2)
+                X[i][j]=numpy.float(2)
     print("Y:\n", Y)
     print("X:\n", X)
     print(type(X[0,0]))
@@ -47,3 +48,7 @@ def classifier():
     print("Accuracy media=",results.mean())
     print("deviazione standard dell'Accuracy=",results.std())
     #print("Accuracy: %.3f (%.3f)") % (results.mean(), results.std())
+
+if __name__=='__main__':
+    print("classifier")
+    classifier()
