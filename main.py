@@ -35,7 +35,6 @@ def list_models(names,num_tree=10,seed=1000):
 if __name__=='__main__':
     X,Y=CSV.read_csv('tic_tac_toe.csv')
     Y=CSV.convert_label_values(Y,['positive','negative'],[1,0])
-    print(Y)
     for i in range(len(X[:,0])):
         for j in range(len(X[0,:])):
             if X[i][j]=='x':
@@ -53,12 +52,12 @@ if __name__=='__main__':
     scoring = {'accuracy': 'accuracy',
                'precision_macro': 'precision_macro',
                'recall_micro': 'recall_macro'}
-    #scoring = 'accuracy'
     for name, model in models:
         kfold = model_selection.KFold(n_splits=10, random_state=seed)
         scores=model_selection.cross_validate(model,X,Y,cv=kfold,scoring=scoring,return_train_score=True)
         #cv_results = model_selection.cross_val_score(model, X, Y, cv=kfold, scoring=scoring)
         results.append(scores)
+        #print(scores)
         print(name,scoring['accuracy'],scores['test_accuracy'].mean(),scoring['precision_macro'],scores['test_precision_macro'].mean(),scoring['recall_micro'],scores['test_recall_micro'].mean())
 
 
