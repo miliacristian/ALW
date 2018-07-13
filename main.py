@@ -33,6 +33,9 @@ def list_models(names,num_tree=10,seed=1000):
     return models
 
 if __name__=='__main__':
+    X,Y=CSV.read_csv('zoo.csv',skip_rows=8)
+    print(X)
+    exit(0)
     X,Y=CSV.read_csv('tic_tac_toe.csv')
     Y=CSV.convert_label_values(Y,['positive','negative'],[1,0])
     for i in range(len(X[:,0])):
@@ -70,7 +73,7 @@ if __name__=='__main__':
                # 'f1_samples': 'f1_samples',
                }
     for name, model in models:
-        kfold = model_selection.KFold(n_splits=10, random_state=seed,shuffle=True)
+        kfold = model_selection.KFold(n_splits=10,shuffle=True)
         scores=model_selection.cross_validate(model,X,Y,cv=kfold,scoring=scoring,return_train_score=True,n_jobs=1)
         results.append(scores)
         print(name,scoring['accuracy'],scores['test_accuracy'].mean(),scoring['precision_macro'],scores['test_precision_macro'].mean(),scoring['recall_micro'],scores['test_recall_micro'].mean(),scoring['precision'],scores['test_precision'].mean(),scoring['neg_log_loss'],scores['test_neg_log_loss'].mean())

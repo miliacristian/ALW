@@ -2,19 +2,24 @@ import numpy,csv
 #file importato,per usare le funzioni usare nomefile.nomefunzione
 #from Classifier import classifier from nomefile import nomefunzione
 
-def read_csv(filecsv):
+def read_csv(filecsv,skip_rows=0,delimiter=',',skip_column=0):
     """
     :param filecsv: string path to csv file
     :return features set: X,labels set:Y
     assunzione:le label solo nell'ultima colonna
     """
     with open(filecsv) as csvfile:
-        readCSV = csv.reader(csvfile, delimiter=',')
+        readCSV = csv.reader(csvfile, delimiter=delimiter)
+        #for i in range(skip_rows):
+         #   next(readCSV)
         data=list(readCSV)
+        print(data)
         result=numpy.array(data)
         num_row=len(result)
-        num_col=len(result[0])
-    X = result[:,0:num_col-1]  # dati senza la colonna con le label
+        print(num_row)
+        num_col=len(result[skip_rows])
+        print(num_col)
+    X = result[skip_rows:,0:num_col-1]  # dati senza la colonna con le label
     Y= result[:,num_col-1] #array di label
     return X,Y
 
