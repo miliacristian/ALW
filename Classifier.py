@@ -52,3 +52,39 @@ def classifier():
 if __name__=='__main__':
     print("classifier")
     classifier()
+
+    """
+                   'neg_log_loss':'neg_log_loss',
+                   'average_precision':'average_precision',
+                   'f1':'f1',
+                   'f1_macro':'f1_macro',
+                   'f1_micro':'f1_micro',
+                   'neg_mean_absolute_error':'neg_mean_absolute_error',
+                   'neg_mean_squared_error':'neg_mean_squared_error',
+                   'neg_mean_squared_log_error':'neg_mean_squared_log_error',
+                   'neg_median_absolute_error':'neg_median_absolute_error',
+                   'precision':'precision',
+                   'precision_micro': 'precision_micro',
+                   'recall':'recall',
+                   'recall_macro':'recall_macro',
+                   'recall_samples':'recall_samples',
+                   'recall_weighted':'recall_weighted',
+                  'roc_auc':'roc_auc' """
+'''
+classificazione:
+'average_precision'
+'f1'
+ 'f1_macro', 'f1_micro', , 'f1_weighted' micro,macro,weighted,samples servono per multilabel
+'f1_samples' utile solo per multiclass
+neg_log_loss 
+'precision_macro', 'precision_micro', 'precision_samples', 'precision_weighted'
+'recall', 'recall_macro',
+     'recall_micro', 'recall_samples', 'recall_weighted',
+'roc_auc'
+
+regressione:
+'explained_variance'
+'neg_mean_absolute_error', 'neg_mean_squared_error',
+     'neg_mean_squared_log_error', 'neg_median_absolute_error',
+     'r2'
+'''
