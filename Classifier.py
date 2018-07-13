@@ -75,7 +75,7 @@ classificazione:
 'average_precision'
 'f1'
  'f1_macro', 'f1_micro', , 'f1_weighted' micro,macro,weighted,samples servono per multilabel
-'f1_samples' utile solo per multiclass
+'f1_samples' utile solo per multiLABEL
 neg_log_loss 
 'precision_macro', 'precision_micro', 'precision_samples', 'precision_weighted'
 'recall', 'recall_macro',
