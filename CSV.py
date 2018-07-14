@@ -21,13 +21,16 @@ def read_csv(filecsv,skip_rows=0,delimiter=',',skip_column_left=0,skip_column_ri
             next(readCSV)
         data = list(readCSV)
         result=numpy.array(data)
-        print(result)
         num_row=len(result)
         print("num_row",num_row)
         num_col=len(result[skip_rows])
         print("num_col",num_col)
-    X = result[:,skip_column_left:num_col-skip_column_right-1]  # dati senza la colonna con le label
-    Y= result[:,num_col-skip_column_right-1] #array di label
+    if last_column_is_label:
+        X = result[:,skip_column_left:num_col-skip_column_right-1]  # dati senza la colonna con le label
+        Y= result[:,num_col-skip_column_right-1] #array di label
+    else:
+        X=result[:,0+skip_column_left+1:num_col-skip_column_right]
+        Y=result[:,0+skip_column_left]#array di label nella prima colonna
     return X,Y
 
 def convert_label_values(Y,list_old_label,list_new_label):
