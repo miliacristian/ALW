@@ -7,7 +7,7 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.naive_bayes import GaussianNB
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
-
+#
 def list_models(names,num_tree=10,seed=1000):
     """""
     ritorna una lista di modelli
