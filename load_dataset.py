@@ -20,6 +20,16 @@ def load_zoo_dataset():
     X=CSV.convert_type_to_float(X)
     return X,Y
 
+def load_balance_dataset():
+    """
+    :return:features set X del dataset zoo ,label set Y del dataset zoo
+    """
+    X, Y = CSV.read_csv('balance.csv', skip_rows=29,last_column_is_label=False)
+    Y=CSV.convert_label_values(Y,['L','B','R'],[-1,0,1])
+    Y=CSV.convert_type_to_float(Y)
+    X=CSV.convert_type_to_float(X)
+    return X,Y
+
 def load_seed_dataset():
     """
     :return:features set X del dataset zoo ,label set Y del dataset zoo

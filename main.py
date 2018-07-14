@@ -81,6 +81,8 @@ def create_dictionary_of_scoring():
     return scoring
 
 if __name__=='__main__':
+    #il dataset seed non funziona
+
     X,Y=load_dataset.load_seed_dataset()
     load_dataset.print_dataset(X,Y)
     name_models=['RANDFOREST','CART','LR','LDA','KNN','NB','SVM']
