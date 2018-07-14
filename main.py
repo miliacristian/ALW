@@ -81,7 +81,7 @@ def create_dictionary_of_scoring():
     return scoring
 
 if __name__=='__main__':
-    X,Y=load_dataset.load_tris_dataset()
+    X,Y=load_dataset.load_seed_dataset()
     load_dataset.print_dataset(X,Y)
     name_models=['RANDFOREST','CART','LR','LDA','KNN','NB','SVM']
     models=list_models(name_models)
@@ -90,7 +90,7 @@ if __name__=='__main__':
     seed=7
     scoring=create_dictionary_of_scoring()
     for name, model in models:
-        kfold = model_selection.KFold(n_splits=2,shuffle=True)
+        kfold = model_selection.KFold(n_splits=10,shuffle=True)
         scores=model_selection.cross_validate(model,X,Y,cv=kfold,scoring=scoring,return_train_score=True,n_jobs=1)
         results.append(scores)
         print_scoring(name,scoring,scores,test=True,train=True,fit_time=True,score_time=True)

@@ -19,6 +19,7 @@ def read_csv(filecsv,skip_rows=0,delimiter=',',skip_column_left=0,skip_column_ri
             next(readCSV)
         data = list(readCSV)
         result=numpy.array(data)
+        print(result)
         num_row=len(result)
         print("num_row",num_row)
         num_col=len(result[skip_rows])

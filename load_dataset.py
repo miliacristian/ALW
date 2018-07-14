@@ -20,11 +20,20 @@ def load_zoo_dataset():
     X=CSV.convert_type_to_float(X)
     return X,Y
 
+def load_seed_dataset():
+    """
+    :return:features set X del dataset zoo ,label set Y del dataset zoo
+    """
+    X, Y = CSV.read_csv('seeds.csv', skip_rows=2,delimiter='\t')
+    Y=CSV.convert_type_to_float(Y)
+    X=CSV.convert_type_to_float(X)
+    return X,Y
+
 def load_tris_dataset():
     """
     :return:features set X del dataset tris ,label set Y del dataset tris
     """
-    X, Y = CSV.read_csv('tic_tac_toe.csv')
+    X, Y = CSV.read_csv('tic_tac_toe.csv',skip_rows=17)
     Y = CSV.convert_label_values(Y, ['positive', 'negative'], [1, 0])
     for i in range(len(X[:,0])):
         for j in range(len(X[0,:])):
