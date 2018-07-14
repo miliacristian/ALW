@@ -2,15 +2,17 @@ import numpy,csv
 #file importato,per usare le funzioni usare nomefile.nomefunzione
 #from Classifier import classifier from nomefile import nomefunzione
 
-def read_csv(filecsv,skip_rows=0,delimiter=',',skip_column_left=0,skip_column_right=0):
+def read_csv(filecsv,skip_rows=0,delimiter=',',skip_column_left=0,skip_column_right=0,last_column_is_label=True):
     """
     Legge un file csv con delimitatore delimiter saltando le prime skip_rows righe e saltando le prime
     skip_column_left e skip_column_right colonne rispettivamente da sinistra e da destra
     da destra
-    precondizioni:le label solo nell'ultima colonna dopo aver tolto le skip_column_right colonne a destra
+    precondizioni:le label solo nell'ultima colonna
     :param filecsv: string,path to csv file
     :param skip_rows:int,row to skip
     :param skip_column_left,skip_column_right:int column_left to skip,column_right_to skip
+    :param last_column_is_label:boolean se last_column_is_label==True la lebel deve essere letta dall'ultima colonna
+    (dopo aver tolto le skip_column_right colonne a destra),altrimenti è la prima label(dopo aver tolto le skip_column_left colonne a sinistra)
     :return features set: X,labels set:Y
     """
     with open(filecsv) as csvfile:
