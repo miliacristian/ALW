@@ -25,7 +25,6 @@ def load_balance_dataset():
     :return:features set X del dataset zoo ,label set Y del dataset zoo
     """
     X, Y = CSV.read_csv('balance.csv', skip_rows=29,last_column_is_label=False)
-    print(Y)
     Y=CSV.convert_label_values(Y, ['L','B','R'], ['0', '1', '2'])
     X=CSV.convert_type_to_float(X)
     return X,Y

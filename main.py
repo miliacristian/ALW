@@ -1,4 +1,4 @@
-import load_dataset
+import load_dataset,numpy
 from sklearn import model_selection
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
@@ -79,11 +79,51 @@ def create_dictionary_of_scoring():
                # 'f1_samples': 'f1_samples',
                }
     return scoring
-#
+
+def remove_row_with_label_L(X,Y,L):
+    length=len(Y)
+    for i in range(length):
+        if Y[i]==L:
+            Y=numpy.delete(Y,i,axis=0)
+            X=numpy.delete(X,i,axis=0)
+            i=i-1
+            length=length-1
+    return X,Y
+
+def remove_row_dataset(X,Y,A,B,step=1):
+    """
+    :param X: features set
+    :param Y: label set
+    :param A: int,indice prima riga da eliminare
+    :param B: int,indice ultima riga-1 da eliminare
+    :param step: int,quante righe saltare prima di eliminare la prossima riga
+    :return: X,Y con righe da A,B eliminate con step step
+    """
+    temp_X=numpy.delete(X,numpy.s_[A:B:step],axis=0)#axis=0==riga,axis=1==colonna
+    temp_Y = numpy.delete(Y, numpy.s_[A:B:step], axis=0)
+    return temp_X,temp_Y
+
+def remove_column_dataset(X,Y,A,B,step=1):
+    """
+    :param X: features set
+    :param Y: label set
+    :param A: int,indice prima colonna da eliminare
+    :param B: int,indice ultima colonna-1 da eliminare
+    :param step: int,quante colonne saltare prima di eliminare la prossima colonna
+    :return: X,Y con colonne da A,B eliminate con step step
+    """
+    temp_X=numpy.delete(X,numpy.s_[A:B:step],axis=1)#axis=0==riga,axis=1==colonna
+    temp_Y = numpy.delete(Y, numpy.s_[A:B:step], axis=1)
+    return temp_X,temp_Y
+
+
 if __name__=='__main__':
     #il dataset seed non funziona
     X,Y=load_dataset.load_balance_dataset()
+    X,Y=remove_row_dataset(X,Y,0,3)
+    X,Y=remove_row_with_label_L(X,Y,2.0)
     load_dataset.print_dataset(X,Y)
+    exit(0)
     name_models=['RANDFOREST','CART','LR','LDA','KNN','NB','SVM']
     models=list_models(name_models)
     results = []
