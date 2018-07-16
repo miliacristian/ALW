@@ -97,7 +97,7 @@ def remove_row_with_label_L(X,Y,L):
     Rimuove le labels L dal label set Y e le righe corrispondenti nel features set X
     :param X: features set
     :param Y: label set
-    :param L: valore label da rimuovere
+    :param L: lista di label da rimuovere
     :return: X,Y con label rimosse
     """
     length=len(Y)
@@ -156,10 +156,12 @@ def one_hot_encoding(Y):
 
 if __name__=='__main__':
     #i dataset seed e balance non funzionano
-    X,Y=load_dataset.load_tris_dataset()
+    X,Y=load_dataset.load_balance_dataset()
     #X,Y=remove_row_dataset(X,Y,0,3)
     load_dataset.print_dataset(X, Y)
-    #X,Y=remove_row_with_label_L(X,Y,0.0)
+    X,Y=remove_row_with_label_L(X,Y,[1.0,2.0])
+    load_dataset.print_dataset(X, Y)
+    exit(0)
     Y = one_hot_encoding(Y)
     print(Y)
     name_models=['RANDFOREST','CART','LR','LDA','KNN','NB','SVM']
