@@ -116,7 +116,8 @@ def one_hot_encoding(Y):
     onehot_encoder = OneHotEncoder(sparse=False)
     integer_encoded = integer_encoded.reshape(len(integer_encoded), 1)
     Y_onehot_encoded = onehot_encoder.fit_transform(integer_encoded)
-    #print(onehot_encoded)
+    #print(Y_onehot_encoded)
     # invert
-    #inverted = label_encoder.inverse_transform(integer_encoded)
+    inverted = label_encoder.inverse_transform(integer_encoded)
+    #print(inverted)
     return Y_onehot_encoded

@@ -1,11 +1,15 @@
 import dataset
-from sklearn import model_selection
+from sklearn import model_selection, metrics
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_score
+
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.naive_bayes import GaussianNB
 from sklearn.ensemble import RandomForestClassifier
+import p
 from sklearn.svm import SVC
 
 
@@ -20,17 +24,21 @@ def list_models(names,num_tree=10,seed=1000):
     if('RANDFOREST' in names):
         models.append(('RANDFOREST',RandomForestClassifier(num_tree,random_state=seed)))
     if('CART' in names):
-        models.append(('CART', DecisionTreeClassifier()))
-    if ('LR' in names):
-        models.append(('LR', LogisticRegression()))
-    if('LDA' in names):
-        models.append(('LDA', LinearDiscriminantAnalysis()))
-    if('NB' in names):
-        models.append(('NB', GaussianNB()))
-    if ('KNN' in names):
-            models.append(('KNN', KNeighborsClassifier()))
-    if ('SVM' in names):
-        models.append(('SVM', SVC(probability=True)))
+         models.append(('CART', DecisionTreeClassifier(random_state=seed)))
+    # if ('KNN' in names):
+    #         models.append(('KNN', KNeighborsClassifier()))
+    # if ('SVM' in names):#solo per classificatore binario
+    #      models.append(('SVM', SVC(probability=True)))
+    # if ('LR' in names):#solo per classificatore binario
+    #     models.append(('LR', LogisticRegression()))
+    # if('LDA' in names):#solo per classificatore binario
+    #      models.append(('LDA', LinearDiscriminantAnalysis()))
+    # if('NB' in names):#solo per classificatore binario
+    #     models.append(('NB', GaussianNB()))
+
+
+
+
     return models
 
 def print_scoring(name_model,dict_name_scoring,dict_scores,test=True,train=False,fit_time=False,score_time=False):
@@ -52,7 +60,7 @@ def print_scoring(name_model,dict_name_scoring,dict_scores,test=True,train=False
         print('score_time', dict_scores['score_time'].mean(),end=' ')
     for key, value in dict_name_scoring.items():
         if(test):#stampa test score
-            print('test_'+key,dict_scores['test_'+value].mean(),end=' ')
+            print('test_'+key,(dict_scores['test_'+value].mean()),end=' ')
         if(train):#stampa train_score
             print('train_' + key, dict_scores['train_' + value].mean(), end=' ')
     print()#serve per new line
@@ -60,24 +68,24 @@ def print_scoring(name_model,dict_name_scoring,dict_scores,test=True,train=False
 
 def create_dictionary_of_scoring():
     scoring = {'accuracy': 'accuracy',
-               #'precision': 'precision',
-               'average_precision': 'average_precision',
-               'precision_micro': 'precision_micro',
-               'precision_macro': 'precision_macro',
-               'precision_weighted': 'precision_weighted',
-               # 'precision_samples':'precision_samples',
-               #'recall': 'recall',
-               'recall_macro': 'recall_macro',
-               'recall_micro': 'recall_micro',
-               'recall_weighted': 'recall_weighted',
-               # 'recall_samples': 'recall_samples',
-               'roc_auc': 'roc_auc',
-               #'neg_log_loss': 'neg_log_loss',
-               #'f1': 'f1',
-               'f1_macro': 'f1_macro',
-               'f1_micro': 'f1_micro',
-               'f1_weighted': 'f1_weighted'
-               # 'f1_samples': 'f1_samples',
+               #'precision': 'precision' non usare per multilabel
+                'average_precision': 'average_precision',
+                'precision_micro': 'precision_micro',
+                'precision_macro': 'precision_macro',
+                'precision_weighted': 'precision_weighted',
+                'precision_samples':'precision_samples',
+                #'recall': 'recall', non usare per multilabel
+                'recall_macro': 'recall_macro',
+                'recall_micro': 'recall_micro',
+                'recall_weighted': 'recall_weighted',
+                 'recall_samples': 'recall_samples',
+                 'roc_auc': 'roc_auc',
+               #'neg_log_loss': 'neg_log_loss', non usare per multilabel
+                #'f1': 'f1',non usare per multilabel
+                'f1_macro': 'f1_macro',
+                'f1_micro': 'f1_micro',
+               'f1_weighted': 'f1_weighted',
+               'f1_samples': 'f1_samples'
                }
     return scoring
 
@@ -94,20 +102,28 @@ def prova():
 
 if __name__=='__main__':
     #i dataset seed e balance non funzionano
-    X,Y=dataset.load_tris_dataset()
+    X,Y=dataset.load_balance_dataset()
     #X,Y=remove_row_dataset(X,Y,0,3)
     dataset.print_dataset(X, Y)
     #X,Y=remove_row_with_label_L(X,Y,[1.0,2.0])
-    dataset.print_dataset(X, Y)
+    #dataset.print_dataset(X, Y)
     #Y = dataset.one_hot_encoding(Y)
     name_models=['RANDFOREST','CART','LR','LDA','KNN','NB','SVM']
-    models=list_models(name_models)
+    models=list_models(name_models,seed=1000)
     results = []
     names = []
     seed=7
+    # X_train,X_test,Y_train,Y_test=model_selection.train_test_split(X,Y,test_size=0.3)
+    # model=RandomForestClassifier(10,random_state=seed)
+    # model.fit(X_train, Y_train)
+    # predictions=model.predict(X_test)
+    # neg_log_loss=metrics.log_loss(Y_test,predictions)
+    # print(neg_log_loss)
+    # print(predictions)
+    # exit(0)
     scoring=create_dictionary_of_scoring()
     for name, model in models:
-        kfold = model_selection.KFold(n_splits=10,shuffle=True)
+        kfold = model_selection.KFold(n_splits=10,shuffle=True,random_state=seed)
         scores=model_selection.cross_validate(model,X,Y,cv=kfold,scoring=scoring,return_train_score=True,n_jobs=1)
         results.append(scores)
         print_scoring(name,scoring,scores,test=True,train=True,fit_time=True,score_time=True)
