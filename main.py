@@ -78,25 +78,25 @@ def roc_auc_weighted(y_true, y_pred):
 
 def create_dictionary_of_scoring():
     scoring = {
-        # 'accuracy': 'accuracy',
+        'accuracy': 'accuracy',
         #    'precision': 'precision' non usare per multilabel
-        #     'average_precision': 'average_precision',
-        #     'precision_micro': 'precision_micro',
+             'average_precision': 'average_precision',
+            'precision_micro': 'precision_micro',
         #     'precision_macro': 'precision_macro',
-        #     'precision_weighted': 'precision_weighted',
+             'precision_weighted': 'precision_weighted',
         #     'precision_samples':'precision_samples',
         #     'recall': 'recall', non usare per multilabel
-        #     'recall_macro': 'recall_macro',
-        #     'recall_micro': 'recall_micro',
-        #     'recall_weighted': 'recall_weighted',
+        #   'recall_macro': 'recall_macro',
+            'recall_micro': 'recall_micro',
+            'recall_weighted': 'recall_weighted',
         #      'recall_samples': 'recall_samples',
-              'roc_auc': 'roc_auc',
-              # 'roc_auc_micro': make_scorer(roc_auc_micro),
+             'roc_auc': 'roc_auc',
+        # 'roc_auc_micro': make_scorer(roc_auc_micro),
         #    'neg_log_loss': 'neg_log_loss', non usare per multilabel
         #     'f1': 'f1',non usare per multilabel
         #     'f1_macro': 'f1_macro',
-        #     'f1_micro': 'f1_micro',
-        #    'f1_weighted': 'f1_weighted',
+            'f1_micro': 'f1_micro',
+           'f1_weighted': 'f1_weighted',
         #    'f1_samples': 'f1_samples'
                }
     return scoring
@@ -139,6 +139,6 @@ if __name__=='__main__':
         scores=model_selection.cross_validate(model,X,Y,cv=kfold,scoring=scoring,return_train_score=True,n_jobs=1)
         results.append(scores)
         print_scoring(name,scoring,scores,test=True,train=True,fit_time=True,score_time=True)
-        print('scores = ', scores)
+        #print('scores = ', scores)
 
 
