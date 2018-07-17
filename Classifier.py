@@ -49,7 +49,8 @@ def classifier():
     print("deviazione standard dell'Accuracy=",results.std())
     #print("Accuracy: %.3f (%.3f)") % (results.mean(), results.std())
 
-if __name__=='__main__':
+
+if __name__ == '__main__':
     print("classifier")
     classifier()
 
