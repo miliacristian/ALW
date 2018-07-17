@@ -36,7 +36,7 @@ def list_models(names,num_tree=10,seed=1000, n_neighbors = 5):
 if __name__=='__main__':
     # i dataset seed e balance non funzionano
     X, Y = dataset.load_tris_dataset()
-    # Y = dataset.one_hot_encoding(Y)
+    Y = dataset.one_hot_encoding(Y)
     name_models = ['RANDFOREST', 'CART', 'LR', 'LDA', 'KNN', 'NB', 'SVM']
     results = []
     names = []
@@ -50,6 +50,3 @@ if __name__=='__main__':
             scores=model_selection.cross_validate(model, X, Y, cv=kfold, scoring=scoring, return_train_score=True, n_jobs=1)
             results.append(scores)
             scoringUtils.print_scoring(name,scoring,scores,test=True,train=False,fit_time=True,score_time=True)
-
-
-
