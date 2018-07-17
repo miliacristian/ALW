@@ -7,12 +7,12 @@ from sklearn.svm import SVC
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import  GaussianNB
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-import scoring
+import scoringUtils
 #rende un classificatore multiclass funzionante anche per multilabel
 from sklearn.multiclass import OneVsRestClassifier
 
 
-def list_models(names,num_tree=10,seed=1000):
+def list_models(names,num_tree=10,seed=1000, n_neighbors = 5):
     """""
     ritorna una lista di modelli
     :param names: string list
@@ -24,72 +24,32 @@ def list_models(names,num_tree=10,seed=1000):
         models.append(('RANDFOREST',RandomForestClassifier(num_tree,random_state=seed)))
     # if('CART' in names):
     #      models.append(('CART', DecisionTreeClassifier(random_state=seed)))
-    # if ('KNN' in names):
-    #         models.append(('KNN', KNeighborsClassifier()))
+    if ('KNN' in names):
+            models.append(('KNN', KNeighborsClassifier(n_neighbors= n_neighbors, weights='distance')))
     # if ('SVM' in names):#solo per classificatore binario
     #      models.append(('SVM', OneVsRestClassifier(SVC())))
     # if ('LR' in names):#solo per classificatore binario
     #     models.append(('LR', OneVsRestClassifier(LogisticRegression())))
     return models
 
-def print_scoring(name_model,dict_name_scoring,dict_scores,test=True,train=False,fit_time=False,score_time=False):
-    """
-    Stampa tutti gli score presenti nel dizionario scoring del modello name_model
-    :param name_model: string,nome modello es KNN
-    :param dict_name_scoring:dictionary,dizionario nomi degli score
-    :param dict_scores:dictionary, dizionario dei valori degli score
-    :param test:boolean,se test==True stampa il test di tutte le score es test_accuracy,test precision
-    :param train:boolean,se train==True stampa il train di tutte le score es train_accuracy,train precision
-    :param fit_time:boolean,se fit_time==True stampa il tempo di fit
-    :param score_time:boolena,se score_time==True stampa il tempo di score
-    :return: None
-    """
-    print(name_model)
-    if(fit_time):#stampa fit_time
-        print('fit_time', "{0:.6f}".format(dict_scores['fit_time'].mean()),end=' ')
-    if (score_time):#stampa score_time
-        print('score_time', "{0:.6f}".format(dict_scores['score_time'].mean()),end=' ')
-    for key, value in dict_name_scoring.items():
-        if(test):#stampa test score
-            if type(value) is str:
-                print('test_'+key,"{0:.6f}".format(dict_scores['test_'+ value].mean()),end=' ')
-            else:
-                print('test_' + key, "{0:.6f}".format(dict_scores['test_' + str(value)[12:-1]].mean()), end=' ')
-        if(train):#stampa train_score
-            if type(value) is str:
-                print('train_' + key, "{0:.6f}".format(dict_scores['train_' + value].mean()), end=' ')
-            else:
-                print('train_' + key, "{0:.6f}".format(dict_scores['train_' + str(value)[12:-1]].mean()), end=' ')
-    print()#serve per new line
-    return None
-
-
-def prova():
-    L=[1,2,3,4,5,6,7,8,9,10]
-    count=0
-    lun=len(L)
-    for l in range(lun):#il range non cambia anche se la lun cambia
-        count=count+1
-        print(lun)
-        lun=lun-1
-    print(count)
-
 
 if __name__=='__main__':
     # i dataset seed e balance non funzionano
-    X, Y = dataset.tris_dataset()
-    Y = dataset.one_hot_encoding(Y)
+    X, Y = dataset.load_tris_dataset()
+    # Y = dataset.one_hot_encoding(Y)
     name_models = ['RANDFOREST', 'CART', 'LR', 'LDA', 'KNN', 'NB', 'SVM']
-    models = list_models(name_models, seed=1000)
     results = []
     names = []
-    seed = 7
-    scoring = scoring.create_dictionary_classification_scoring()
-    for name, model in models:
-        kfold = model_selection.KFold(n_splits=10,shuffle=True,random_state=seed)
-        scores=model_selection.cross_validate(model, X, Y, cv=kfold, scoring=scoring, return_train_score=True, n_jobs=1)
-        results.append(scores)
-        print_scoring(name,scoring,scores,test=True,train=True,fit_time=True,score_time=True)
+    seed = 100
+    scoring = scoringUtils.create_dictionary_classification_scoring()
+    for i in range(5, 10, 1):
+        print(i)
+        models = list_models(name_models, seed=1000, n_neighbors=int(i))
+        for name, model in models:
+            kfold = model_selection.KFold(n_splits=10,shuffle=True,random_state=seed)
+            scores=model_selection.cross_validate(model, X, Y, cv=kfold, scoring=scoring, return_train_score=True, n_jobs=1)
+            results.append(scores)
+            scoringUtils.print_scoring(name,scoring,scores,test=True,train=False,fit_time=True,score_time=True)
 
 
 
