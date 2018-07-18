@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from math import pi
 from scipy.stats import hmean
+from sklearn import model_selection
 
 def roc_auc_micro(y_true, y_pred):
     return metrics.roc_auc_score(y_true, y_pred, average="micro")
@@ -150,3 +151,23 @@ def scores_to_list(dict_name_scoring, dict_scores):
 
 def hmean_scores(dict_name_scoring,dict_scores):
     return hmean(scores_to_list(dict_name_scoring, dict_scores))
+
+
+def K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=True):
+    """
+
+    :param model:
+    :param X:
+    :param Y:
+    :param scoring:
+    :param n_split:
+    :param seed:
+    :return: dictionary with key 'name metric' and value 'mean' or all values
+    """
+
+    kfold = model_selection.KFold(n_splits=n_split, shuffle=True, random_state=seed)
+    scores = model_selection.cross_validate(model, X, Y, cv=kfold, scoring=scoring, return_train_score=True, n_jobs=1)
+    result = {}
+    for name, value in scores:
+        if mean:
+            result[name[]]
