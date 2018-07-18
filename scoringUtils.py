@@ -105,6 +105,25 @@ def radar_plot():
     ax.set_rlabel_position(0)
     plt.yticks([10, 20, 30], ["10", "20", "30"], color="grey", size=7)
     plt.ylim(0, 40)
+    # ------- PART 2: Add plots
+
+    # Plot each individual = each line of the data
+    # I don't do a loop, because plotting more than 3 groups makes the chart unreadable
+
+    # Ind1
+    values = df.loc[0].drop('group').values.flatten().tolist()
+    values += values[:1]
+    ax.plot(angles, values, linewidth=1, linestyle='solid', label="group A")
+    ax.fill(angles, values, 'b', alpha=0.1)
+
+    # Ind2
+    values = df.loc[1].drop('group').values.flatten().tolist()
+    values += values[:1]
+    ax.plot(angles, values, linewidth=1, linestyle='solid', label="group B")
+    ax.fill(angles, values, 'r', alpha=0.1)
+
+    # Add legend
+    plt.legend(loc='upper right', bbox_to_anchor=(0.1, 0.1))
 
 if __name__=='__main__':
     radar_plot()
