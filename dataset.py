@@ -69,7 +69,6 @@ def load_dataset(dataset):
         X, Y = load_zoo_dataset()
     else:
         print("input must be 'tris' or 'seed' or 'balance' or 'zoo'")
-
     Y = dataset.one_hot_encoding(Y)
     return X, Y
 

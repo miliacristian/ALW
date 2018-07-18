@@ -17,9 +17,14 @@ def KNN_training(X, Y, k, scoring,seed,n_split,mean):
     :return: the best k
     """
     best_k=None
-    t=0
-    model=KNeighborsClassifier(n_neighbors=t, weights='distance')
-    result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
+    best_total_score=None
+    for num_neighbors in k:
+        model=KNeighborsClassifier(n_neighbors=num_neighbors, weights='distance')
+        result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
+        harmonic_mean = 0  # funzione che da result calcola media armonica
+        if (best_total_score == None or best_total_score < harmonic_mean):
+            best_total_score = harmonic_mean
+            best_k=num_neighbors
     return best_k
 
 def RANDOMFOREST_training(X, Y,list_n_trees,scoring,seed,n_split,mean):
@@ -32,14 +37,18 @@ def RANDOMFOREST_training(X, Y,list_n_trees,scoring,seed,n_split,mean):
     :param n_trees: number of trees of the forest
     :return: best n_trees, best max_features
     """
-
     best_n_trees=None
     best_max_features=None
     best_total_score=None
     for trees in list_n_trees:
-        for max_features in range(1,len(X)+1):#len(X)==numero features?
+        for max_features in range(1,len(X[0])+1):#len(X[0])==numero features
             model=RandomForestClassifier(trees, random_state=seed, max_features=max_features)
             result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
+            harmonic_mean=0#funzione che da result calcola media armonica
+            if(best_total_score==None or best_total_score<harmonic_mean):
+                best_total_score=harmonic_mean
+                best_max_features=max_features
+                best_n_trees=trees
     return best_n_trees,best_max_features
 
 def SVM_training(X, Y, scoring,seed,n_split,mean): #TODO
