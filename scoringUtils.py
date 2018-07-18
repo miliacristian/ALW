@@ -120,8 +120,8 @@ def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name = "ra
 
     # Draw ylabels
     ax.set_rlabel_position(0)
-    plt.yticks([0.8, 0.83, 0.86, 0.89, 0.92, 0.95, 0.98], [str(i) for i in [0.8, 0.83, 0.86, 0.89, 0.92, 0.95, 0.98]], color="grey", size=7)
-    plt.ylim(0.8, 1)
+    plt.yticks([0.62, 0.65, 0.68, 0.71, 0.74, 0.77, 0.8, 0.83, 0.86, 0.89, 0.92, 0.95, 0.98], [str(i) for i in [0.62, 0.65, 0.68, 0.71, 0.74, 0.77, 0.8, 0.83, 0.86, 0.89, 0.92, 0.95, 0.98]], color="grey", size=7)
+    plt.ylim(0.6, 1)
 
     # ------- PART 2: Add plots
 

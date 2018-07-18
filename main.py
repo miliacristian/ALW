@@ -12,7 +12,7 @@ import scoringUtils
 from sklearn.multiclass import OneVsRestClassifier
 
 if __name__=='__main__':
-    X, Y = dataset.load_dataset('tris')
+    X, Y = dataset.load_dataset('balance')
     name_models = ['RANDFOREST', 'CART', 'KNN']
     results = []
     names = []
