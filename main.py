@@ -11,28 +11,6 @@ import scoringUtils
 #rende un classificatore multiclass funzionante anche per multilabel
 from sklearn.multiclass import OneVsRestClassifier
 
-
-def list_models(names,num_tree=10,seed=1000, n_neighbors = 5):
-    """""
-    ritorna una lista di modelli
-    :param names: string list
-    :return: list models
-    lista completa modelli:['RANDFOREST','CART','LR','LDA','KNN','NB','SVM']
-    """
-    models = []
-    if('RANDFOREST' in names):
-        models.append(('RANDFOREST',RandomForestClassifier(num_tree,random_state=seed)))
-    if('CART' in names):
-         models.append(('CART', DecisionTreeClassifier(random_state=seed)))
-    if ('KNN' in names):
-            models.append(('KNN', KNeighborsClassifier(n_neighbors= n_neighbors, weights='distance')))
-    if ('SVM' in names):#solo per classificatore binario
-         models.append(('SVM', OneVsRestClassifier(SVC())))
-    if ('LR' in names):#solo per classificatore binario
-        models.append(('LR', OneVsRestClassifier(LogisticRegression())))
-    return models
-
-
 if __name__=='__main__':
     X, Y = dataset.load_dataset('tris')
     print(len(X))
