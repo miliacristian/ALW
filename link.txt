@@ -1,3 +1,6 @@
 link documento word condiviso:
  https://drive.google.com/open?id=1Zjj1wYKzFirIboGaJ9OLSTUKZlPfEqawaxehFHtSugk
 
+ #TODO training di KNN, RF e SVM, e K_Fold_Cross_Validation e sistemare main
+ #TODO Emanuele KNN, K_FOLD e main, Cristian RF
+
