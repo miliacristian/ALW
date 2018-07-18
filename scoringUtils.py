@@ -3,6 +3,7 @@ from sklearn.metrics import make_scorer
 import matplotlib.pyplot as plt
 import pandas as pd
 from math import pi
+from scipy.stats import hmean
 
 def roc_auc_micro(y_true, y_pred):
     return metrics.roc_auc_score(y_true, y_pred, average="micro")
@@ -68,29 +69,41 @@ def print_scoring(name_model,dict_name_scoring,dict_scores,test=True,train=False
     print() #new line
     return None
 
-def radar_plot():
+def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name = "radar_plot.png"):
+    """
+    Print and save the radar plot of the scoring
+
+    :param name_models: list of str contains the name of the models used
+    :param dict_name_scoring: dictionary contains the scoring of every models
+    :param list_dict_scores: list of dictionary contains the scores result of k_fold for each models
+    :return: None
+    """
+
+    fig = plt.figure()
     # Set data
-    df = pd.DataFrame({
-        'group': ['A', 'B', 'C', 'D'],
-        'var1': [38, 1.5, 30, 4],
-        'var2': [29, 10, 9, 34],
-        'var3': [8, 39, 23, 24],
-        'var4': [7, 31, 33, 14],
-        'var5': [28, 15, 32, 14]
-    })
-    print(type(df))
+    dict = {}
+    for key, value in dict_name_scoring.items():
+        if type(value) is str:
+            dict[value] = []
+        else:
+            dict[str(value)[12:-1]] = []
+
+    for i in range(len(list_dict_scores)):
+        for key, value in dict_name_scoring.items():
+            if type(value) is str:
+                dict[value].append(list_dict_scores[i]['test_' + value].mean())
+            else:
+                dict[str(value)[12:-1]].append(list_dict_scores[i]['test_' + str(value)[12:-1]].mean())
+    df = pd.DataFrame(dict)
+
     # ------- PART 1: Create background
 
     # number of variable
-    categories = list(df)[1:]
-    print(type(categories))
+    categories = list(df)[:]
     N = len(categories)
-    print(N)
     # What will be the angle of each axis in the plot? (we divide the plot / number of variable)
     angles = [n / float(N) * 2 * pi for n in range(N)]
-    print(angles)
     angles += angles[:1]
-    print(angles)
     # Initialise the spider plot
     ax = plt.subplot(111, polar=True)
 
@@ -103,27 +116,41 @@ def radar_plot():
 
     # Draw ylabels
     ax.set_rlabel_position(0)
-    plt.yticks([10, 20, 30], ["10", "20", "30"], color="grey", size=7)
-    plt.ylim(0, 40)
+    plt.yticks([0.8, 0.83, 0.86, 0.89, 0.92, 0.95, 0.98], [str(i) for i in [0.8, 0.83, 0.86, 0.89, 0.92, 0.95, 0.98]], color="grey", size=7)
+    plt.ylim(0.8, 1)
+
     # ------- PART 2: Add plots
 
     # Plot each individual = each line of the data
     # I don't do a loop, because plotting more than 3 groups makes the chart unreadable
-
-    # Ind1
-    values = df.loc[0].drop('group').values.flatten().tolist()
-    values += values[:1]
-    ax.plot(angles, values, linewidth=1, linestyle='solid', label="group A")
-    ax.fill(angles, values, 'b', alpha=0.1)
-
-    # Ind2
-    values = df.loc[1].drop('group').values.flatten().tolist()
-    values += values[:1]
-    ax.plot(angles, values, linewidth=1, linestyle='solid', label="group B")
-    ax.fill(angles, values, 'r', alpha=0.1)
+    for i in range(len(name_models)):
+        # loc[i] preleva la colonna i-esima dei valori del dataframe
+        values = df.loc[i].values.flatten().tolist()
+        values += values[:1]
+        ax.plot(angles, values, linewidth=1, linestyle='solid', label=name_models[i])
+        ax.fill(angles, values, alpha=0.1)
 
     # Add legend
-    plt.legend(loc='upper right', bbox_to_anchor=(0.1, 0.1))
+    plt.legend(bbox_to_anchor=(0.1, 0.2))
+
+    plt.show()
+    fig.savefig(file_name)
+    plt.close(fig)
+
+
+def scores_to_list(dict_name_scoring, dict_scores):
+    scores_list = []
+    for key, value in dict_name_scoring.items():
+            if type(value) is str:
+                scores_list.append(dict_scores['test_'+ value].mean())
+            else:
+                scores_list.append(dict_scores['test_' + str(value)[12:-1]].mean())
+    return scores_list
+
+
+def hmean_scores(dict_name_scoring,dict_scores):
+    return hmean(scores_to_list(dict_name_scoring, dict_scores))
+
 
 if __name__=='__main__':
     radar_plot()

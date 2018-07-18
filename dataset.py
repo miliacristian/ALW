@@ -57,6 +57,19 @@ def load_tris_dataset():
     X=CSV.convert_type_to_float(X)
     return X,Y
 
+
+def load_dataset(dataset):
+    if dataset == 'tris':
+        return load_tris_dataset()
+    elif dataset == 'seed':
+        return load_seed_dataset()
+    elif dataset == 'balance':
+        return load_balance_dataset()
+    elif dataset == 'zoo':
+        return load_zoo_dataset()
+    else:
+        print("input must be 'tris' or 'seed' or 'balance' or 'zoo'")
+
 def remove_row_with_label_L(X,Y,L):
     """
     Rimuove le labels L dal label set Y e le righe corrispondenti nel features set X

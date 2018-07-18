@@ -21,8 +21,8 @@ def list_models(names,num_tree=10,seed=1000, n_neighbors = 5):
     lista completa modelli:['RANDFOREST','CART','LR','LDA','KNN','NB','SVM']
     """
     models = []
-    if('RANDFOREST' in names):
-        models.append(('RANDFOREST',RandomForestClassifier(num_tree,random_state=seed)))
+    # if('RANDFOREST' in names):
+    #     models.append(('RANDFOREST',RandomForestClassifier(num_tree,random_state=seed)))
     # if('CART' in names):
     #      models.append(('CART', DecisionTreeClassifier(random_state=seed)))
     if ('KNN' in names):
@@ -34,6 +34,8 @@ def list_models(names,num_tree=10,seed=1000, n_neighbors = 5):
     return models
 
 
+
+
 if __name__=='__main__':
     # i dataset seed e balance non funzionano
     X, Y = dataset.load_tris_dataset()
@@ -43,11 +45,16 @@ if __name__=='__main__':
     names = []
     seed = 100
     scoring = scoringUtils.create_dictionary_classification_scoring()
-    for i in range(5, 10, 1):
-        print(i)
+    list_scores = []
+    list_names = []
+    for i in [5, 6, 7, 8, 9]:
         models = list_models(name_models, seed=1000, n_neighbors=int(i))
         for name, model in models:
             kfold = model_selection.KFold(n_splits=10,shuffle=True,random_state=seed)
             scores=model_selection.cross_validate(model, X, Y, cv=kfold, scoring=scoring, return_train_score=True, n_jobs=1)
             results.append(scores)
             scoringUtils.print_scoring(name,scoring,scores,test=True,train=False,fit_time=True,score_time=True)
+            list_scores.append(scores)
+            list_names.append(name + str(i))
+            print("KNN" + str(i) + "total score =", scoringUtils.hmean_scores(scoring, scores))
+    scoringUtils.radar_plot(list_names, scoring, list_scores)
