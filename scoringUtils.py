@@ -156,12 +156,12 @@ def hmean_scores(dict_name_scoring,dict_scores):
 def K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=True):
     """
 
-    :param model:
-    :param X:
-    :param Y:
-    :param scoring:
-    :param n_split:
-    :param seed:
+    :param model:modello machine learning
+    :param X:features set
+    :param Y:label set
+    :param scoring:dict,dizionario di scoring
+    :param n_split:int,numero di test fold
+    :param seed:int,seme generatore pseudocasuale
     :return: dictionary with key 'name metric' and value 'mean' or all values
     """
     kfold = model_selection.KFold(n_splits=n_split, shuffle=True, random_state=seed)
