@@ -35,6 +35,8 @@ def list_models(names,num_tree=10,seed=1000, n_neighbors = 5):
 
 if __name__=='__main__':
     X, Y = dataset.load_dataset('tris')
+    print(len(X))
+    exit(0)
     name_models = ['RANDFOREST', 'CART', 'KNN', 'SVM', 'LR']
     results = []
     names = []
@@ -42,7 +44,7 @@ if __name__=='__main__':
     scoring = scoringUtils.create_dictionary_classification_scoring()
     list_scores = []
     list_names = []
-    models = training(X, Y, name_models,scoring,seed = seed,)
+    models = training(X, Y, name_models,scoring,seed = seed,n_split=10,mean=True)
     for name, model in models:
         kfold = model_selection.KFold(n_splits=10,shuffle=True,random_state=seed)
         scores=model_selection.cross_validate(model, X, Y, cv=kfold, scoring=scoring, return_train_score=True, n_jobs=1)
