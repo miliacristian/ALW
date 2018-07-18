@@ -1,4 +1,4 @@
-import dataset
+import dataset,__init__
 from sklearn import model_selection
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
@@ -8,6 +8,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import  GaussianNB
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 import scoringUtils
+
 #rende un classificatore multiclass funzionante anche per multilabel
 from sklearn.multiclass import OneVsRestClassifier
 

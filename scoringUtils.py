@@ -1,6 +1,8 @@
 from sklearn import metrics
 from sklearn.metrics import make_scorer
-
+import matplotlib.pyplot as plt
+import pandas as pd
+from math import pi
 
 def roc_auc_micro(y_true, y_pred):
     return metrics.roc_auc_score(y_true, y_pred, average="micro")
@@ -65,3 +67,44 @@ def print_scoring(name_model,dict_name_scoring,dict_scores,test=True,train=False
                 print('train_' + key, "{0:.6f}".format(dict_scores['train_' + str(value)[12:-1]].mean()), end=' ')
     print() #new line
     return None
+
+def radar_plot():
+    # Set data
+    df = pd.DataFrame({
+        'group': ['A', 'B', 'C', 'D'],
+        'var1': [38, 1.5, 30, 4],
+        'var2': [29, 10, 9, 34],
+        'var3': [8, 39, 23, 24],
+        'var4': [7, 31, 33, 14],
+        'var5': [28, 15, 32, 14]
+    })
+    print(type(df))
+    # ------- PART 1: Create background
+
+    # number of variable
+    categories = list(df)[1:]
+    print(type(categories))
+    N = len(categories)
+    print(N)
+    # What will be the angle of each axis in the plot? (we divide the plot / number of variable)
+    angles = [n / float(N) * 2 * pi for n in range(N)]
+    print(angles)
+    angles += angles[:1]
+    print(angles)
+    # Initialise the spider plot
+    ax = plt.subplot(111, polar=True)
+
+    # If you want the first axis to be on top:
+    ax.set_theta_offset(pi / 2)
+    ax.set_theta_direction(-1)
+
+    # Draw one axe per variable + add labels labels yet
+    plt.xticks(angles[:-1], categories)
+
+    # Draw ylabels
+    ax.set_rlabel_position(0)
+    plt.yticks([10, 20, 30], ["10", "20", "30"], color="grey", size=7)
+    plt.ylim(0, 40)
+
+if __name__=='__main__':
+    radar_plot()
