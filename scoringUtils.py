@@ -150,7 +150,3 @@ def scores_to_list(dict_name_scoring, dict_scores):
 
 def hmean_scores(dict_name_scoring,dict_scores):
     return hmean(scores_to_list(dict_name_scoring, dict_scores))
-
-
-if __name__=='__main__':
-    radar_plot()

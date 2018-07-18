@@ -60,15 +60,18 @@ def load_tris_dataset():
 
 def load_dataset(dataset):
     if dataset == 'tris':
-        return load_tris_dataset()
+        X, Y = load_tris_dataset()
     elif dataset == 'seed':
-        return load_seed_dataset()
+        X, Y = load_seed_dataset()
     elif dataset == 'balance':
-        return load_balance_dataset()
+        X, Y = load_balance_dataset()
     elif dataset == 'zoo':
-        return load_zoo_dataset()
+        X, Y = load_zoo_dataset()
     else:
         print("input must be 'tris' or 'seed' or 'balance' or 'zoo'")
+
+    Y = dataset.one_hot_encoding(Y)
+    return X, Y
 
 def remove_row_with_label_L(X,Y,L):
     """
