@@ -164,10 +164,12 @@ def K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=True):
     :param seed:
     :return: dictionary with key 'name metric' and value 'mean' or all values
     """
-
     kfold = model_selection.KFold(n_splits=n_split, shuffle=True, random_state=seed)
     scores = model_selection.cross_validate(model, X, Y, cv=kfold, scoring=scoring, return_train_score=True, n_jobs=1)
     result = {}
     for name, value in scores:
         if mean:
-            result[name[]]
+            pass
+        else:
+            pass
+    return result

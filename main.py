@@ -6,8 +6,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 from sklearn.linear_model import LogisticRegression
 from training import training
-from sklearn.naive_bayes import  GaussianNB
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 import scoringUtils
 
 #rende un classificatore multiclass funzionante anche per multilabel
@@ -44,7 +42,7 @@ if __name__=='__main__':
     scoring = scoringUtils.create_dictionary_classification_scoring()
     list_scores = []
     list_names = []
-    models = training(X, Y, name_models, seed = seed, scoring)
+    models = training(X, Y, name_models,scoring,seed = seed,)
     for name, model in models:
         kfold = model_selection.KFold(n_splits=10,shuffle=True,random_state=seed)
         scores=model_selection.cross_validate(model, X, Y, cv=kfold, scoring=scoring, return_train_score=True, n_jobs=1)
