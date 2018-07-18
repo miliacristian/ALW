@@ -52,23 +52,26 @@ def print_scoring(name_model,dict_name_scoring,dict_scores,test=True,train=False
     :return: None
     """
     print(name_model)
-    if(fit_time):#stampa fit_time
-        print('fit_time', "{0:.6f}".format(dict_scores['fit_time'].mean()),end=' ')
-    if (score_time):#stampa score_time
-        print('score_time', "{0:.6f}".format(dict_scores['score_time'].mean()),end=' ')
-    for key, value in dict_name_scoring.items():
-        if(test):#stampa test score
-            if type(value) is str:
-                print('test_'+key,"{0:.6f}".format(dict_scores['test_'+ value].mean()),end=' ')
-            else:
-                print('test_' + key, "{0:.6f}".format(dict_scores['test_' + str(value)[12:-1]].mean()), end=' ')
-        if(train):#stampa train_score
-            if type(value) is str:
-                print('train_' + key, "{0:.6f}".format(dict_scores['train_' + value].mean()), end=' ')
-            else:
-                print('train_' + key, "{0:.6f}".format(dict_scores['train_' + str(value)[12:-1]].mean()), end=' ')
-    print() #new line
+    # if(fit_time):#stampa fit_time
+    #     print('fit_time', "{0:.6f}".format(dict_scores['fit_time'].mean()),end=' ')
+    # if (score_time):#stampa score_time
+    #     print('score_time', "{0:.6f}".format(dict_scores['score_time'].mean()),end=' ')
+    # for key, value in dict_name_scoring.items():
+    #     if(test):#stampa test score
+    #         if type(value) is str:
+    #             print('test_'+key,"{0:.6f}".format(dict_scores['test_'+ value].mean()),end=' ')
+    #         else:
+    #             print('test_' + key, "{0:.6f}".format(dict_scores['test_' + str(value)[12:-1]].mean()), end=' ')
+    #     if(train):#stampa train_score
+    #         if type(value) is str:
+    #             print('train_' + key, "{0:.6f}".format(dict_scores['train_' + value].mean()), end=' ')
+    #         else:
+    #             print('train_' + key, "{0:.6f}".format(dict_scores['train_' + str(value)[12:-1]].mean()), end=' ')
+    # print() #new line
+    for key, value in dict_scores.items():
+        print(key, "{0:.6f}".value)
     return None
+
 
 def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name = "radar_plot.png"):
     """
@@ -92,9 +95,9 @@ def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name = "ra
     for i in range(len(list_dict_scores)):
         for key, value in dict_name_scoring.items():
             if type(value) is str:
-                dict[value].append(list_dict_scores[i]['test_' + value].mean())
+                dict[value].append(list_dict_scores[i][value])
             else:
-                dict[str(value)[12:-1]].append(list_dict_scores[i]['test_' + str(value)[12:-1]].mean())
+                dict[str(value)[12:-1]].append(list_dict_scores[i][str(value)[12:-1]])
     df = pd.DataFrame(dict)
 
     # ------- PART 1: Create background
@@ -143,9 +146,9 @@ def scores_to_list(dict_name_scoring, dict_scores):
     scores_list = []
     for key, value in dict_name_scoring.items():
             if type(value) is str:
-                scores_list.append(dict_scores['test_'+ value].mean())
+                scores_list.append(dict_scores[value].mean())
             else:
-                scores_list.append(dict_scores['test_' + str(value)[12:-1]].mean())
+                scores_list.append(dict_scores[str(value)[12:-1]].mean())
     return scores_list
 
 
@@ -167,9 +170,17 @@ def K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=True):
     kfold = model_selection.KFold(n_splits=n_split, shuffle=True, random_state=seed)
     scores = model_selection.cross_validate(model, X, Y, cv=kfold, scoring=scoring, return_train_score=True, n_jobs=1)
     result = {}
-    for name, value in scores:
+    for name, value in scoring.items():
         if mean:
-            pass
+            if type(value) is str:
+                result[name] = scores['test_'+ value].mean()
+            else:
+                result[name] = scores['test_' + str(value)[12:-1]].mean()
         else:
-            pass
+            if type(value) is str:
+                result[name] = scores['test_'+ value]
+            else:
+                result[name] = scores['test_' + str(value)[12:-1]]
     return result
+
+

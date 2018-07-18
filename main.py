@@ -13,22 +13,22 @@ from sklearn.multiclass import OneVsRestClassifier
 
 if __name__=='__main__':
     X, Y = dataset.load_dataset('tris')
-    print(len(X))
-    exit(0)
-    name_models = ['RANDFOREST', 'CART', 'KNN', 'SVM', 'LR']
+    name_models = ['RANDFOREST', 'CART', 'KNN']
     results = []
     names = []
     seed = 100
     scoring = scoringUtils.create_dictionary_classification_scoring()
     list_scores = []
     list_names = []
-    models = training(X, Y, name_models,scoring,seed = seed,n_split=10,mean=True)
-    for name, model in models:
-        kfold = model_selection.KFold(n_splits=10,shuffle=True,random_state=seed)
-        scores=model_selection.cross_validate(model, X, Y, cv=kfold, scoring=scoring, return_train_score=True, n_jobs=1)
+    models = training(X, Y, name_models, scoring, k=range(8, 12, 1), list_n_trees=range(8, 12, 1), seed=seed,
+                      n_split=10, mean=True)
+    for name, model in models.items():
+        scores = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split=10, seed=seed)
         results.append(scores)
-        scoringUtils.print_scoring(name,scoring,scores,test=True,train=False,fit_time=True,score_time=True)
+        print(name)
+        print(scores)
+        # scoringUtils.print_scoring(name, scoring, scores, test=True, train=False, fit_time=True, score_time=True)
         list_scores.append(scores)
-        list_names.append(name + str(i))
-        print("KNN" + str(i) + "total score =", scoringUtils.hmean_scores(scoring, scores))
+        list_names.append(name)
+        print("total score =", scoringUtils.hmean_scores(scoring, scores))
     scoringUtils.radar_plot(list_names, scoring, list_scores)
