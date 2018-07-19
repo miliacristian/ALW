@@ -1,3 +1,4 @@
+#rende un classificatore multiclass funzionante anche per multilabel
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
@@ -5,7 +6,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 import scoringUtils
 from scoringUtils import hmean_scores
-
 
 def KNN_training(X, Y, k, scoring, seed, n_split, mean):
     """

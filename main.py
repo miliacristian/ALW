@@ -1,15 +1,6 @@
-import dataset,__init__
-from sklearn import model_selection
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.svm import SVC
-from sklearn.linear_model import LogisticRegression
+import dataset
 from training import training
 import scoringUtils
-
-#rende un classificatore multiclass funzionante anche per multilabel
-from sklearn.multiclass import OneVsRestClassifier
 
 if __name__=='__main__':
     X, Y = dataset.load_dataset('balance')
@@ -27,7 +18,6 @@ if __name__=='__main__':
         results.append(scores)
         print(name)
         print(scores)
-        # scoringUtils.print_scoring(name, scoring, scores, test=True, train=False, fit_time=True, score_time=True)
         list_scores.append(scores)
         list_names.append(name)
         print("total score =", scoringUtils.hmean_scores(scoring, scores))

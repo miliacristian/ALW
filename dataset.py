@@ -69,6 +69,7 @@ def load_dataset(dataset):
         X, Y = load_zoo_dataset()
     else:
         print("input must be 'tris' or 'seed' or 'balance' or 'zoo'")
+        exit(0)
     Y = one_hot_encoding(Y)
     return X, Y
 
@@ -125,14 +126,8 @@ def one_hot_encoding(Y):
     """
     label_encoder = LabelEncoder()
     integer_encoded = label_encoder.fit_transform(Y)
-    #print(integer_encoded)
-
-    # binary encode
     onehot_encoder = OneHotEncoder(sparse=False)
     integer_encoded = integer_encoded.reshape(len(integer_encoded), 1)
     Y_onehot_encoded = onehot_encoder.fit_transform(integer_encoded)
-    #print(Y_onehot_encoded)
-    # invert
     inverted = label_encoder.inverse_transform(integer_encoded)
-    #print(inverted)
     return Y_onehot_encoded

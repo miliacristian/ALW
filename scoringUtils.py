@@ -7,22 +7,50 @@ from scipy.stats import hmean
 from sklearn import model_selection
 
 def roc_auc_micro(y_true, y_pred):
+    """
+    Chiama roc_auc_score con average=micro
+    :param y_true:
+    :param y_pred:
+    :return:
+    """
     return metrics.roc_auc_score(y_true, y_pred, average="micro")
 
 
 def roc_auc_weighted(y_true, y_pred):
+    """
+    Chiama roc_auc_score con average=weighted
+    :param y_true:
+    :param y_pred:
+    :return:
+    """
     return metrics.roc_auc_score(y_true, y_pred, average="weighted")
 
 
 def average_precision_micro(y_true, y_pred):
+    """
+    Chiama average_precision_score con average=micro
+    :param y_true:
+    :param y_pred:
+    :return:
+    """
     return metrics.average_precision_score(y_true, y_pred, average="micro")
 
 
 def average_precision_weighted(y_true, y_pred):
+    """
+    Chiama average_precision_score con average=weigthed
+    :param y_true:
+    :param y_pred:
+    :return:
+    """
     return metrics.average_precision_score(y_true, y_pred, average="weighted")
 
 
 def create_dictionary_classification_scoring():
+    """
+    Crea dizionario con key:'name_score' value:score da calcolare
+    :return: dict,dizionario con tutti gli scoring da calcolare
+    """
     scoring = {
         'accuracy': 'accuracy',
         'precision_micro': 'precision_micro',
@@ -82,7 +110,6 @@ def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name = "ra
     :param list_dict_scores: list of dictionary contains the scores result of k_fold for each models
     :return: None
     """
-
     fig = plt.figure()
     # Set data
     dict = {}
@@ -143,6 +170,12 @@ def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name = "ra
 
 
 def scores_to_list(dict_name_scoring, dict_scores):
+    """
+    Trasforma il dizionario degli scores in una lista di valori
+    :param dict_name_scoring: dict,dizionario dei nomi degli scores
+    :param dict_scores: dict,dizionario dei valori degli scores
+    :return: list,lista degli scores
+    """
     scores_list = []
     for key, value in dict_name_scoring.items():
             if type(value) is str:
@@ -153,19 +186,25 @@ def scores_to_list(dict_name_scoring, dict_scores):
 
 
 def hmean_scores(dict_name_scoring,dict_scores):
+    """
+    Calcola la media armonica degli scores
+    :param dict_name_scoring: dict,dizionario dei nomi degli scorer
+    :param dict_scores: dict,dizionario dei valori degli scores
+    :return: media armonica degli scores
+    """
     return hmean(scores_to_list(dict_name_scoring, dict_scores))
 
 
 def K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=True):
     """
-
+    Esegue Kfold cross validation su X,Y usando il modello model dividendo il dataset in n_split fold
     :param model:modello machine learning
     :param X:features set
     :param Y:label set
     :param scoring:dict,dizionario di scoring
     :param n_split:int,numero di test fold
     :param seed:int,seme generatore pseudocasuale
-    :return: dictionary with key 'name metric' and value 'mean' or all values
+    :return: dictionary with key 'name metric' and value 'value mean of metric' or all values
     """
     kfold = model_selection.KFold(n_splits=n_split, shuffle=True, random_state=seed)
     scores = model_selection.cross_validate(model, X, Y, cv=kfold, scoring=scoring, return_train_score=True, n_jobs=1)
