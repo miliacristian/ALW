@@ -1,6 +1,7 @@
 import CSV,numpy
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
+from math import sqrt
 
 def print_dataset(X,Y):
     """
@@ -117,6 +118,77 @@ def remove_column_dataset(X,Y,A,B,step=1):
     temp_X=numpy.delete(X,numpy.s_[A:B:step],axis=1)#axis=0==riga,axis=1==colonna
     temp_Y = numpy.delete(Y, numpy.s_[A:B:step], axis=1)
     return temp_X,temp_Y
+
+def dataset_minmax(X):
+    """
+    Calcola il minimo e massimo per ogni features e ritorna una lista di coppie (min,max)
+    :param X:features set
+    :return: list,list max,min per ogni features
+    """
+    minmax = list()
+    for i in range(len(X[0])):
+        col_values = [row[i] for row in X]
+        value_min = min(col_values)
+        value_max = max(col_values)
+        minmax.append([value_min, value_max])
+    return minmax
+
+def normalize_dataset(X):
+    """
+    Normalizza i valori degli attributi di X
+    :param X: features set
+    :return: X normalizato,scaled_value =(value - min) / (max - min)
+    """
+    minmax=dataset_minmax(X)
+    X_normalized=X.copy()
+    for row in X_normalized:
+        for i in range(len(row)):
+            row[i] = (row[i] - minmax[i][0]) / (minmax[i][1] - minmax[i][0])
+    return X_normalized
+
+
+def column_means(X):
+    """
+    Calcola la media di ogni features
+    :param X: features set
+    :return: list,lista di medie per ogni features
+    """
+    means = [0 for i in range(len(X[0]))]
+    for i in range(len(X[0])):#per ogni attributo
+        col_values = [row[i] for row in X]#colonna dei valori di ogni attributo
+        means[i] = sum(col_values) / float(len(X))
+    return means
+
+
+
+def column_stdevs(X, means):
+    """
+    Calcola la media di ogni features
+    :param X: features set
+    :param means:list,lista di medie per ogni features
+    :return: list,lista di medie per ogni features
+    """
+    stdevs = [0 for i in range(len(X[0]))]
+    for i in range(len(X[0])):
+        variance = [pow(row[i]-means[i], 2) for row in X]
+        stdevs[i] = sum(variance)
+    stdevs = [sqrt(x/(float(len(X)-1))) for x in stdevs]
+    return stdevs
+
+def standardize_dataset(X):
+    """
+    Standardizza il dataset X
+    :param X: features set
+    :return:X_ standardizzato,standard deviation = sqrt( (value_i - mean)^2 / (total_values-1))
+    """
+    means=column_means(X)
+    stdevs=column_stdevs(X,means)
+    X_std=X.copy()
+    for row in X_std:
+        for i in range(len(row)):
+            row[i] = (row[i] - means[i]) / stdevs[i]
+    return X_std
+
 
 def one_hot_encoding(Y):
     """

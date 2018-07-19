@@ -111,6 +111,12 @@ def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name =file
     :return: None
     """
     fig = plt.figure()
+    name_plot=""
+    if file_name==file_name_radar_plot:
+        name_plot=file_name
+    else:
+        name_plot=file_name_radar_plot+"_"+file_name
+    print(name_plot)
     # Set data
     dict = {}
     for key, value in dict_name_scoring.items():
@@ -136,8 +142,10 @@ def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name =file
     angles = [n / float(N) * 2 * pi for n in range(N)]
     angles += angles[:1]
     # Initialise the spider plot
+    #plt.suptitle(name_plot,loc='left')
     ax = plt.subplot(111, polar=True)
-
+    plt.rc('axes', titlesize=25)
+    plt.title(name_plot,loc='right')
     # If you want the first axis to be on top:
     ax.set_theta_offset(pi / 2)
     ax.set_theta_direction(-1)
@@ -165,10 +173,7 @@ def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name =file
     plt.legend(bbox_to_anchor=(0.1, 0.2))
 
     plt.show()
-    if file_name==file_name_radar_plot:
-        fig.savefig(file_name+file_format_radar_plot)
-    else:
-        fig.savefig(file_name_radar_plot+"_"+file_name+file_format_radar_plot)
+    fig.savefig(name_plot+file_format_radar_plot)
     plt.close(fig)
 
 

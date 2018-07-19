@@ -1,6 +1,6 @@
 import dataset
 from training import training
-import scoringUtils
+import scoringUtils,p
 
 if __name__=='__main__':
     name_models = ['RANDFOREST', 'CART', 'KNN']
@@ -12,6 +12,8 @@ if __name__=='__main__':
     list_names = []
 
     X, Y = dataset.load_dataset(dataset_name)
+    X_norm=dataset.normalize_dataset(X)
+    X_std=dataset.standardize_dataset(X)
     scoring = scoringUtils.create_dictionary_classification_scoring()
     models = training(X, Y, name_models, scoring, k=range(8, 12, 1), list_n_trees=range(8, 12, 1), seed=seed,
                       n_split=10, mean=True)
