@@ -44,7 +44,7 @@ def load_tris_dataset():
     """
     :return:features set X del dataset tris ,label set Y del dataset tris
     """
-    X, Y = CSV.read_csv('tic_tac_toe.csv',skip_rows=17)
+    X, Y = CSV.read_csv('tris.csv',skip_rows=17)
     Y = CSV.convert_label_values(Y, ['positive', 'negative'], [1, 0])
     for i in range(len(X[:,0])):
         for j in range(len(X[0,:])):

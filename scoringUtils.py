@@ -5,7 +5,7 @@ import pandas as pd
 from math import pi
 from scipy.stats import hmean
 from sklearn import model_selection
-
+from __init__ import file_name_radar_plot
 def roc_auc_micro(y_true, y_pred):
     """
     Chiama roc_auc_score con average=micro
@@ -101,7 +101,7 @@ def print_scoring(name_model,dict_name_scoring,dict_scores,test=True,train=False
     return None
 
 
-def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name = "radar_plot.png"):
+def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name =file_name_radar_plot,file_format_radar_plot=".png"):
     """
     Print and save the radar plot of the scoring
 
@@ -165,7 +165,10 @@ def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name = "ra
     plt.legend(bbox_to_anchor=(0.1, 0.2))
 
     plt.show()
-    fig.savefig(file_name)
+    if file_name==file_name_radar_plot:
+        fig.savefig(file_name+file_format_radar_plot)
+    else:
+        fig.savefig(file_name_radar_plot+"_"+file_name+file_format_radar_plot)
     plt.close(fig)
 
 
