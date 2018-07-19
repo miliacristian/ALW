@@ -1,4 +1,5 @@
 link documento word condiviso:
  https://drive.google.com/open?id=1Zjj1wYKzFirIboGaJ9OLSTUKZlPfEqawaxehFHtSugk
 
-
+passare alla funzione load dataset i booleani standardized e normalized per caricare un dataset e renderlo normalizato/standardizzato
+ha senso rendere un dataset sia normalizzato sia standardizzato?
