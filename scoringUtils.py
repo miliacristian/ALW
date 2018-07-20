@@ -1,11 +1,23 @@
 from sklearn import metrics
+from sklearn.exceptions import UndefinedMetricWarning
 from sklearn.metrics import make_scorer
 import matplotlib.pyplot as plt
 import pandas as pd
 from math import pi
 from scipy.stats import hmean
 from sklearn import model_selection
-from __init__ import file_name_radar_plot
+import warnings
+
+
+def fxn():
+    warnings.warn("Undefined metric", UndefinedMetricWarning)
+
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore")
+    fxn()
+
+
 def roc_auc_micro(y_true, y_pred):
     """
     Chiama roc_auc_score con average=micro
@@ -101,22 +113,24 @@ def print_scoring(name_model,dict_name_scoring,dict_scores,test=True,train=False
     return None
 
 
-def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name =file_name_radar_plot,file_format_radar_plot=".png"):
+def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name="radar_plot", file_format =".png"):
     """
     Print and save the radar plot of the scoring
 
+    :param file_name: name of plot file
+    :param file_format: format of plot file
     :param name_models: list of str contains the name of the models used
     :param dict_name_scoring: dictionary contains the scoring of every models
     :param list_dict_scores: list of dictionary contains the scores result of k_fold for each models
     :return: None
     """
     fig = plt.figure()
-    name_plot=""
-    if file_name==file_name_radar_plot:
-        name_plot=file_name
-    else:
-        name_plot=file_name_radar_plot+"_"+file_name
-    print(name_plot)
+    # name_plot=""
+    # if file_name==file_name_radar_plot:
+    #     name_plot=file_name
+    # else:
+    #     name_plot=file_name_radar_plot+"_"+file_name
+    # print(name_plot)
     # Set data
     dict = {}
     for key, value in dict_name_scoring.items():
@@ -145,7 +159,7 @@ def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name =file
     #plt.suptitle(name_plot,loc='left')
     ax = plt.subplot(111, polar=True)
     plt.rc('axes', titlesize=25)
-    plt.title(name_plot,loc='right')
+    # plt.title(name_plot,loc='right')
     # If you want the first axis to be on top:
     ax.set_theta_offset(pi / 2)
     ax.set_theta_direction(-1)
@@ -173,7 +187,7 @@ def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name =file
     plt.legend(bbox_to_anchor=(0.1, 0.2))
 
     plt.show()
-    fig.savefig(name_plot+file_format_radar_plot)
+    fig.savefig(file_name+file_format)
     plt.close(fig)
 
 
@@ -193,25 +207,28 @@ def scores_to_list(dict_name_scoring, dict_scores):
     return scores_list
 
 
-def hmean_scores(dict_name_scoring,dict_scores):
+def hmean_scores(dict_name_scoring, dict_scores):
     """
     Calcola la media armonica degli scores
     :param dict_name_scoring: dict,dizionario dei nomi degli scorer
     :param dict_scores: dict,dizionario dei valori degli scores
     :return: media armonica degli scores
     """
+
+    if list(dict_scores.values()).__contains__(0.0):
+        return 0
     return hmean(scores_to_list(dict_name_scoring, dict_scores))
 
 
 def K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=True):
     """
     Esegue Kfold cross validation su X,Y usando il modello model dividendo il dataset in n_split fold
-    :param model:modello machine learning
+    :param model:  modello machine learning
     :param X:features set
     :param Y:label set
     :param scoring:dict,dizionario di scoring
-    :param n_split:int,numero di test fold
-    :param seed:int,seme generatore pseudocasuale
+    :param n_split: int, numero di test fold
+    :param seed: int, seme generatore pseudocasuale
     :return: dictionary with key 'name metric' and value 'value mean of metric' or all values
     """
     kfold = model_selection.KFold(n_splits=n_split, shuffle=True, random_state=seed)
@@ -220,12 +237,12 @@ def K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=True):
     for name, value in scoring.items():
         if mean:
             if type(value) is str:
-                result[name] = scores['test_'+ value].mean()
+                result[name] = scores['test_' + value].mean()
             else:
                 result[name] = scores['test_' + str(value)[12:-1]].mean()
         else:
             if type(value) is str:
-                result[name] = scores['test_'+ value]
+                result[name] = scores['test_' + value]
             else:
                 result[name] = scores['test_' + str(value)[12:-1]]
     return result

@@ -23,11 +23,7 @@ def read_csv(filecsv,skip_rows=0,delimiter=',',skip_column_left=0,skip_column_ri
         data = list(readCSV)
         result=numpy.array(data)
         num_row=len(result)
-        if printValue:
-            print("num_row", num_row)
         num_col=len(result[skip_rows])
-        if printValue:
-            print("num_col", num_col)
     if last_column_is_label:
         X = result[:, skip_column_left:num_col-skip_column_right-1]  # dati senza la colonna con le label
         Y = result[:, num_col-skip_column_right-1] #array di label

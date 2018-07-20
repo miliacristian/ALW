@@ -1,10 +1,12 @@
 import dataset
-from training import training
-import scoringUtils,p
+import training
+import scoringUtils
 
 if __name__=='__main__':
-    name_models = ['RANDFOREST', 'CART', 'KNN']
-    dataset_name='seed'
+    name_models = ['RANDFOREST', 'CART', 'KNN', 'SVC']
+    dataset_name = 'zoo'
+    name_setting_file = dataset_name + '_settings.txt'
+    name_radar_plot_file = dataset_name + '_radar_plot'
     seed = 100
     results = []
     names = []
@@ -12,11 +14,10 @@ if __name__=='__main__':
     list_names = []
 
     X, Y = dataset.load_dataset(dataset_name)
-    X_norm=dataset.normalize_dataset(X)
-    X_std=dataset.standardize_dataset(X)
+    X_norm = dataset.normalize_dataset(X)
+    X_std = dataset.standardize_dataset(X)
     scoring = scoringUtils.create_dictionary_classification_scoring()
-    models = training(X, Y, name_models, scoring, k=range(8, 12, 1), list_n_trees=range(8, 12, 1), seed=seed,
-                      n_split=10, mean=True)
+    models = training.build_models(name_models, name_setting_file)
     for name, model in models.items():
         scores = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split=10, seed=seed)
         results.append(scores)
@@ -25,4 +26,4 @@ if __name__=='__main__':
         list_scores.append(scores)
         list_names.append(name)
         print("total score =", scoringUtils.hmean_scores(scoring, scores))
-    scoringUtils.radar_plot(list_names, scoring, list_scores,dataset_name)
+    scoringUtils.radar_plot(list_names, scoring, list_scores, file_name=name_radar_plot_file)
