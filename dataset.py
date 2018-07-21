@@ -12,9 +12,36 @@ def print_dataset(X,Y):
     :param Y: label set
     :return: None
     """
-    print("Features set:\n",X)
-    print("Label set:\n",Y)
+    print("Features set("+str(len(X[:,0]))+","+str(len(X[0,:]))+"):\n",X)
+    print("Label set("+str(len(X[:,0]))+","+str(len(X[0,:]))+"):\n",Y)
     return None
+def replace_value_in_column(X,list_column,value_to_replace,new_value):
+    """
+    :param X: features set
+    :param list_column: list,lista delle colonne in cui sostituire i valori
+    :param value_to_replace: valore da sostituire
+    :param new_value: nuovo valore
+    :return: X con valori sostituiti nelle colonne list column
+    """
+    for k in list_column:
+        for i in range(len(X[:, 0])):
+            if(X[i,k]==value_to_replace):
+                X[i, k]=new_value
+    return X
+
+def replace_value_in_row(X,list_row,value_to_replace,new_value):
+    """
+    :param X: features set
+    :param list_row: list,lista delle righe in cui sostituire i valori
+    :param value_to_replace: valore da sostituire
+    :param new_value: nuovo valore
+    :return: X con valori sostituiti nelle righe list row
+    """
+    for k in list_row:
+        for j in range(len(X[0,:])):
+            if(X[k,j]==value_to_replace):
+                X[k, j]=new_value
+    return X
 
 def load_zoo_dataset():
     """
@@ -24,6 +51,7 @@ def load_zoo_dataset():
     X, Y = CSV.read_csv(path+datasets_dir+'zoo.csv', skip_rows=31, skip_column_left=1)
     Y=CSV.convert_type_to_float(Y)
     X=CSV.convert_type_to_float(X)
+    print(type(X))
     return X,Y
 
 def load_balance_dataset():
@@ -64,33 +92,6 @@ def load_tris_dataset():
     X=CSV.convert_type_to_float(X)
     return X,Y
 
-def replace_value_in_column(X,list_column,value_to_replace,new_value):
-    """
-    :param X: features set
-    :param list_column: list,lista delle colonne in cui sostituire i valori
-    :param value_to_replace: valore da sostituire
-    :param new_value: nuovo valore
-    :return: X con valori sostituiti nelle colonne list column
-    """
-    for k in list_column:
-        for i in range(len(X[:, 0])):
-            if(X[i,k]==value_to_replace):
-                X[i, k]=new_value
-    return X
-
-def replace_value_in_row(X,list_row,value_to_replace,new_value):
-    """
-    :param X: features set
-    :param list_row: list,lista delle righe in cui sostituire i valori
-    :param value_to_replace: valore da sostituire
-    :param new_value: nuovo valore
-    :return: X con valori sostituiti nelle righe list row
-    """
-    for k in list_row:
-        for j in range(len(X[0,:])):
-            if(X[k,j]==value_to_replace):
-                X[k, j]=new_value
-    return X
 
 def load_pima_indians_diabetes_dataset():
     """
@@ -100,6 +101,7 @@ def load_pima_indians_diabetes_dataset():
     X, Y = CSV.read_csv(path + datasets_dir + 'pima_indians_diabetes.csv', skip_rows=18)
     Y = CSV.convert_type_to_float(Y)
     X = CSV.convert_type_to_float(X)
+    print(type(X))
     X = replace_value_in_column(X, [1, 2, 3, 4, 5], 0, numpy.NaN)
     #numpy.isnan(X)
     return X, Y

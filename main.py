@@ -20,6 +20,9 @@ if __name__=='__main__':
     X, Y = dataset.load_dataset(dataset_name)
     dataset.print_dataset(X,Y)
     print(numpy.isnan(X).sum())
+    X=X[~numpy.isnan(X).any(axis=1)]
+    dataset.print_dataset(X,Y)
+    exit(0)
     X_norm = dataset.normalize_dataset(X)
     X_std = dataset.standardize_dataset(X)
     scoring = scoringUtils.create_dictionary_classification_scoring()
