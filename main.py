@@ -4,6 +4,7 @@ import scoringUtils
 from __init__ import setting
 from __init__ import radar_plot
 import numpy
+
 import p
 
 if __name__=='__main__':
@@ -19,10 +20,7 @@ if __name__=='__main__':
 
     X, Y = dataset.load_dataset(dataset_name)
     dataset.print_dataset(X,Y)
-    print(numpy.isnan(X).sum())
-    X=X[~numpy.isnan(X).any(axis=1)]
-    dataset.print_dataset(X,Y)
-    exit(0)
+    X=dataset.replace_NaN_with_strategy(X,"mean")
     X_norm = dataset.normalize_dataset(X)
     X_std = dataset.standardize_dataset(X)
     scoring = scoringUtils.create_dictionary_classification_scoring()

@@ -3,6 +3,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
 from math import sqrt
 import os
+from sklearn.preprocessing import Imputer
 from __init__ import datasets_dir
 
 def print_dataset(X,Y):
@@ -41,6 +42,19 @@ def replace_value_in_row(X,list_row,value_to_replace,new_value):
         for j in range(len(X[0,:])):
             if(X[k,j]==value_to_replace):
                 X[k, j]=new_value
+    return X
+
+def replace_NaN_with_strategy(X,strategy):
+    imputer = Imputer(strategy=strategy)
+    X = imputer.fit_transform(X)
+    return X
+
+def remove_row_with_Nan(X):
+    """
+    :param X: features set
+    :return: X togliendo le righe che hanno almeno 1 valore NaN
+    """
+    X = X[~numpy.isnan(X).any(axis=1)]
     return X
 
 def load_zoo_dataset():
