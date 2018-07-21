@@ -5,7 +5,7 @@ from math import sqrt
 import os
 from sklearn.preprocessing import Imputer
 from __init__ import datasets_dir
-
+from math import floor
 def print_dataset(X,Y):
     """
     Stampa features set X e label set Y
