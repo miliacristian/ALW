@@ -28,7 +28,7 @@ Attribute Information: (name of attribute and type of value domain)
   17. catsize		Boolean
   18. type		Numeric (integer values in range [1,7])
 End Description
-
+missing values:no
 aardvark,1,0,0,1,0,0,1,1,1,1,0,0,4,0,0,1,1
 antelope,1,0,0,1,0,0,0,1,1,1,0,0,4,1,0,1,1
 bass,0,0,1,0,0,1,1,1,1,0,0,1,0,1,0,0,4

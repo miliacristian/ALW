@@ -3,10 +3,11 @@ import training
 import scoringUtils
 from __init__ import setting
 from __init__ import radar_plot
+import p
 
 if __name__=='__main__':
     name_models = ['RANDFOREST', 'CART', 'KNN', 'SVC']
-    dataset_name = 'zoo'
+    dataset_name = 'indians'
     name_setting_file = dataset_name +setting
     name_radar_plot_file = dataset_name + radar_plot
     seed = 100
@@ -16,6 +17,8 @@ if __name__=='__main__':
     list_names = []
 
     X, Y = dataset.load_dataset(dataset_name)
+    dataset.print_dataset(X,Y)
+    exit(0)
     X_norm = dataset.normalize_dataset(X)
     X_std = dataset.standardize_dataset(X)
     scoring = scoringUtils.create_dictionary_classification_scoring()

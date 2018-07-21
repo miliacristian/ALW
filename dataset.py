@@ -64,6 +64,45 @@ def load_tris_dataset():
     X=CSV.convert_type_to_float(X)
     return X,Y
 
+def replace_value_in_column(X,list_column,value_to_replace,new_value):
+    """
+    :param X: features set
+    :param list_column: list,lista delle colonne in cui sostituire i valori
+    :param value_to_replace: valore da sostituire
+    :param new_value: nuovo valore
+    :return: X con valori sostituiti nelle colonne list column
+    """
+    for k in range(len(list_column)):
+        for i in range(len(X[:, 0])):
+            if(X[i,k]==value_to_replace):
+                X[i, k]=new_value
+    return X
+
+def replace_value_in_row(X,list_row,value_to_replace,new_value):
+    """
+    :param X: features set
+    :param list_row: list,lista delle righe in cui sostituire i valori
+    :param value_to_replace: valore da sostituire
+    :param new_value: nuovo valore
+    :return: X con valori sostituiti nelle righe list row
+    """
+    for k in range(len(list_row)):
+        for j in range(len(X[0,:])):
+            if(X[k,j]==value_to_replace):
+                X[k, j]=new_value
+    return X
+
+def load_pima_indians_diabetes_dataset():
+    """
+    :return:features set X del dataset tris ,label set Y del dataset pima_indians_dataset
+    """
+    path = os.path.abspath('')
+    X, Y = CSV.read_csv(path + datasets_dir + 'pima_indians_diabetes.csv', skip_rows=18)
+    Y = CSV.convert_type_to_float(Y)
+    X = CSV.convert_type_to_float(X)
+    X = replace_value_in_column(X, [1, 2, 3, 4, 5], 0, numpy.NaN)
+    #isNull per verificare che un elemento è NaN
+    return X, Y
 
 def load_dataset(dataset):
     if dataset == 'tris':
@@ -74,8 +113,10 @@ def load_dataset(dataset):
         X, Y = load_balance_dataset()
     elif dataset == 'zoo':
         X, Y = load_zoo_dataset()
+    elif dataset=='indians':
+        X,Y=load_pima_indians_diabetes_dataset()
     else:
-        print("input must be 'tris' or 'seed' or 'balance' or 'zoo'")
+        print("input must be 'tris' or 'seed' or 'balance' or 'zoo' or 'indians' ")
         exit(1)
     Y = one_hot_encoding(Y)
     return X, Y

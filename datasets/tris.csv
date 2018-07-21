@@ -14,7 +14,7 @@ Attribute Information:
 8. bottom-middle-square: {x,o,b}
 9. bottom-right-square: {x,o,b}
 10. Class: {positive,negative}
-
+missing values:no
 x,x,x,x,o,o,x,o,o,positive
 x,x,x,x,o,o,o,x,o,positive
 x,x,x,x,o,o,o,o,x,positive

@@ -4,10 +4,7 @@ link documento word condiviso:
 passare alla funzione load dataset i booleani standardized e normalized per caricare un dataset e renderlo normalizato/standardizzato
 ha senso rendere un dataset sia normalizzato sia standardizzato?
 
-
-cartella settings a parte
-cartella a parte radar plot
-
+i warning non sono spariti?sono attivi i warning ignore?
 def fxn()://devono stare necessariamente in 2 file??
     warnings.warn("Undefined metric", UndefinedMetricWarning)
 
@@ -16,3 +13,7 @@ with warnings.catch_warnings()://devono stare necessariamente in 2 file??
     warnings.simplefilter("ignore")
     fxn()
 
+http://scikit-learn.org/0.18/auto_examples/missing_values.html #missign value scikit learn
+http://scikit-learn.org/dev/modules/impute.html
+http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.Imputer.html
+https://machinelearningmastery.com/handle-missing-data-python/ #master machine learning
