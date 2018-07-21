@@ -4,6 +4,7 @@ import scoringUtils
 from __init__ import setting
 from __init__ import radar_plot
 import numpy
+from math import floor
 
 import p
 
@@ -20,6 +21,9 @@ if __name__=='__main__':
 
     X, Y = dataset.load_dataset(dataset_name)
     dataset.print_dataset(X,Y)
+    X=dataset.put_random_NaN(X,0.5,seed=100)
+    print(X)
+    exit(0)
     X=dataset.replace_NaN_with_strategy(X,"mean")
     X_norm = dataset.normalize_dataset(X)
     X_std = dataset.standardize_dataset(X)

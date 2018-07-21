@@ -16,6 +16,7 @@ def print_dataset(X,Y):
     print("Features set("+str(len(X[:,0]))+","+str(len(X[0,:]))+"):\n",X)
     print("Label set("+str(len(X[:,0]))+","+str(len(X[0,:]))+"):\n",Y)
     return None
+
 def replace_value_in_column(X,list_column,value_to_replace,new_value):
     """
     :param X: features set
@@ -55,6 +56,20 @@ def remove_row_with_Nan(X):
     :return: X togliendo le righe che hanno almeno 1 valore NaN
     """
     X = X[~numpy.isnan(X).any(axis=1)]
+    return X
+
+def put_random_NaN(X,fraction_sample_missing_value,seed=100):
+    if fraction_sample_missing_value>=1 or fraction_sample_missing_value<0:
+        print("invalid parameter fraction sample missing value")
+        exit(1)
+    rng = numpy.random.RandomState(seed)
+    num_examples=len(X[:,0])
+    num_features=len(X[0,:])
+    num_missing_example=floor(fraction_sample_missing_value*num_examples)
+    list_index_missing_samples= rng.choice(num_examples, num_missing_example, replace=False)
+    for i in list_index_missing_samples:
+        rand_num=rng.randint(0,num_features)
+        X[i,rand_num]=numpy.NaN
     return X
 
 def load_zoo_dataset():
@@ -115,7 +130,6 @@ def load_pima_indians_diabetes_dataset():
     X, Y = CSV.read_csv(path + datasets_dir + 'pima_indians_diabetes.csv', skip_rows=18)
     Y = CSV.convert_type_to_float(Y)
     X = CSV.convert_type_to_float(X)
-    print(type(X))
     X = replace_value_in_column(X, [1, 2, 3, 4, 5], 0, numpy.NaN)
     #numpy.isnan(X)
     return X, Y
