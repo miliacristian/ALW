@@ -21,11 +21,10 @@ if __name__=='__main__':
 
     X, Y = dataset.load_dataset(dataset_name)
     dataset.print_dataset(X,Y)
-    X,Y=dataset.remove_rows_with_NaN(X,Y)
-    dataset.print_dataset(X, Y)
     X=dataset.put_random_NaN(X,0.8,seed=100)
     dataset.print_dataset(X, Y)
     X, Y = dataset.remove_rows_with_NaN(X, Y)
+    dataset.print_dataset(X, Y)
     exit(0)
     X=dataset.replace_NaN_with_strategy(X,"mean")
     X_norm = dataset.normalize_dataset(X)

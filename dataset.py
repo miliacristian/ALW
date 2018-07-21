@@ -74,7 +74,7 @@ def put_random_NaN(X,fraction_sample_missing_value,seed=100):
         if numpy.isnan(X[i,rand_num]):
             count_nan=count_nan+1
         else:
-            X[i][rand_num]=numpy.NaN
+            X[i][rand_num]=numpy.nan
             count_not_nan=count_not_nan+1
     print('count_nan',count_nan,'count_not_nan',count_not_nan)
     return X
@@ -137,7 +137,7 @@ def load_pima_indians_diabetes_dataset():
     X, Y = CSV.read_csv(path + datasets_dir + 'pima_indians_diabetes.csv', skip_rows=18)
     Y = CSV.convert_type_to_float(Y)
     X = CSV.convert_type_to_float(X)
-    X = replace_value_in_column(X, [1, 2, 3, 4, 5], 0, numpy.NaN)
+    X = replace_value_in_column(X, [1, 2, 3, 4, 5], 0, numpy.nan)
     #numpy.isnan(X)
     return X, Y
 
@@ -161,7 +161,6 @@ def load_dataset(dataset):
 def remove_rows_with_NaN(X,Y):
     length = len(X[:,0])
     i = 0
-    count=0
     while i < length:#tutte le righe
         for j in range (len(X[0,:])):#tutte le colonne
             if numpy.isnan(X[i][j]):
