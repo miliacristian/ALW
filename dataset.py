@@ -14,7 +14,7 @@ def print_dataset(X,Y):
     :return: None
     """
     print("Features set("+str(len(X[:,0]))+","+str(len(X[0,:]))+"):\n",X)
-    print("Label set("+str(len(X[:,0]))+","+str(len(X[0,:]))+"):\n",Y)
+    print("Label set("+str(len(Y[:,0]))+","+str(len(Y[0,:]))+"):\n",Y)
     return None
 
 def replace_value_in_column(X,list_column,value_to_replace,new_value):
@@ -62,14 +62,25 @@ def put_random_NaN(X,fraction_sample_missing_value,seed=100):
     if fraction_sample_missing_value>=1 or fraction_sample_missing_value<0:
         print("invalid parameter fraction sample missing value")
         exit(1)
+    count_nan=0
+    count_not_nan=0
     rng = numpy.random.RandomState(seed)
     num_examples=len(X[:,0])
     num_features=len(X[0,:])
     num_missing_example=floor(fraction_sample_missing_value*num_examples)
+    print(num_missing_example)
     list_index_missing_samples= rng.choice(num_examples, num_missing_example, replace=False)
+    print(list_index_missing_samples)
+    list_index_missing_samples.sort()
+    print(list_index_missing_samples)
     for i in list_index_missing_samples:
         rand_num=rng.randint(0,num_features)
-        X[i,rand_num]=numpy.NaN
+        if numpy.isnan(X[i,rand_num]):
+            count_nan=count_nan+1
+        else:
+            X[i][rand_num]=numpy.NaN
+            count_not_nan=count_not_nan+1
+    print('count_nan',count_nan,'count_not_nan',count_not_nan)
     return X
 
 def load_zoo_dataset():
@@ -149,6 +160,19 @@ def load_dataset(dataset):
         print("input must be 'tris' or 'seed' or 'balance' or 'zoo' or 'indians' ")
         exit(1)
     Y = one_hot_encoding(Y)
+    return X, Y
+def rem(X,Y):
+    length = len(X)
+    i = 0
+    while i < length:#tutte le righe
+        for j in range (len(X[0,:])):#tutte le colonne
+            if numpy.isnan(X[i][j]):
+                Y = numpy.delete(Y, i, axis=0)
+                X = numpy.delete(X, i, axis=0)
+                i = i - 1
+                length = length - 1
+            i = i + 1
+            break
     return X, Y
 
 def remove_row_with_label_L(X,Y,L):
