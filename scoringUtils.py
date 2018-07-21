@@ -6,7 +6,9 @@ import pandas as pd
 from math import pi
 from scipy.stats import hmean
 from sklearn import model_selection
+from __init__ import radar_plot_dir
 import warnings
+import os
 
 
 def fxn():
@@ -145,7 +147,8 @@ def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name="rada
     # Add legend
     plt.legend(bbox_to_anchor=(0.1, 0.2))
     plt.show()
-    fig.savefig(file_name+file_format)
+    path = os.path.abspath('')
+    fig.savefig(path+radar_plot_dir+file_name+file_format)
     plt.close(fig)
 
 

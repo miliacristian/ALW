@@ -14,8 +14,10 @@ import numpy as np
 from scoringUtils import hmean_scores
 from __init__ import printValue
 from __init__ import setting
+from __init__ import model_settings_dir
 from time import time
 import warnings
+import os
 
 
 def fxn():
@@ -196,7 +198,8 @@ def training(X, Y, name_models,  scoring, k=[5], list_n_trees=[10], seed=111, n_
     :param list_n_trees: list,lista dei possibili numeri di alberi per il random forest
     :param seed: int,seme per generatore pseudocasuale
     """
-    fl = open(file_name, "w")
+    path = os.path.abspath('')
+    fl = open(path+model_settings_dir+file_name, "w")
     fl.writelines(["seed " + str(seed) + "\n", "n_split " + str(n_split) + "\n"])
     if 'RANDFOREST' in name_models:
         best_n_trees, best_max_features = RANDOMFOREST_training(X, Y, list_n_trees, scoring, seed, n_split, mean)
@@ -213,14 +216,15 @@ def training(X, Y, name_models,  scoring, k=[5], list_n_trees=[10], seed=111, n_
 
 def build_models(name_models, file_name):
     """
-    build the list of models using the sitting specifying in file_name.
+    build the list of models using the setting specifying in file_name.
     :param name_models: name of models used
     :param file_name: name of settings file
     :return: the list of models training
     """
 
     models = {}
-    fl = open(file_name, "r")
+    path = os.path.abspath('')
+    fl = open(path+model_settings_dir+file_name, "r")#aggiungere path
     settings = {}
     while 1:
         line = fl.readline()
@@ -258,7 +262,5 @@ if __name__ == '__main__':
     X_norm = dataset.normalize_dataset(X)
     X_std = dataset.standardize_dataset(X)
     scoring = scoringUtils.create_dictionary_classification_scoring()
-    # training(X, Y, name_models, scoring, k=range(3, 20, 1), list_n_trees=range(5, 20, 1), seed=seed,
-    #          n_split=10, mean=True, file_name="tris_settings.txt")
     training(X, Y, name_models, scoring, k=range(8, 11, 1), list_n_trees=range(9, 12, 1), seed=seed,
              n_split=10, mean=True, file_name=name_setting_file)
