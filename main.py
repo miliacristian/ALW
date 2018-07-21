@@ -1,12 +1,14 @@
 import dataset
 import training
 import scoringUtils
+from __init__ import setting
+from __init__ import radar_plot
 
 if __name__=='__main__':
     name_models = ['RANDFOREST', 'CART', 'KNN', 'SVC']
     dataset_name = 'zoo'
-    name_setting_file = dataset_name + '_settings.txt'
-    name_radar_plot_file = dataset_name + '_radar_plot'
+    name_setting_file = dataset_name +setting
+    name_radar_plot_file = dataset_name + radar_plot
     seed = 100
     results = []
     names = []

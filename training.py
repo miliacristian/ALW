@@ -1,6 +1,8 @@
-#rende un classificatore multiclass funzionante anche per multilabel
 from sklearn.exceptions import UndefinedMetricWarning
+
+#rende un classificatore multiclass funzionante anche per multilabel
 from sklearn.multiclass import OneVsRestClassifier
+
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
@@ -11,6 +13,7 @@ import scoringUtils
 import numpy as np
 from scoringUtils import hmean_scores
 from __init__ import printValue
+from __init__ import setting
 from time import time
 import warnings
 
@@ -250,7 +253,7 @@ if __name__ == '__main__':
     seed = 100
     name_models = ['RANDFOREST', 'CART', 'KNN', 'SVC']
     dataset_name = 'zoo'
-    name_setting_file = dataset_name + '_settings.txt'
+    name_setting_file = dataset_name +setting
     X, Y = dataset.load_dataset(dataset_name)
     X_norm = dataset.normalize_dataset(X)
     X_std = dataset.standardize_dataset(X)

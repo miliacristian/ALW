@@ -3,3 +3,16 @@ link documento word condiviso:
 
 passare alla funzione load dataset i booleani standardized e normalized per caricare un dataset e renderlo normalizato/standardizzato
 ha senso rendere un dataset sia normalizzato sia standardizzato?
+
+cartella dataset a parte
+cartella settings a parte
+cartella a parte radar plot
+
+def fxn()://devono stare necessariamente in 2 file??
+    warnings.warn("Undefined metric", UndefinedMetricWarning)
+
+
+with warnings.catch_warnings()://devono stare necessariamente in 2 file??
+    warnings.simplefilter("ignore")
+    fxn()
+

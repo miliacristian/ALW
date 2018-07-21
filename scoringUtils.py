@@ -78,41 +78,6 @@ def create_dictionary_classification_scoring():
                }
     return scoring
 
-
-def print_scoring(name_model,dict_name_scoring,dict_scores,test=True,train=False,fit_time=False,score_time=False):
-    """
-    Stampa tutti gli score presenti nel dizionario scoring del modello name_model
-    :param name_model: string,nome modello es KNN
-    :param dict_name_scoring:dictionary,dizionario nomi degli score
-    :param dict_scores:dictionary, dizionario dei valori degli score
-    :param test:boolean,se test==True stampa il test di tutte le score es test_accuracy,test precision
-    :param train:boolean,se train==True stampa il train di tutte le score es train_accuracy,train precision
-    :param fit_time:boolean,se fit_time==True stampa il tempo di fit
-    :param score_time:boolena,se score_time==True stampa il tempo di score
-    :return: None
-    """
-    print(name_model)
-    # if(fit_time):#stampa fit_time
-    #     print('fit_time', "{0:.6f}".format(dict_scores['fit_time'].mean()),end=' ')
-    # if (score_time):#stampa score_time
-    #     print('score_time', "{0:.6f}".format(dict_scores['score_time'].mean()),end=' ')
-    # for key, value in dict_name_scoring.items():
-    #     if(test):#stampa test score
-    #         if type(value) is str:
-    #             print('test_'+key,"{0:.6f}".format(dict_scores['test_'+ value].mean()),end=' ')
-    #         else:
-    #             print('test_' + key, "{0:.6f}".format(dict_scores['test_' + str(value)[12:-1]].mean()), end=' ')
-    #     if(train):#stampa train_score
-    #         if type(value) is str:
-    #             print('train_' + key, "{0:.6f}".format(dict_scores['train_' + value].mean()), end=' ')
-    #         else:
-    #             print('train_' + key, "{0:.6f}".format(dict_scores['train_' + str(value)[12:-1]].mean()), end=' ')
-    # print() #new line
-    for key, value in dict_scores.items():
-        print(key, "{0:.6f}".value)
-    return None
-
-
 def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name="radar_plot", file_format =".png"):
     """
     Print and save the radar plot of the scoring
@@ -125,12 +90,6 @@ def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name="rada
     :return: None
     """
     fig = plt.figure()
-    # name_plot=""
-    # if file_name==file_name_radar_plot:
-    #     name_plot=file_name
-    # else:
-    #     name_plot=file_name_radar_plot+"_"+file_name
-    # print(name_plot)
     # Set data
     dict = {}
     for key, value in dict_name_scoring.items():
@@ -185,7 +144,6 @@ def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name="rada
 
     # Add legend
     plt.legend(bbox_to_anchor=(0.1, 0.2))
-
     plt.show()
     fig.savefig(file_name+file_format)
     plt.close(fig)

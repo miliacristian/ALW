@@ -1,7 +1,4 @@
 import numpy,csv
-from __init__ import printValue
-#file importato,per usare le funzioni usare nomefile.nomefunzione
-#from Classifier import classifier from nomefile import nomefunzione
 
 def read_csv(filecsv,skip_rows=0,delimiter=',',skip_column_left=0,skip_column_right=0,last_column_is_label=True):
     """

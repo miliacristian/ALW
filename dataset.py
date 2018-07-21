@@ -2,6 +2,8 @@ import CSV,numpy
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
 from math import sqrt
+import os
+from __init__ import datasets
 
 def print_dataset(X,Y):
     """
@@ -18,7 +20,8 @@ def load_zoo_dataset():
     """
     :return:features set X del dataset zoo ,label set Y del dataset zoo
     """
-    X, Y = CSV.read_csv('zoo.csv', skip_rows=31, skip_column_left=1)
+    path = os.path.abspath('')
+    X, Y = CSV.read_csv(path+datasets+'zoo.csv', skip_rows=31, skip_column_left=1)
     Y=CSV.convert_type_to_float(Y)
     X=CSV.convert_type_to_float(X)
     return X,Y
@@ -27,7 +30,8 @@ def load_balance_dataset():
     """
     :return:features set X del dataset zoo ,label set Y del dataset zoo
     """
-    X, Y = CSV.read_csv('balance.csv', skip_rows=29,last_column_is_label=False)
+    path = os.path.abspath('')
+    X, Y = CSV.read_csv(path+datasets+'balance.csv', skip_rows=29,last_column_is_label=False)
     Y=CSV.convert_label_values(Y, ['L','B','R'], ['0', '1', '2'])
     X=CSV.convert_type_to_float(X)
     return X,Y
@@ -36,7 +40,8 @@ def load_seed_dataset():
     """
     :return:features set X del dataset zoo ,label set Y del dataset zoo
     """
-    X, Y = CSV.read_csv('seeds.csv', skip_rows=2,delimiter='\t')
+    path = os.path.abspath('')
+    X, Y = CSV.read_csv(path+datasets+'seeds.csv', skip_rows=2,delimiter='\t')
     Y=CSV.convert_type_to_float(Y)
     X=CSV.convert_type_to_float(X)
     return X,Y
@@ -45,7 +50,8 @@ def load_tris_dataset():
     """
     :return:features set X del dataset tris ,label set Y del dataset tris
     """
-    X, Y = CSV.read_csv('tris.csv',skip_rows=17)
+    path = os.path.abspath('')
+    X, Y = CSV.read_csv(path+datasets+'tris.csv',skip_rows=17)
     Y = CSV.convert_label_values(Y, ['positive', 'negative'], [1, 0])
     for i in range(len(X[:,0])):
         for j in range(len(X[0,:])):
@@ -70,7 +76,7 @@ def load_dataset(dataset):
         X, Y = load_zoo_dataset()
     else:
         print("input must be 'tris' or 'seed' or 'balance' or 'zoo'")
-        exit(0)
+        exit(1)
     Y = one_hot_encoding(Y)
     return X, Y
 
