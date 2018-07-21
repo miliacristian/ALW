@@ -28,7 +28,7 @@ def load_zoo_dataset():
 
 def load_balance_dataset():
     """
-    :return:features set X del dataset zoo ,label set Y del dataset zoo
+    :return:features set X del dataset balance ,label set Y del dataset balance
     """
     path = os.path.abspath('')
     X, Y = CSV.read_csv(path+datasets_dir+'balance.csv', skip_rows=29,last_column_is_label=False)
@@ -38,7 +38,7 @@ def load_balance_dataset():
 
 def load_seed_dataset():
     """
-    :return:features set X del dataset zoo ,label set Y del dataset zoo
+    :return:features set X del dataset seed ,label set Y del dataset zoo
     """
     path = os.path.abspath('')
     X, Y = CSV.read_csv(path+datasets_dir+'seeds.csv', skip_rows=2,delimiter='\t')
@@ -72,7 +72,7 @@ def replace_value_in_column(X,list_column,value_to_replace,new_value):
     :param new_value: nuovo valore
     :return: X con valori sostituiti nelle colonne list column
     """
-    for k in range(len(list_column)):
+    for k in list_column:
         for i in range(len(X[:, 0])):
             if(X[i,k]==value_to_replace):
                 X[i, k]=new_value
@@ -86,7 +86,7 @@ def replace_value_in_row(X,list_row,value_to_replace,new_value):
     :param new_value: nuovo valore
     :return: X con valori sostituiti nelle righe list row
     """
-    for k in range(len(list_row)):
+    for k in list_row:
         for j in range(len(X[0,:])):
             if(X[k,j]==value_to_replace):
                 X[k, j]=new_value
@@ -94,14 +94,14 @@ def replace_value_in_row(X,list_row,value_to_replace,new_value):
 
 def load_pima_indians_diabetes_dataset():
     """
-    :return:features set X del dataset tris ,label set Y del dataset pima_indians_dataset
+    :return:features set X del dataset pima_indians_diabetes ,label set Y del dataset pima_indians_diabetes
     """
     path = os.path.abspath('')
     X, Y = CSV.read_csv(path + datasets_dir + 'pima_indians_diabetes.csv', skip_rows=18)
     Y = CSV.convert_type_to_float(Y)
     X = CSV.convert_type_to_float(X)
     X = replace_value_in_column(X, [1, 2, 3, 4, 5], 0, numpy.NaN)
-    #isNull per verificare che un elemento è NaN
+    #numpy.isnan(X)
     return X, Y
 
 def load_dataset(dataset):
