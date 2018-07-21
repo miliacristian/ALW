@@ -27,8 +27,8 @@ def replace_value_in_column(X,list_column,value_to_replace,new_value):
     """
     for k in list_column:
         for i in range(len(X[:, 0])):
-            if(X[i,k]==value_to_replace):
-                X[i, k]=new_value
+            if(X[i][k]==value_to_replace):
+                X[i][k]=new_value
     return X
 
 def replace_value_in_row(X,list_row,value_to_replace,new_value):
@@ -68,11 +68,7 @@ def put_random_NaN(X,fraction_sample_missing_value,seed=100):
     num_examples=len(X[:,0])
     num_features=len(X[0,:])
     num_missing_example=floor(fraction_sample_missing_value*num_examples)
-    print(num_missing_example)
     list_index_missing_samples= rng.choice(num_examples, num_missing_example, replace=False)
-    print(list_index_missing_samples)
-    list_index_missing_samples.sort()
-    print(list_index_missing_samples)
     for i in list_index_missing_samples:
         rand_num=rng.randint(0,num_features)
         if numpy.isnan(X[i,rand_num]):
@@ -161,9 +157,11 @@ def load_dataset(dataset):
         exit(1)
     Y = one_hot_encoding(Y)
     return X, Y
-def rem(X,Y):
-    length = len(X)
+
+def remove_rows_with_NaN(X,Y):
+    length = len(X[:,0])
     i = 0
+    count=0
     while i < length:#tutte le righe
         for j in range (len(X[0,:])):#tutte le colonne
             if numpy.isnan(X[i][j]):
@@ -171,8 +169,8 @@ def rem(X,Y):
                 X = numpy.delete(X, i, axis=0)
                 i = i - 1
                 length = length - 1
-            i = i + 1
-            break
+                break
+        i = i + 1
     return X, Y
 
 def remove_row_with_label_L(X,Y,L):

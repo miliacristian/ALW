@@ -10,7 +10,7 @@ import p
 
 if __name__=='__main__':
     name_models = ['RANDFOREST', 'CART', 'KNN', 'SVC']
-    dataset_name = 'balance'
+    dataset_name = 'indians'
     name_setting_file = dataset_name +setting
     name_radar_plot_file = dataset_name + radar_plot
     seed = 100
@@ -20,12 +20,12 @@ if __name__=='__main__':
     list_names = []
 
     X, Y = dataset.load_dataset(dataset_name)
-    #dataset.print_dataset(X,Y)
+    dataset.print_dataset(X,Y)
+    X,Y=dataset.remove_rows_with_NaN(X,Y)
+    dataset.print_dataset(X, Y)
     X=dataset.put_random_NaN(X,0.8,seed=100)
     dataset.print_dataset(X, Y)
-    #X=dataset.remove_row_with_Nan(X)
-    X,Y=dataset.rem(X,Y)
-    dataset.print_dataset(X,Y)
+    X, Y = dataset.remove_rows_with_NaN(X, Y)
     exit(0)
     X=dataset.replace_NaN_with_strategy(X,"mean")
     X_norm = dataset.normalize_dataset(X)
