@@ -256,7 +256,7 @@ def build_models(name_models, file_name):
 if __name__ == '__main__':
     seed = 100
     name_models = ['RANDFOREST', 'CART', 'KNN', 'SVC']
-    dataset_name = 'zoo'
+    dataset_name = 'indians'
     name_setting_file = dataset_name +setting
     X, Y = dataset.load_dataset(dataset_name)
     X_norm = dataset.normalize_dataset(X)

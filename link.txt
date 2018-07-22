@@ -17,3 +17,5 @@ http://scikit-learn.org/0.18/auto_examples/missing_values.html #missign value sc
 http://scikit-learn.org/dev/modules/impute.html
 http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.Imputer.html
 https://machinelearningmastery.com/handle-missing-data-python/ #master machine learning
+
+https://www.datacamp.com/community/tutorials/random-forests-classifier-python#findingfeatures link per vedere l'importanza delle features
