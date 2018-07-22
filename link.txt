@@ -19,3 +19,5 @@ http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.Imputer.h
 https://machinelearningmastery.com/handle-missing-data-python/ #master machine learning
 
 https://www.datacamp.com/community/tutorials/random-forests-classifier-python#findingfeatures link per vedere l'importanza delle features
+
+in teoria se non esistono variabili da predirre si può fare regressione su qualsiasi variabile continua(sfruttando le altre?)

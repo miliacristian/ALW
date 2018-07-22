@@ -4,7 +4,7 @@ from sklearn.preprocessing import OneHotEncoder
 from math import sqrt
 import os
 from sklearn.preprocessing import Imputer
-from __init__ import datasets_dir
+from __init__ import classification_datasets_dir
 from math import floor
 def print_dataset(X,Y):
     """
@@ -84,7 +84,7 @@ def load_zoo_dataset():
     :return:features set X del dataset zoo ,label set Y del dataset zoo
     """
     path = os.path.abspath('')
-    X, Y = CSV.read_csv(path+datasets_dir+'zoo.csv', skip_rows=31, skip_column_left=1)
+    X, Y = CSV.read_csv(path+classification_datasets_dir+'zoo.csv', skip_rows=31, skip_column_left=1)
     Y=CSV.convert_type_to_float(Y)
     X=CSV.convert_type_to_float(X)
     print(type(X))
@@ -95,7 +95,7 @@ def load_balance_dataset():
     :return:features set X del dataset balance ,label set Y del dataset balance
     """
     path = os.path.abspath('')
-    X, Y = CSV.read_csv(path+datasets_dir+'balance.csv', skip_rows=29,last_column_is_label=False)
+    X, Y = CSV.read_csv(path+classification_datasets_dir+'balance.csv', skip_rows=29,last_column_is_label=False)
     Y=CSV.convert_label_values(Y, ['L','B','R'], ['0', '1', '2'])
     X=CSV.convert_type_to_float(X)
     return X,Y
@@ -105,7 +105,7 @@ def load_seed_dataset():
     :return:features set X del dataset seed ,label set Y del dataset zoo
     """
     path = os.path.abspath('')
-    X, Y = CSV.read_csv(path+datasets_dir+'seeds.csv', skip_rows=2,delimiter='\t')
+    X, Y = CSV.read_csv(path+classification_datasets_dir+'seeds.csv', skip_rows=2,delimiter='\t')
     Y=CSV.convert_type_to_float(Y)
     X=CSV.convert_type_to_float(X)
     return X,Y
@@ -115,7 +115,7 @@ def load_tris_dataset():
     :return:features set X del dataset tris ,label set Y del dataset tris
     """
     path = os.path.abspath('')
-    X, Y = CSV.read_csv(path+datasets_dir+'tris.csv',skip_rows=17)
+    X, Y = CSV.read_csv(path+classification_datasets_dir+'tris.csv',skip_rows=17)
     Y = CSV.convert_label_values(Y, ['positive', 'negative'], [1, 0])
     for i in range(len(X[:,0])):
         for j in range(len(X[0,:])):
@@ -134,7 +134,7 @@ def load_pima_indians_diabetes_dataset():
     :return:features set X del dataset pima_indians_diabetes ,label set Y del dataset pima_indians_diabetes
     """
     path = os.path.abspath('')
-    X, Y = CSV.read_csv(path + datasets_dir + 'pima_indians_diabetes.csv', skip_rows=18)
+    X, Y = CSV.read_csv(path + classification_datasets_dir + 'pima_indians_diabetes.csv', skip_rows=18)
     Y = CSV.convert_type_to_float(Y)
     X = CSV.convert_type_to_float(X)
     X = replace_value_in_column(X, [1, 2, 3, 4, 5], 0, numpy.nan)
