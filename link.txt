@@ -21,3 +21,17 @@ https://machinelearningmastery.com/handle-missing-data-python/ #master machine l
 https://www.datacamp.com/community/tutorials/random-forests-classifier-python#findingfeatures link per vedere l'importanza delle features
 
 in teoria se non esistono variabili da predirre si può fare regressione su qualsiasi variabile continua(sfruttando le altre?)
+
+#TODO
+    -   training --> testing su ogni caso
+    -   i casi sono:
+        -   dataset originali (senza norm e stand, solo norm, solo stand).
+        -   dataset con NaN (rimuovi righe con NaN, stategia media, mediana, moda)
+            dataset con NaN generati con percentuali di NaN pari a 0.1, 0.4, 0.7.
+
+    Che radar plot creiamo? esempio, RF al variare della strategia usata per il filling?
+
+    balance --> all
+    seed --> mean, median
+    tris --> mode
+    zoo --> mode

@@ -18,15 +18,7 @@ from __init__ import model_settings_dir
 from time import time
 import warnings
 import os
-
-
-def fxn():
-    warnings.warn("Undefined metric", UndefinedMetricWarning)
-
-
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore")
-    fxn()
+import main
 
 
 def KNN_training(X, Y, k, scoring, seed, n_split, mean):
@@ -78,7 +70,7 @@ def RANDOMFOREST_training(X, Y,list_n_trees,scoring,seed,n_split,mean):
     best_total_score = None
 
     for trees in list_n_trees:
-        for max_features in range(1,len(X[0])+1):  # len(X[0])==numero features
+        for max_features in range(1, len(X[0])+1):  # len(X[0])==numero features
             model=RandomForestClassifier(n_estimators=trees, random_state=seed, max_features=max_features)
             result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
             harmonic_mean = hmean_scores(scoring, result)  # funzione che da result calcola media armonica
@@ -114,15 +106,20 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
     best_degree = None
     best_total_score = None
     # range in cui variano i parametri plausibili (lungo il training)
-    # C_range = np.logspace(-3, 6, 10)
-    # gamma_range = np.logspace(-9, 3, 13)
-    # degree_range = range(1, 6, 1)
+    C_range = np.logspace(-2, 3, 6)
+    gamma_range = np.logspace(-5, 2, 8)
+    degree_range = range(2, 4, 1)
     # range minori per testare funzionalità
-    C_range = np.logspace(-1, 1, 3)
-    gamma_range = np.logspace(-4, -1, 3)
-    degree_range = range(2, 3, 1)
+    # C_range = np.logspace(-1, 1, 3)
+    # gamma_range = np.logspace(-4, -1, 3)
+    # degree_range = range(2, 3, 1)
 
     # case kernel is linear
+
+    if printValue:
+        print("Start training of SVC with kernel linear")
+        start_time_linear = time()
+
     for C in C_range:
         model = OneVsRestClassifier(SVC(kernel='linear', random_state=seed,C=C))
         result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
@@ -132,18 +129,34 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
             best_C = C
             best_kernel = 'linear'
 
+    if printValue:
+        print("End training of SVC with kernel linear after", time() - start_time_linear, "s.")
+
     # case kernel is rbf
+
+    if printValue:
+        print("Start training of SVC with kernel rbf")
+        start_time_rbf = time()
+
     for C in C_range:
         for gamma in gamma_range:
             model = OneVsRestClassifier(SVC(kernel='rbf', random_state=seed, C=C, gamma=gamma))
             result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
-            print(result)
             harmonic_mean = hmean_scores(scoring, result)
             if best_total_score < harmonic_mean:
                 best_total_score = harmonic_mean
                 best_C = C
                 best_gamma = gamma
                 best_kernel = 'rbf'
+
+    if printValue:
+        print("End training of SVC with kernel rbf after", time() - start_time_rbf, "s.")
+
+    # case kernel is polynomial
+
+    if printValue:
+        print("Start training of SVC with kernel polynomial")
+        start_time_poly = time()
 
     for C in C_range:
         for degree in degree_range:
@@ -158,6 +171,15 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
                     best_degree = degree
                     best_kernel = 'poly'
 
+    if printValue:
+        print("End training of SVC with kernel polynomial after", time() - start_time_poly, "s.")
+
+    # case kernel is sigmoid
+
+    if printValue:
+        print("Start training of SVC with kernel sigmoid")
+        start_time_sigmoid = time()
+
     for C in C_range:
         for gamma in gamma_range:
                 model = OneVsRestClassifier(SVC(kernel='sigmoid', random_state=seed, C=C, gamma=gamma))
@@ -168,6 +190,9 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
                     best_C = C
                     best_gamma = gamma
                     best_kernel = 'sigmoid'
+
+    if printValue:
+        print("End training of SVC with kernel sigmoid after", time() - start_time_sigmoid, "s.")
 
     # setto valori numerici per evitare problemi nella lettura e conversione da file, tanto non verranno visti dal
     # costruttore del modello se sono ancora None a questo punto del codice
@@ -213,6 +238,8 @@ def training(X, Y, name_models,  scoring, k=[5], list_n_trees=[10], seed=111, n_
         fl.writelines(["best_C " + str(best_C) + "\n","best_degree " + str(best_degree) + "\n", "best_gamma " +
                        str(best_gamma) + "\n", "best_kernel " + str(best_kernel) + "\n"])
 
+    fl.close()
+
 
 def build_models(name_models, file_name):
     """
@@ -224,7 +251,7 @@ def build_models(name_models, file_name):
 
     models = {}
     path = os.path.abspath('')
-    fl = open(path+model_settings_dir+file_name, "r")#aggiungere path
+    fl = open(path + model_settings_dir + file_name, "r")  # aggiungere path
     settings = {}
     while 1:
         line = fl.readline()
@@ -250,17 +277,20 @@ def build_models(name_models, file_name):
                                                 gamma=float(settings["best_gamma"]),
                                                 degree=int(settings["best_degree"])))
 
+    fl.close()
+
     return models
 
 
 if __name__ == '__main__':
+    warnings.filterwarnings('always')
     seed = 100
     name_models = ['RANDFOREST', 'CART', 'KNN', 'SVC']
-    dataset_name = 'zoo'
-    name_setting_file = dataset_name +setting
-    X, Y = dataset.load_dataset(dataset_name)
-    X_norm = dataset.normalize_dataset(X)
-    X_std = dataset.standardize_dataset(X)
-    scoring = scoringUtils.create_dictionary_classification_scoring()
-    training(X, Y, name_models, scoring, k=range(8, 11, 1), list_n_trees=range(9, 12, 1), seed=seed,
+    dataset_name = 'tris'
+    k_range = range(3, 21, 1)
+    n_trees_range = range(5, 21, 1)
+
+    X, Y, scoring, name_setting_file, name_radar_plot_file = main.case_full_dataset_classification(dataset_name)
+
+    training(X, Y, name_models, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
              n_split=10, mean=True, file_name=name_setting_file)

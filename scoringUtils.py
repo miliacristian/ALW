@@ -11,15 +11,6 @@ import warnings
 import os
 
 
-def fxn():
-    warnings.warn("Undefined metric", UndefinedMetricWarning)
-
-
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore")
-    fxn()
-
-
 def roc_auc_micro(y_true, y_pred):
     """
     Chiama roc_auc_score con average=micro
@@ -80,7 +71,8 @@ def create_dictionary_classification_scoring():
                }
     return scoring
 
-def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name="radar_plot", file_format =".png"):
+
+def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name="radar_plot", file_format=".png"):
     """
     Print and save the radar plot of the scoring
 
@@ -192,6 +184,7 @@ def K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=True):
     :param seed: int, seme generatore pseudocasuale
     :return: dictionary with key 'name metric' and value 'value mean of metric' or all values
     """
+    warnings.filterwarnings('always')
     kfold = model_selection.KFold(n_splits=n_split, shuffle=True, random_state=seed)
     scores = model_selection.cross_validate(model, X, Y, cv=kfold, scoring=scoring, return_train_score=True, n_jobs=1)
     result = {}
