@@ -159,6 +159,8 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
         start_time_poly = time()
 
     for C in C_range:
+        if printValue:
+            print("Starting cycle with C =", C)
         for degree in degree_range:
             for gamma in gamma_range:
                 model = OneVsRestClassifier(SVC(kernel='poly', random_state=seed, C=C, gamma=gamma, degree=degree))
@@ -286,7 +288,7 @@ if __name__ == '__main__':
     warnings.filterwarnings('always')
     seed = 100
     name_models = ['RANDFOREST', 'CART', 'KNN', 'SVC']
-    dataset_name = 'tris'
+    dataset_name = 'balance'
     k_range = range(3, 21, 1)
     n_trees_range = range(5, 21, 1)
 
