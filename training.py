@@ -106,8 +106,8 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
     best_degree = None
     best_total_score = None
     # range in cui variano i parametri plausibili (lungo il training)
-    C_range = np.logspace(-2, 3, 6)
-    gamma_range = np.logspace(-5, 2, 8)
+    C_range = np.logspace(-2, 2, 5)
+    gamma_range = np.logspace(-5, 0, 6)
     degree_range = range(2, 4, 1)
     # range minori per testare funzionalità
     # C_range = np.logspace(-1, 1, 3)
@@ -159,10 +159,13 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
         start_time_poly = time()
 
     for C in C_range:
-        if printValue:
-            print("Starting cycle with C =", C)
         for degree in degree_range:
             for gamma in gamma_range:
+                # if (C == 100 or C == 1000) and gamma == 10:
+                #     continue
+                if printValue:
+                    print("Starting cycle with C =", C, "degree =", degree, "gamma =", gamma)
+                    start_time_poly2 = time()
                 model = OneVsRestClassifier(SVC(kernel='poly', random_state=seed, C=C, gamma=gamma, degree=degree))
                 result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
                 harmonic_mean = hmean_scores(scoring, result)
@@ -172,6 +175,8 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
                     best_gamma = gamma
                     best_degree = degree
                     best_kernel = 'poly'
+                if printValue:
+                    print("Ending in", time() - start_time_poly2)
 
     if printValue:
         print("End training of SVC with kernel polynomial after", time() - start_time_poly, "s.")
@@ -292,7 +297,7 @@ if __name__ == '__main__':
     k_range = range(3, 21, 1)
     n_trees_range = range(5, 21, 1)
 
-    X, Y, scoring, name_setting_file, name_radar_plot_file = main.case_full_dataset_classification(dataset_name)
+    X, Y, scoring, name_setting_file, name_radar_plot_file = main.case_NaN_dataset_classification(dataset_name, "mean", seed, 0.3)
 
     training(X, Y, name_models, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
              n_split=10, mean=True, file_name=name_setting_file)
