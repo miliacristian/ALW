@@ -31,7 +31,29 @@ in teoria se non esistono variabili da predirre si può fare regressione su qual
 
     Che radar plot creiamo? esempio, RF al variare della strategia usata per il filling?
 
+    problema: dataset piccoli (seed e zoo), strategia eliminate_row da problemi con KNN (Fold con pochissimi elementi)
+
     balance --> all
     seed --> mean, median
     tris --> mode
     zoo --> mode
+
+   -    REGRESSIONE:
+        -   aggiustare dataset  energy (sembra fattibile. multilabel ?, anche se supportato dalle metriche sembra),
+                                pc (non mi piace, alcune features ambigue e piccolo),
+                                com (ok),
+                                auto (ok, attenzione valori mancanti),
+                                airfull (ok)
+        -   scegliere modelli:  SVR (idem SVC per regressione),
+                                KNeighborsRegressor (KNN per regressione),
+                                RadiusNeighborsRegressor (idem KNN ma non vede i K elementi più vicini,
+                                    ma quelli che distano meno di un certo raggio),
+                                DecisionTreeRegressor (CART for regressione),
+                                MLPRegressor (reti neurali per regressione),
+                                RandomForestRegressor (RF per regressione)
+        -   scegliere metriche: 'explained_variance' (tra 0 e 1),
+                                'neg_mean_absolute_error',
+                                'neg_mean_squared_error',
+                                'neg_mean_squared_log_error',
+                                'neg_median_absolute_error',
+                                'r2'

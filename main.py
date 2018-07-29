@@ -51,7 +51,7 @@ def case_full_dataset_classification(dataset_name, standardize=False, normalize=
     name_setting_file = dataset_name + setting
     name_radar_plot_file = dataset_name + radar_plot
 
-    X, Y = dataset.load_dataset(dataset_name)
+    X, Y = dataset.load_classification_dataset(dataset_name)
     if printValue:
         dataset.print_dataset(X, Y)
 
@@ -93,7 +93,7 @@ def case_NaN_dataset_classification(dataset_name, strategy, seed=100, perc_NaN=0
     name_setting_file = dataset_name + setting
     name_radar_plot_file = dataset_name + radar_plot
 
-    X, Y = dataset.load_dataset(dataset_name)
+    X, Y = dataset.load_classification_dataset(dataset_name)
     name_setting_file += '_' + str(perc_NaN*100) + '%_NaN'
     name_radar_plot_file += '_' + str(perc_NaN*100) + '%_NaN'
     X = dataset.put_random_NaN(X, perc_NaN, seed=seed)

@@ -161,8 +161,8 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
     for C in C_range:
         for degree in degree_range:
             for gamma in gamma_range:
-                # if (C == 100 or C == 1000) and gamma == 10:
-                #     continue
+                if C == 100 and gamma == 1:
+                    continue
                 if printValue:
                     print("Starting cycle with C =", C, "degree =", degree, "gamma =", gamma)
                     start_time_poly2 = time()
@@ -293,11 +293,11 @@ if __name__ == '__main__':
     warnings.filterwarnings('always')
     seed = 100
     name_models = ['RANDFOREST', 'CART', 'KNN', 'SVC']
-    dataset_name = 'balance'
+    dataset_name = 'tris'
     k_range = range(3, 21, 1)
     n_trees_range = range(5, 21, 1)
 
-    X, Y, scoring, name_setting_file, name_radar_plot_file = main.case_NaN_dataset_classification(dataset_name, "mean", seed, 0.3)
+    X, Y, scoring, name_setting_file, name_radar_plot_file = main.case_NaN_dataset_classification(dataset_name, "mode", seed, 0.1)
 
     training(X, Y, name_models, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
              n_split=10, mean=True, file_name=name_setting_file)

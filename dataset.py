@@ -4,7 +4,7 @@ from sklearn.preprocessing import OneHotEncoder
 from math import sqrt
 import os
 from sklearn.preprocessing import Imputer
-from __init__ import classification_datasets_dir
+from __init__ import classification_datasets_dir, regression_dataset_dir
 from math import floor
 
 
@@ -191,7 +191,29 @@ def load_pima_indians_diabetes_dataset():
     return X, Y
 
 
-def load_dataset(dataset):
+def load_com_dataset():
+    """
+    :return:features set X del dataset com ,label set Y del dataset com
+    """
+    path = os.path.abspath('')
+    X, Y = CSV.read_csv(path + regression_dataset_dir + 'com.csv', skip_rows=20, delimiter='\t')
+    Y = CSV.convert_type_to_float(Y)
+    X = CSV.convert_type_to_float(X)
+    return X, Y
+
+
+def load_airfoil_dataset():
+    """
+    :return:features set X del dataset airfoil ,label set Y del dataset airfoil
+    """
+    path = os.path.abspath('')
+    X, Y = CSV.read_csv(path + regression_dataset_dir + 'airfoil_self_noise.csv', skip_rows=16, delimiter='\t')
+    Y = CSV.convert_type_to_float(Y)
+    X = CSV.convert_type_to_float(X)
+    return X, Y
+
+
+def load_classification_dataset(dataset):
     if dataset == 'tris':
         X, Y = load_tris_dataset()
     elif dataset == 'seed':
@@ -203,9 +225,21 @@ def load_dataset(dataset):
     elif dataset == 'indians':
         X, Y = load_pima_indians_diabetes_dataset()
     else:
-        print("input must be 'tris' or 'seed' or 'balance' or 'zoo' or 'indians' ")
+        print("input must be 'tris' or 'seed' or 'balance' or 'zoo' or 'indians'.")
         exit(1)
     Y = one_hot_encoding(Y)
+    return X, Y
+
+
+def load_regression_dataset(dataset):
+    if dataset == 'com':
+        X, Y = load_com_dataset()
+    elif dataset == 'airfoil':
+        X, Y = load_airfoil_dataset()
+    else:
+        print("input must be 'com' or 'airfoil'.")
+        exit(1)
+
     return X, Y
 
 
@@ -357,3 +391,13 @@ def one_hot_encoding(Y):
     Y_onehot_encoded = onehot_encoder.fit_transform(integer_encoded)
     inverted = label_encoder.inverse_transform(integer_encoded)
     return Y_onehot_encoded
+
+
+if __name__ == '__main__':
+    X, Y = load_regression_dataset('com')
+    print(X)
+    print(Y)
+
+    X, Y = load_regression_dataset('airfoil')
+    print(X)
+    print(Y)
