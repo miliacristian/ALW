@@ -173,6 +173,20 @@ def hmean_scores(dict_name_scoring, dict_scores):
     return hmean(scores_to_list(dict_name_scoring, dict_scores))
 
 
+def total_score_regression(dict_name_scoring, dict_scores):
+    """
+    Calcola il total score per la regressione
+    :param dict_name_scoring: dict,dizionario dei nomi degli scorer
+    :param dict_scores: dict,dizionario dei valori degli scores
+    :return: total score
+    """
+
+    result = 0
+    for i in scores_to_list(dict_name_scoring, dict_scores):
+        result += i
+    return result
+
+
 def K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=True):
     """
     Esegue Kfold cross validation su X,Y usando il modello model dividendo il dataset in n_split fold

@@ -6,12 +6,12 @@ from sklearn.multiclass import OneVsRestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.svm import SVC
+from sklearn.svm import SVC, SVR
 
 import dataset
 import scoringUtils
 import numpy as np
-from scoringUtils import hmean_scores
+from scoringUtils import hmean_scores, total_score_regression
 from __init__ import printValue
 from __init__ import setting
 from __init__ import model_settings_dir, model_setting_test_dir
@@ -87,9 +87,7 @@ def RANDOMFOREST_training(X, Y,list_n_trees,scoring,seed,n_split,mean):
 def SVC_training(X, Y, scoring, seed, n_split, mean):
     """
     do the training of a SVC with dataset X, Y and K_Fold_Cross_Validation. Find the best setting iterating on the type
-    of kernel function use (linear, rbf, polynomial or sigmoid), iterating the parameter C in [0.001, 0.01, 0.1 ...
-    100000, 1000000], the parameter degree in [1, 2, ..., 5, 6], the parameter gamma in [0.000000001, ..., 100, 1000],
-    and using the parameter coef0 = 0.0
+    of kernel function use (linear, rbf, polynomial or sigmoid)
     :param X: feature set
     :param Y: label set
     :param scoring: dict of scoring use
@@ -214,6 +212,144 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
     return best_C, best_degree, best_gamma, best_kernel
 
 
+def SVR_training(X, Y, scoring, seed, n_split, mean):
+    """
+    do the training of a SVR with dataset X, Y and K_Fold_Cross_Validation. Find the best setting iterating on the type
+    of kernel function use (linear, rbf, polynomial or sigmoid)
+    :param X: feature set
+    :param Y: label set
+    :param scoring: dict of scoring use
+    :return: the best parameter C, epsilon, gamma and degree with the best kernel function
+    """
+
+    if printValue:
+        print("Start training of SVR")
+        start_time = time()
+
+    best_kernel = None
+    best_C = None
+    best_eps = None
+    best_gamma = None
+    best_degree = None
+    best_total_score = None
+    # range in cui variano i parametri plausibili (lungo il training)
+    C_range = np.logspace(-2, 2, 5)
+    eps_range = [0.0, 0.01, 0.1, 0.5, 1, 2, 4]
+    gamma_range = np.logspace(-5, 0, 6)
+    degree_range = range(2, 4, 1)
+    # range minori per testare funzionalità
+    # C_range = np.logspace(-1, 1, 3)
+    # gamma_range = np.logspace(-4, -1, 3)
+    # degree_range = range(2, 3, 1)
+
+    # case kernel is linear
+
+    if printValue:
+        print("Start training of SVR with kernel linear")
+        start_time_linear = time()
+
+    for C in C_range:
+        for eps in eps_range:
+            model = OneVsRestClassifier(SVR(kernel='linear', random_state=seed, C=C, epsilon=eps))
+            result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
+            total_score = total_score_regression(scoring, result)
+            if best_total_score is None or best_total_score < total_score:
+                best_total_score = total_score
+                best_C = C
+                best_eps = eps
+                best_kernel = 'linear'
+
+    if printValue:
+        print("End training of SVR with kernel linear after", time() - start_time_linear, "s.")
+
+    # case kernel is rbf
+
+    if printValue:
+        print("Start training of SVR with kernel rbf")
+        start_time_rbf = time()
+
+    for C in C_range:
+        for eps in eps_range:
+            for gamma in gamma_range:
+                model = OneVsRestClassifier(SVR(kernel='rbf', random_state=seed, C=C, gamma=gamma, epsilon=eps))
+                result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
+                total_score = total_score_regression(scoring, result)
+                if best_total_score < total_score:
+                    best_total_score = total_score
+                    best_C = C
+                    best_eps = eps
+                    best_gamma = gamma
+                    best_kernel = 'rbf'
+
+    if printValue:
+        print("End training of SVR with kernel rbf after", time() - start_time_rbf, "s.")
+
+    # case kernel is polynomial
+
+    if printValue:
+        print("Start training of SVR with kernel polynomial")
+        start_time_poly = time()
+
+    for C in C_range:
+        for eps in eps_range:
+            for degree in degree_range:
+                for gamma in gamma_range:
+                    if C == 100 and gamma == 1:
+                        continue
+                    if printValue:
+                        print("Starting cycle with C =", C, "eps =", eps, "degree =", degree, "gamma =", gamma)
+                        start_time_poly2 = time()
+                    model = OneVsRestClassifier(SVC(kernel='poly', random_state=seed, C=C, gamma=gamma, degree=degree))
+                    result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
+                    total_score =  total_score_regression(scoring, result)
+                    if best_total_score < total_score:
+                        best_total_score = total_score
+                        best_C = C
+                        best_eps = eps
+                        best_gamma = gamma
+                        best_degree = degree
+                        best_kernel = 'poly'
+                    if printValue:
+                        print("Ending in", time() - start_time_poly2)
+
+    if printValue:
+        print("End training of SVR with kernel polynomial after", time() - start_time_poly, "s.")
+
+    # case kernel is sigmoid
+
+    if printValue:
+        print("Start training of SVR with kernel sigmoid")
+        start_time_sigmoid = time()
+
+    for C in C_range:
+        for eps in eps_range:
+            for gamma in gamma_range:
+                    model = OneVsRestClassifier(SVR(kernel='sigmoid', random_state=seed, C=C, gamma=gamma, epsilon=eps))
+                    result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
+                    total_score = total_score_regression(scoring, result)
+                    if best_total_score < total_score:
+                        best_total_score = total_score
+                        best_C = C
+                        best_eps = eps
+                        best_gamma = gamma
+                        best_kernel = 'sigmoid'
+
+    if printValue:
+        print("End training of SVR with kernel sigmoid after", time() - start_time_sigmoid, "s.")
+
+    # setto valori numerici per evitare problemi nella lettura e conversione da file, tanto non verranno visti dal
+    # costruttore del modello se sono ancora None a questo punto del codice
+    if best_gamma is None:
+        best_gamma = 'auto'
+    if best_degree is None:
+        best_degree = 0
+
+    if printValue:
+        print("End training of SVR after", time() - start_time, "s.")
+
+    return best_C, best_eps, best_degree, best_gamma, best_kernel
+
+
 def training(X, Y, name_models,  scoring, k=[5], list_n_trees=[10], seed=111, n_split=10, mean=True,
              file_name="best_setting.txt"):
     """
@@ -297,11 +433,11 @@ if __name__ == '__main__':
     warnings.filterwarnings('always')
     seed = 100
     name_models = ['RANDFOREST', 'CART', 'KNN', 'SVC']
-    dataset_name = 'tris'
+    dataset_name = 'balance'
     k_range = range(3, 21, 1)
     n_trees_range = range(5, 21, 1)
 
-    X, Y, scoring, name_setting_file, name_radar_plot_file = main.case_NaN_dataset_classification(dataset_name, "mode", seed, 0.1)
+    X, Y, scoring, name_setting_file, name_radar_plot_file = main.case_NaN_dataset_classification(dataset_name, "mode", seed, 0.15)
 
     training(X, Y, name_models, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
              n_split=10, mean=True, file_name=name_setting_file)
