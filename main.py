@@ -175,7 +175,7 @@ def case_NaN_dataset_classification(dataset_name, strategy, seed=100, perc_NaN=0
 if __name__ == '__main__':
     warnings.filterwarnings('always')
     name_models = ['RANDFOREST', 'CART', 'KNN', 'SVC']
-    dataset_names = ['seed', 'tris', 'zoo', 'balance']
+    dataset_names = ['seed', 'tris', 'zoo', 'balance','eye','page']
     seed = 100
 
     strategies = ['mean', 'eliminate_row', 'mode', 'median']
