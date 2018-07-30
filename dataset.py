@@ -218,7 +218,7 @@ def load_com_dataset():
     :return:features set X del dataset com ,label set Y del dataset com
     """
     path = os.path.abspath('')
-    X, Y = CSV.read_csv(path + regression_dataset_dir + 'com.csv', skip_rows=20, delimiter='\t')
+    X, Y = CSV.read_csv(path + regression_dataset_dir + 'concrete_compressive_strength.csv', skip_rows=20, delimiter='\t')
     Y = CSV.convert_type_to_float(Y)
     X = CSV.convert_type_to_float(X)
     return X, Y
@@ -245,7 +245,26 @@ def load_auto_dataset():
     Y = CSV.convert_type_to_float(Y)
     X = CSV.convert_type_to_float(X)
     return X, Y
+def load_power_plant_dataset():
+    """
+    :return:features set X del dataset power_plant ,label set Y del dataset power_plant
+    """
+    path = os.path.abspath('')
+    X, Y = CSV.read_csv(path + regression_dataset_dir + 'combined_cycle_power_plant.csv', skip_rows=15)
+    Y = CSV.convert_type_to_float(Y)
+    X = CSV.convert_type_to_float(X)
+    return X, Y
 
+
+def load_energy_efficiency_dataset():
+    """
+    :return:features set X del dataset energy_efficency ,label set Y del dataset energy_efficency
+    """
+    path = os.path.abspath('')
+    X, Y = CSV.read_csv(path + regression_dataset_dir + 'energy_efficiency.csv', skip_rows=26,num_label=2)
+    Y = CSV.convert_type_to_float(Y)
+    X = CSV.convert_type_to_float(X)
+    return X, Y
 
 def load_classification_dataset(dataset):
     if dataset == 'tris':
@@ -270,14 +289,18 @@ def load_classification_dataset(dataset):
 
 
 def load_regression_dataset(dataset):
-    if dataset == 'com':
+    if dataset == 'compressive_strength':
         X, Y = load_com_dataset()
     elif dataset == 'airfoil':
         X, Y = load_airfoil_dataset()
     elif dataset == 'auto':
         X, Y, = load_auto_dataset()
+    elif dataset == 'power_plant':
+        X,Y = load_power_plant_dataset()
+    elif dataset=='energy':
+        X,Y=load_energy_efficiency_dataset()
     else:
-        print("input must be 'com' or 'airfoil' or 'auto'.")
+        print("input must be 'compressive_strength' or 'airfoil' or 'auto' or 'power_plant' or 'energy'.")
         exit(1)
 
     return X, Y
@@ -434,6 +457,7 @@ def one_hot_encoding(Y):
 
 
 if __name__ == '__main__':
-    X, Y = load_regression_dataset('auto')
+    X, Y = load_regression_dataset('energy')
     print(X)
     print(Y)
+    exit(0)

@@ -1,6 +1,10 @@
 Data Set Information:
 
-We perform energy analysis using 12 different building shapes simulated in Ecotect. The buildings differ with respect to the glazing area, the glazing area distribution, and the orientation, amongst other parameters. We simulate various settings as functions of the afore-mentioned characteristics to obtain 768 building shapes. The dataset comprises 768 samples and 8 features, aiming to predict two real valued responses. It can also be used as a multi-class classification problem if the response is rounded to the nearest integer.
+We perform energy analysis using 12 different building shapes simulated in Ecotect.
+The buildings differ with respect to the glazing area, the glazing area distribution,and the orientation, amongst other parameters.
+We simulate various settings as functions of the afore-mentioned characteristics to obtain 768 building shapes.
+The dataset comprises 768 samples and 8 features, aiming to predict two real valued responses.
+It can also be used as a multi-class classification problem if the response is rounded to the nearest integer.
 
 Attribute Information:
 
@@ -788,4 +792,3 @@ y2 Cooling Load
 0,62	808,50	367,50	220,50	3,50	3	0,40	5	16,44	17,11
 0,62	808,50	367,50	220,50	3,50	4	0,40	5	16,48	16,61
 0,62	808,50	367,50	220,50	3,50	5	0,40	5	16,64	16,03
-
