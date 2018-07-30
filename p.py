@@ -18,3 +18,5 @@ def l():
     multi_key_word_arg(p,b='blue',c='cyano',p='turc',)
 
 
+if __name__== '__name__':
+    pass

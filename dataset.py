@@ -178,6 +178,28 @@ def load_tris_dataset():
     return X, Y
 
 
+def load_eye_dataset():
+    """
+    :return:features set X del dataset eye ,label set Y del dataset eye
+    """
+    path = os.path.abspath('')
+    X, Y = CSV.read_csv(path + classification_datasets_dir + 'EEG_eye_state.csv', skip_rows=24)
+    X = CSV.convert_type_to_float(X)
+    Y = CSV.convert_type_to_float(Y)
+    return X, Y
+
+
+def load_page_dataset():
+    """
+    :return:features set X del dataset page ,label set Y del dataset page
+    """
+    path = os.path.abspath('')
+    X, Y = CSV.read_csv(path + classification_datasets_dir + 'page_block.csv', skip_rows=48, delimiter=' ')
+    X = CSV.convert_type_to_float(X)
+    Y = CSV.convert_type_to_float(Y)
+    return X, Y
+
+
 def load_pima_indians_diabetes_dataset():
     """
     :return:features set X del dataset pima_indians_diabetes ,label set Y del dataset pima_indians_diabetes
@@ -224,8 +246,12 @@ def load_classification_dataset(dataset):
         X, Y = load_zoo_dataset()
     elif dataset == 'indians':
         X, Y = load_pima_indians_diabetes_dataset()
+    elif dataset == 'eye':
+        X, Y = load_eye_dataset()
+    elif dataset == 'page':
+        X, Y = load_page_dataset()
     else:
-        print("input must be 'tris' or 'seed' or 'balance' or 'zoo' or 'indians'.")
+        print("input must be 'tris' or 'seed' or 'balance' or 'zoo' or 'indians' or 'eye' or 'page'.")
         exit(1)
     Y = one_hot_encoding(Y)
     return X, Y
@@ -394,10 +420,6 @@ def one_hot_encoding(Y):
 
 
 if __name__ == '__main__':
-    X, Y = load_regression_dataset('com')
-    print(X)
-    print(Y)
-
-    X, Y = load_regression_dataset('airfoil')
+    X, Y = load_classification_dataset('zoo')
     print(X)
     print(Y)
