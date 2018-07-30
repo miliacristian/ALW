@@ -204,7 +204,7 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
     # setto valori numerici per evitare problemi nella lettura e conversione da file, tanto non verranno visti dal
     # costruttore del modello se sono ancora None a questo punto del codice
     if best_gamma is None:
-        best_gamma = 0.0
+        best_gamma = 'auto'
     if best_degree is None:
         best_degree = 0
 
@@ -280,9 +280,13 @@ def build_models(name_models, file_name):
         models['KNN'] = KNeighborsClassifier(n_neighbors=int(settings["best_k"]), weights='distance')
 
     if 'SVC' in name_models:
-        models['SVC'] = OneVsRestClassifier(SVC(kernel=settings["best_kernel"], C=float(settings["best_C"]),
-                                                gamma=float(settings["best_gamma"]),
-                                                degree=int(settings["best_degree"])))
+        if settings["best_gamma"] == "'auto'":
+            models['SVC'] = OneVsRestClassifier(SVC(kernel=settings["best_kernel"], C=float(settings["best_C"]),
+                                                    degree=int(settings["best_degree"])))
+        else:
+            models['SVC'] = OneVsRestClassifier(SVC(kernel=settings["best_kernel"], C=float(settings["best_C"]),
+                                                    gamma=float(settings["best_gamma"]),
+                                                    degree=int(settings["best_degree"])))
 
     fl.close()
 

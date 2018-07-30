@@ -5,5 +5,5 @@ best_max_features 4
 best_k 3
 best_C 1.0
 best_degree 0
-best_gamma 0.0
+best_gamma 'auto'
 best_kernel linear
