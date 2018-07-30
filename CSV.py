@@ -1,4 +1,4 @@
-import numpy, csv
+import numpy, csv,re
 
 
 def read_csv(filecsv, skip_rows=0, delimiter=',', skip_column_left=0, skip_column_right=0, last_column_is_label=True,num_label=1):
@@ -28,7 +28,7 @@ def read_csv(filecsv, skip_rows=0, delimiter=',', skip_column_left=0, skip_colum
         Y = result[:, num_col - skip_column_right - num_label:]  # array di label
     else:#first column is label
         X = result[:, 0 + skip_column_left + num_label:num_col - skip_column_right]
-        Y = result[:, 0 + skip_column_left:skip_column_left+num_label]  # array di label nella prima colonna
+        Y = result[:, 0 + skip_column_left:skip_column_left+num_label]  # array di label nelle prime num_label colonne
     return X, Y
 
 

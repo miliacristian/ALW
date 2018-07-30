@@ -240,7 +240,7 @@ def load_auto_dataset():
     :return:features set X del dataset auto ,label set Y del dataset auto
     """
     path = os.path.abspath('')
-    X, Y = CSV.read_csv(path + regression_dataset_dir + 'auto_mpg.csv', skip_rows=32, delimiter=' ',
+    X, Y = CSV.read_csv(path + regression_dataset_dir + 'auto_mpg.csv', skip_rows=24, delimiter=' ',
                         skip_column_right=1, last_column_is_label=False)
     Y = CSV.convert_type_to_float(Y)
     X = CSV.convert_type_to_float(X)
@@ -457,7 +457,7 @@ def one_hot_encoding(Y):
 
 
 if __name__ == '__main__':
-    X, Y = load_regression_dataset('energy')
+    X, Y = load_regression_dataset('auto')
     print(X)
     print(Y)
     exit(0)
