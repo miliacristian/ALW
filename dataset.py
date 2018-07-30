@@ -235,6 +235,18 @@ def load_airfoil_dataset():
     return X, Y
 
 
+def load_auto_dataset():
+    """
+    :return:features set X del dataset auto ,label set Y del dataset auto
+    """
+    path = os.path.abspath('')
+    X, Y = CSV.read_csv(path + regression_dataset_dir + 'auto_mpg.csv', skip_rows=32, delimiter=' ',
+                        skip_column_right=1, last_column_is_label=False)
+    Y = CSV.convert_type_to_float(Y)
+    X = CSV.convert_type_to_float(X)
+    return X, Y
+
+
 def load_classification_dataset(dataset):
     if dataset == 'tris':
         X, Y = load_tris_dataset()
@@ -262,8 +274,10 @@ def load_regression_dataset(dataset):
         X, Y = load_com_dataset()
     elif dataset == 'airfoil':
         X, Y = load_airfoil_dataset()
+    elif dataset == 'auto':
+        X, Y, = load_auto_dataset()
     else:
-        print("input must be 'com' or 'airfoil'.")
+        print("input must be 'com' or 'airfoil' or 'auto'.")
         exit(1)
 
     return X, Y
@@ -420,6 +434,6 @@ def one_hot_encoding(Y):
 
 
 if __name__ == '__main__':
-    X, Y = load_classification_dataset('zoo')
+    X, Y = load_regression_dataset('auto')
     print(X)
     print(Y)
