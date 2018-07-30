@@ -261,7 +261,7 @@ def load_energy_efficiency_dataset():
     :return:features set X del dataset energy_efficency ,label set Y del dataset energy_efficency
     """
     path = os.path.abspath('')
-    X, Y = CSV.read_csv(path + regression_dataset_dir + 'energy_efficiency.csv', skip_rows=26,num_label=2)
+    X, Y = CSV.read_csv(path + regression_dataset_dir + 'energy_efficiency.csv', skip_rows=27,num_label=2,delimiter='\t')
     Y = CSV.convert_type_to_float(Y)
     X = CSV.convert_type_to_float(X)
     return X, Y
