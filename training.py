@@ -14,7 +14,7 @@ import numpy as np
 from scoringUtils import hmean_scores
 from __init__ import printValue
 from __init__ import setting
-from __init__ import model_settings_dir
+from __init__ import model_settings_dir, model_setting_test_dir
 from time import time
 import warnings
 import os
@@ -231,7 +231,7 @@ def training(X, Y, name_models,  scoring, k=[5], list_n_trees=[10], seed=111, n_
     :param seed: int,seme per generatore pseudocasuale
     """
     path = os.path.abspath('')
-    fl = open(path+model_settings_dir+file_name, "w")
+    fl = open(path+ model_setting_test_dir +file_name, "w")
     fl.writelines(["seed " + str(seed) + "\n", "n_split " + str(n_split) + "\n"])
     if 'RANDFOREST' in name_models:
         best_n_trees, best_max_features = RANDOMFOREST_training(X, Y, list_n_trees, scoring, seed, n_split, mean)

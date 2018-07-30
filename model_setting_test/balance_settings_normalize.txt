@@ -1,0 +1,9 @@
+seed 100
+n_split 10
+best_n_trees 13
+best_max_features 2
+best_k 17
+best_C 100.0
+best_degree 2
+best_gamma 1.0
+best_kernel poly
