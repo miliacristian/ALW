@@ -23,14 +23,12 @@ def read_csv(filecsv, skip_rows=0, delimiter=',', skip_column_left=0, skip_colum
         result = numpy.array(data)
         num_row = len(result)
         num_col = len(result[skip_rows])
-    print(result)
-    exit(0)
     if last_column_is_label:
-        X = result[:, skip_column_left:num_col - skip_column_right - 1]  # dati senza la colonna con le label
-        Y = result[:, num_col - skip_column_right - 1]  # array di label
-    else:
-        X = result[:, 0 + skip_column_left + 1:num_col - skip_column_right]
-        Y = result[:, 0 + skip_column_left]  # array di label nella prima colonna
+        X = result[:, skip_column_left:num_col - skip_column_right - num_label]  # dati senza le colonne delle label
+        Y = result[:, num_col - skip_column_right - num_label:]  # array di label
+    else:#first column is label
+        X = result[:, 0 + skip_column_left + num_label:num_col - skip_column_right]
+        Y = result[:, 0 + skip_column_left:skip_column_left+num_label]  # array di label nella prima colonna
     return X, Y
 
 
