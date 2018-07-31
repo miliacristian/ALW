@@ -102,13 +102,13 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
     best_degree = None
     best_total_score = None
     # range in cui variano i parametri plausibili (lungo il training)
-    C_range = np.logspace(-2, 2, 5)
-    gamma_range = np.logspace(-5, 0, 6)
-    degree_range = range(2, 4, 1)
-    # range minori per testare funzionalità
-    # C_range = np.logspace(-1, 1, 3)
-    # gamma_range = np.logspace(-4, -1, 3)
-    # degree_range = range(2, 3, 1)
+    # C_range = np.logspace(-2, 2, 5)
+    # gamma_range = np.logspace(-5, 0, 6)
+    # degree_range = range(2, 4, 1)
+    # range dataset grandi grandi
+    C_range = np.logspace(-1, 1, 3)
+    gamma_range = np.logspace(-3, 0, 4)
+    degree_range = range(2, 3, 1)
 
     # case kernel is linear
 
@@ -311,7 +311,7 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
 
     for C in C_range:
         for eps in eps_range:
-            model = OneVsRestClassifier(SVR(kernel='linear', random_state=seed, C=C, epsilon=eps))
+            model = SVR(kernel='linear', C=C, epsilon=eps)
             result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
             total_score = total_score_regression(scoring, result)
             if best_total_score is None or best_total_score < total_score:
@@ -332,7 +332,7 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
     for C in C_range:
         for eps in eps_range:
             for gamma in gamma_range:
-                model = OneVsRestClassifier(SVR(kernel='rbf', random_state=seed, C=C, gamma=gamma, epsilon=eps))
+                model = OneVsRestClassifier(SVR(kernel='rbf', C=C, gamma=gamma, epsilon=eps))
                 result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
                 total_score = total_score_regression(scoring, result)
                 if best_total_score < total_score:
@@ -360,7 +360,7 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
                     if printValue:
                         print("Starting cycle with C =", C, "eps =", eps, "degree =", degree, "gamma =", gamma)
                         start_time_poly2 = time()
-                    model = OneVsRestClassifier(SVC(kernel='poly', random_state=seed, C=C, gamma=gamma, degree=degree))
+                    model = OneVsRestClassifier(SVC(kernel='poly', C=C, gamma=gamma, degree=degree))
                     result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
                     total_score = total_score_regression(scoring, result)
                     if best_total_score < total_score:
@@ -385,7 +385,7 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
     for C in C_range:
         for eps in eps_range:
             for gamma in gamma_range:
-                model = OneVsRestClassifier(SVR(kernel='sigmoid', random_state=seed, C=C, gamma=gamma, epsilon=eps))
+                model = OneVsRestClassifier(SVR(kernel='sigmoid', C=C, gamma=gamma, epsilon=eps))
                 result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
                 total_score = total_score_regression(scoring, result)
                 if best_total_score < total_score:
@@ -572,11 +572,11 @@ def check_strategies(dataset_name, strategy):
     strategies_seed = ['mean', 'median']
     strategies_tris = ['eliminate_row', 'mode']
     strategies_zoo = ['mode']
-    strategies_compress_strength = []
-    strategies_airfoil = []
-    strategies_auto = []
-    strategies_power_plant = []
-    strategies_energy = []
+    strategies_compress_strength = ['mean', 'eliminate_row', 'median']
+    strategies_airfoil = ['mean', 'eliminate_row', 'median']
+    strategies_auto = ['mean', 'eliminate_row', 'median']
+    strategies_power_plant = ['mean', 'eliminate_row', 'median']
+    strategies_energy = ['mean', 'eliminate_row', 'median']
     if dataset_name == __init__.balance:
         if not strategy in strategies_balance:
             print('invalid strategy for', __init__.balance)
@@ -629,13 +629,14 @@ def check_strategies(dataset_name, strategy):
 if __name__ == '__main__':
     warnings.filterwarnings('always')
     seed = 100
-    name_models = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
-    dataset_name = __init__.page
+    name_models = [__init__.svc]
+    # name_models = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
+    # name_models = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
+    dataset_name = __init__.eye
     k_range = range(3, 21, 1)
     n_trees_range = range(5, 21, 1)
 
-    X, Y, scoring, name_setting_file, name_radar_plot_file = main.case_NaN_dataset(dataset_name,
-                                                                                                  "mean", seed, 0.10)
+    X, Y, scoring, name_setting_file, name_radar_plot_file = main.case_NaN_dataset(dataset_name, "mean", seed, 0.05, classification=True)
 
     training_classificator(X, Y, name_models, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
                            n_split=10, mean=True, file_name=name_setting_file)

@@ -38,7 +38,13 @@ in teoria se non esistono variabili da predirre si può fare regressione su qual
     page --> mean, median, eliminate_row
     seed --> mean, median  FATTO
     tris --> mode, eliminate_row
-    zoo --> mode
+    zoo --> mode    FATTO
+
+    airfoil --> mean, median, eliminate_row
+    auto --> index 0, 5, 6 mode + mean/median, eliminate_row
+    power_plant --> mean, median, eliminate_row
+    compressive --> index 7 mode + mean/median, eliminate_row
+    energy --> index 4, 5, 6, 7 + mean/median, eliminate_row
 
    -    REGRESSIONE:
         -   aggiustare dataset  energy (sembra fattibile. multilabel ?, anche se supportato dalle metriche sembra)

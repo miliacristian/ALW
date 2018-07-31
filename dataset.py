@@ -51,7 +51,7 @@ def replace_value_in_row(X, list_row, value_to_replace, new_value):
     return X
 
 
-def replace_NaN_with_strategy(X, strategy):
+def replace_NaN_with_strategy(X, strategy, list_mode_columns=[]):
     """
 
     :param X:
@@ -59,8 +59,23 @@ def replace_NaN_with_strategy(X, strategy):
     :return:
     """
     imputer = Imputer(strategy=strategy)
-    X = imputer.fit_transform(X)
+    imputer_mode = Imputer(strategy="most_frequent")
+    for j in range(len(X[0])):
+        if j in list_mode_columns:
+            X[:, j] = imputer_mode.fit_transform(X[:, j].reshape(-1, 1))[:, 0]
+        else:
+            X[:, j] = imputer.fit_transform(X[:, j].reshape(-1, 1))[:, 0]
     return X
+
+
+def get_list_mode_columns_by_dataset(dataset_name):
+    if dataset_name == __init__.auto:
+        return [0, 5, 6]
+    elif dataset_name == __init__.compress_strength:
+        return [7]
+    elif dataset_name == __init__.energy:
+        return [4, 5, 6, 7]
+    return []
 
 
 def remove_row_with_Nan(X):
@@ -458,7 +473,8 @@ def one_hot_encoding(Y):
 
 
 if __name__ == '__main__':
-    X, Y = load_regression_dataset(__init__.auto)
+    X = numpy.array([[1], [numpy.nan], [1], [5]])
+    imputer = Imputer(strategy="most_frequent")
+    X[:, 0]
+    print(imputer.fit_transform(X[:, 0].reshape(-1, 1))[:, 0])
     print(X)
-    print(Y)
-    exit(0)

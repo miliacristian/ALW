@@ -94,6 +94,7 @@ def case_NaN_dataset(dataset_name, strategy, seed=100, perc_NaN=0.1, classificat
     :param perc_NaN: percent of total entry of dataset that are setting randomly NaN
     :return: The dataset X, Y, the list of scoring for the test and the name of settings and radar plot files
     """
+    list_mode_columns = dataset.get_list_mode_columns_by_dataset(dataset_name)
     training.check_strategies(dataset_name, strategy)
     name_setting_file = dataset_name + setting
     name_radar_plot_file = dataset_name + radar_plot
@@ -114,11 +115,11 @@ def case_NaN_dataset(dataset_name, strategy, seed=100, perc_NaN=0.1, classificat
     if strategy == 'eliminate_row':
         X, Y = dataset.remove_rows_with_NaN(X, Y)
     elif strategy == 'mean':
-        X = dataset.replace_NaN_with_strategy(X, "mean")
+        X = dataset.replace_NaN_with_strategy(X, "mean", list_mode_columns)
     elif strategy == 'mode':
         X = dataset.replace_NaN_with_strategy(X, "most_frequent")
     elif strategy == 'median':
-        X = dataset.replace_NaN_with_strategy(X, "median")
+        X = dataset.replace_NaN_with_strategy(X, "median", list_mode_columns)
     else:
         print("Strategy parameter for dataset balance must be 'eliminate_row' or 'mean' or 'mode' or 'median'.",
               sys.stderr)
@@ -168,16 +169,19 @@ def create_radar_plot_NaN(dataset_names, name_models, percentuals_NaN):
                                         ['mean', 'eliminate_row', 'median'])
         elif dataset_name == __init__.airfoil:
             create_radar_plot_NaN_cycle(dataset_name, name_models, percentuals_NaN,
-                                        [])
+                                        ['mean', 'eliminate_row', 'median'])
         elif dataset_name == __init__.auto:
             create_radar_plot_NaN_cycle(dataset_name, name_models, percentuals_NaN,
-                                        [])
+                                        ['mean', 'eliminate_row', 'median'])
         elif dataset_name == __init__.power_plant:
             create_radar_plot_NaN_cycle(dataset_name, name_models, percentuals_NaN,
-                                        [])
+                                        ['mean', 'eliminate_row', 'median'])
         elif dataset_name == __init__.energy:
             create_radar_plot_NaN_cycle(dataset_name, name_models, percentuals_NaN,
-                                        [])
+                                        ['mean', 'eliminate_row', 'median'])
+        elif dataset_name == __init__.compress_strength:
+            create_radar_plot_NaN_cycle(dataset_name, name_models, percentuals_NaN,
+                                        ['mean', 'eliminate_row', 'median'])
 
 
 def create_radar_plot_NaN_cycle(dataset_name, name_models, percentuals_NaN, strategies):
