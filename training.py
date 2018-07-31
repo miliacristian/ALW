@@ -558,7 +558,13 @@ def training_regressor(X, Y, name_models, scoring, k=[5], list_n_trees=[10], see
     fl.close()
 
 
-def check_strategies(dataset_name, strategies):
+def check_strategies(dataset_name, strategy):
+    """
+    Verifica che il dataset supporta la strategia strategy
+    :param dataset_name:string,nome del dataset
+    :param strategy: string,nome strategia
+    :return: none
+    """
     all_strategies = ['mean', 'eliminate_row', 'mode', 'median']
     strategies_balance = all_strategies
     strategies_eye = ['mean', 'eliminate_row', 'median']
@@ -566,31 +572,59 @@ def check_strategies(dataset_name, strategies):
     strategies_seed = ['mean', 'median']
     strategies_tris = ['eliminate_row', 'mode']
     strategies_zoo = ['mode']
-
+    strategies_compress_strength = []
+    strategies_airfoil = []
+    strategies_auto = []
+    strategies_power_plant = []
+    strategies_energy = []
     if dataset_name == __init__.balance:
-        if not strategies in strategies_balance:
+        if not strategy in strategies_balance:
             print('invalid strategy for', __init__.balance)
             exit(1)
-    if dataset_name == __init__.eye:
-        if not strategies in strategies_eye:
+    elif dataset_name == __init__.eye:
+        if not strategy in strategies_eye:
             print('invalid strategy for', __init__.eye)
             exit(1)
-    if dataset_name == __init__.page:
-        if not strategies in strategies_page:
+    elif dataset_name == __init__.page:
+        if not strategy in strategies_page:
             print('invalid strategy for', __init__.page)
             exit(1)
-    if dataset_name == __init__.seed:
-        if not strategies in strategies_seed:
+    elif dataset_name == __init__.seed:
+        if not strategy in strategies_seed:
             print('invalid strategy for', __init__.seed)
             exit(1)
-    if dataset_name == __init__.tris:
-        if not strategies in strategies_tris:
+    elif dataset_name == __init__.tris:
+        if not strategy in strategies_tris:
             print('invalid strategy for', __init__.tris)
             exit(1)
-    if dataset_name == __init__.zoo:
-        if not strategies in strategies_zoo:
+    elif dataset_name == __init__.zoo:
+        if not strategy in strategies_zoo:
             print('invalid strategy for', __init__.zoo)
             exit(1)
+    elif dataset_name ==__init__.compress_strength:
+        if not strategy in strategies_compress_strength:
+            print('invalid strategy for', __init__.compress_strength)
+            exit(1)
+    elif dataset_name ==__init__.airfoil:
+        if not strategy in strategies_airfoil:
+            print('invalid strategy for', __init__.airfoil)
+            exit(1)
+    elif dataset_name ==__init__.auto:
+        if not strategy in strategies_auto:
+            print('invalid strategy for', __init__.auto)
+            exit(1)
+    elif dataset_name ==__init__.power_plant:
+        if not strategy in strategies_power_plant:
+            print('invalid strategy for', __init__.power_plant)
+            exit(1)
+    elif dataset_name ==__init__.energy:
+        if not strategy in strategies_energy:
+            print('invalid strategy for', __init__.energy)
+            exit(1)
+    else :
+        print('invalid dataset_name',dataset_name)
+        exit(1)
+
 
 if __name__ == '__main__':
     warnings.filterwarnings('always')
