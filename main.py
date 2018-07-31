@@ -7,6 +7,8 @@ import scoringUtils
 from __init__ import setting
 from __init__ import radar_plot, printValue
 import __init__
+
+
 def testing(X, Y, models, scoring, seed, name_radar_plot_file):
     """
     Create a radar plot
@@ -173,7 +175,7 @@ def case_NaN_dataset_classification(dataset_name, strategy, seed=100, perc_NaN=0
 
 if __name__ == '__main__':
     warnings.filterwarnings('always')
-    name_models = [__init__.randforest,__init__.dec_tree,__init__.knn,__init__.svc]
+    name_models = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
     dataset_names = [__init__.seed,__init__.tris,__init__.zoo,__init__.balance,__init__.eye,__init__.page]
     seed = 100
 

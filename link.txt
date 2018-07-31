@@ -33,7 +33,7 @@ in teoria se non esistono variabili da predirre si può fare regressione su qual
 
     problema: dataset piccoli (seed e zoo), strategia eliminate_row da problemi con KNN (Fold con pochissimi elementi)
 
-    balance --> all
+    balance --> all    FATTO
     eye --> mean, median, eliminate_row
     page --> mean, median, eliminate_row
     seed --> mean, median

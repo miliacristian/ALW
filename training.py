@@ -1,19 +1,16 @@
 from sklearn.exceptions import UndefinedMetricWarning
 
-#rende un classificatore multiclass funzionante anche per multilabel
+# rende un classificatore multiclass funzionante anche per multilabel
 from sklearn.multiclass import OneVsRestClassifier
 
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
+from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.svm import SVC, SVR
-
-import dataset
 import scoringUtils
 import numpy as np
 from scoringUtils import hmean_scores, total_score_regression
 from __init__ import printValue
-from __init__ import setting
 from __init__ import model_settings_dir, model_setting_test_dir
 from time import time
 import warnings
@@ -51,7 +48,7 @@ def KNN_training(X, Y, k, scoring, seed, n_split, mean):
     return best_k
 
 
-def RANDOMFOREST_training(X, Y,list_n_trees,scoring,seed,n_split,mean):
+def RANDOMFOREST_training(X, Y, list_n_trees, scoring, seed, n_split, mean):
     """
      do the training of a Random Forest with dataset X, Y and K_Fold_Cross_Validation. Trova il setting migliore iterando su
     tutte i valori possibili di max_features
@@ -71,8 +68,8 @@ def RANDOMFOREST_training(X, Y,list_n_trees,scoring,seed,n_split,mean):
     best_total_score = None
 
     for trees in list_n_trees:
-        for max_features in range(1, len(X[0])+1):  # len(X[0])==numero features
-            model=RandomForestClassifier(n_estimators=trees, random_state=seed, max_features=max_features)
+        for max_features in range(1, len(X[0]) + 1):  # len(X[0])==numero features
+            model = RandomForestClassifier(n_estimators=trees, random_state=seed, max_features=max_features)
             result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
             harmonic_mean = hmean_scores(scoring, result)  # funzione che da result calcola media armonica
             if best_total_score is None or best_total_score < harmonic_mean:
@@ -120,7 +117,7 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
         start_time_linear = time()
 
     for C in C_range:
-        model = OneVsRestClassifier(SVC(kernel='linear', random_state=seed,C=C))
+        model = OneVsRestClassifier(SVC(kernel='linear', random_state=seed, C=C))
         result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
         harmonic_mean = hmean_scores(scoring, result)
         if best_total_score is None or best_total_score < harmonic_mean:
@@ -188,14 +185,14 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
 
     for C in C_range:
         for gamma in gamma_range:
-                model = OneVsRestClassifier(SVC(kernel='sigmoid', random_state=seed, C=C, gamma=gamma))
-                result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
-                harmonic_mean = hmean_scores(scoring, result)
-                if best_total_score < harmonic_mean:
-                    best_total_score = harmonic_mean
-                    best_C = C
-                    best_gamma = gamma
-                    best_kernel = 'sigmoid'
+            model = OneVsRestClassifier(SVC(kernel='sigmoid', random_state=seed, C=C, gamma=gamma))
+            result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
+            harmonic_mean = hmean_scores(scoring, result)
+            if best_total_score < harmonic_mean:
+                best_total_score = harmonic_mean
+                best_C = C
+                best_gamma = gamma
+                best_kernel = 'sigmoid'
 
     if printValue:
         print("End training of SVC with kernel sigmoid after", time() - start_time_sigmoid, "s.")
@@ -211,6 +208,69 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
         print("End training of SVC after", time() - start_time, "s.")
 
     return best_C, best_degree, best_gamma, best_kernel
+
+
+def KNR_training(X, Y, k, scoring, seed, n_split, mean):
+    """
+    do the training of a KNR models with dataset X,Y and K_Fold_Cross_Validation
+    :param X: feature set
+    :param Y: label set
+    :param scoring: dict of scoring used
+    :param k: list of possibile neighbors
+    :return: the best k
+    """
+
+    if printValue:
+        print("Start training of KNR")
+        start_time = time()
+
+    best_k = None
+    best_total_score = None
+    for num_neighbors in k:
+        model = KNeighborsRegressor(n_neighbors=num_neighbors, weights='distance')
+        result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
+        total_score = total_score_regression(scoring, result)  # funzione che da result calcola media armonica
+        if best_total_score is None or best_total_score < total_score:
+            best_total_score = total_score
+            best_k = num_neighbors
+
+    if printValue:
+        print("End training of KNR after", time() - start_time, "s.")
+    return best_k
+
+
+def RANDOMFORESTRegressor_training(X, Y, list_n_trees, scoring, seed, n_split, mean):
+    """
+     do the training of a Random Forest with dataset X, Y and K_Fold_Cross_Validation. Trova il setting migliore iterando su
+    tutte i valori possibili di max_features
+    :param X: feature set
+    :param Y: label set
+    :param scoring: dict of scoring used
+    :param n_trees: number of trees of the forest
+    :return: best n_trees, best max_features
+    """
+
+    if printValue:
+        print("Start training of Random Forest")
+        start_time = time()
+
+    best_n_trees = None
+    best_max_features = None
+    best_total_score = None
+
+    for trees in list_n_trees:
+        for max_features in range(1, len(X[0]) + 1):  # len(X[0])==numero features
+            model = RandomForestRegressor(n_estimators=trees, random_state=seed, max_features=max_features)
+            result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
+            total_score = total_score_regression(scoring, result)  # funzione che da result calcola media armonica
+            if best_total_score is None or best_total_score < total_score:
+                best_total_score = total_score
+                best_max_features = max_features
+                best_n_trees = trees
+
+    if printValue:
+        print("End training of Random Forest after", time() - start_time, "s.")
+    return best_n_trees, best_max_features
 
 
 def SVR_training(X, Y, scoring, seed, n_split, mean):
@@ -302,7 +362,7 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
                         start_time_poly2 = time()
                     model = OneVsRestClassifier(SVC(kernel='poly', random_state=seed, C=C, gamma=gamma, degree=degree))
                     result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
-                    total_score =  total_score_regression(scoring, result)
+                    total_score = total_score_regression(scoring, result)
                     if best_total_score < total_score:
                         best_total_score = total_score
                         best_C = C
@@ -325,15 +385,15 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
     for C in C_range:
         for eps in eps_range:
             for gamma in gamma_range:
-                    model = OneVsRestClassifier(SVR(kernel='sigmoid', random_state=seed, C=C, gamma=gamma, epsilon=eps))
-                    result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
-                    total_score = total_score_regression(scoring, result)
-                    if best_total_score < total_score:
-                        best_total_score = total_score
-                        best_C = C
-                        best_eps = eps
-                        best_gamma = gamma
-                        best_kernel = 'sigmoid'
+                model = OneVsRestClassifier(SVR(kernel='sigmoid', random_state=seed, C=C, gamma=gamma, epsilon=eps))
+                result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
+                total_score = total_score_regression(scoring, result)
+                if best_total_score < total_score:
+                    best_total_score = total_score
+                    best_C = C
+                    best_eps = eps
+                    best_gamma = gamma
+                    best_kernel = 'sigmoid'
 
     if printValue:
         print("End training of SVR with kernel sigmoid after", time() - start_time_sigmoid, "s.")
@@ -351,8 +411,8 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
     return best_C, best_eps, best_degree, best_gamma, best_kernel
 
 
-def training(X, Y, name_models,  scoring, k=[5], list_n_trees=[10], seed=111, n_split=10, mean=True,
-             file_name="best_setting.txt"):
+def training_classificator(X, Y, name_models, scoring, k=[5], list_n_trees=[10], seed=111, n_split=10, mean=True,
+                           file_name="best_setting.txt"):
     """
     Write on file the best setting for the specific dataset. Every line of file contains "the name of the parameter"
     + " " + "the value of parameter"
@@ -368,9 +428,9 @@ def training(X, Y, name_models,  scoring, k=[5], list_n_trees=[10], seed=111, n_
     :param seed: int,seme per generatore pseudocasuale
     """
     path = os.path.abspath('')
-    fl = open(path+ model_setting_test_dir +file_name, "w")
+    fl = open(path + model_setting_test_dir + file_name, "w")
     fl.writelines(["seed " + str(seed) + "\n", "n_split " + str(n_split) + "\n"])
-    if __init__.randforest in name_models:
+    if __init__.rand_forest in name_models:
         best_n_trees, best_max_features = RANDOMFOREST_training(X, Y, list_n_trees, scoring, seed, n_split, mean)
         fl.writelines(["best_n_trees " + str(best_n_trees) + "\n", "best_max_features " +
                        str(best_max_features) + "\n"])
@@ -379,8 +439,21 @@ def training(X, Y, name_models,  scoring, k=[5], list_n_trees=[10], seed=111, n_
         fl.writelines(["best_k " + str(best_k) + "\n"])
     if __init__.svc in name_models:
         best_C, best_degree, best_gamma, best_kernel = SVC_training(X, Y, scoring, seed, n_split, mean)
-        fl.writelines(["best_C " + str(best_C) + "\n","best_degree " + str(best_degree) + "\n", "best_gamma " +
+        fl.writelines(["best_C " + str(best_C) + "\n", "best_degree " + str(best_degree) + "\n", "best_gamma " +
                        str(best_gamma) + "\n", "best_kernel " + str(best_kernel) + "\n"])
+    if __init__.rand_forest_regressor in name_models:
+        best_n_trees, best_max_features = RANDOMFORESTRegressor_training(X, Y, list_n_trees, scoring, seed, n_split,
+                                                                         mean)
+        fl.writelines(["best_n_trees " + str(best_n_trees) + "\n", "best_max_features " +
+                       str(best_max_features) + "\n"])
+    if __init__.knr in name_models:
+        best_k = KNR_training(X, Y, k, scoring, seed, n_split, mean)
+        fl.writelines(["best_k " + str(best_k) + "\n"])
+    if __init__.svr in name_models:
+        best_C, best_eps, best_degree, best_gamma, best_kernel = SVR_training(X, Y, scoring, seed, n_split, mean)
+        fl.writelines(["best_C " + str(best_C) + "\n", "best_eps " + str(best_eps) + "\n", "best_degree " +
+                       str(best_degree) + "\n", "best_gamma " + str(best_gamma) + "\n", "best_kernel " +
+                       str(best_kernel) + "\n"])
 
     fl.close()
 
@@ -408,10 +481,10 @@ def build_models(name_models, file_name):
     if __init__.dec_tree in name_models:
         models[__init__.dec_tree] = DecisionTreeClassifier(random_state=int(settings["seed"]))
 
-    if __init__.randforest in name_models:
-        models[__init__.randforest] = RandomForestClassifier(random_state=int(settings["seed"]),
-                                                      max_features=int(settings["best_max_features"]),
-                                                      n_estimators=int(settings["best_n_trees"]))
+    if __init__.rand_forest in name_models:
+        models[__init__.rand_forest] = RandomForestClassifier(random_state=int(settings["seed"]),
+                                                              max_features=int(settings["best_max_features"]),
+                                                              n_estimators=int(settings["best_n_trees"]))
 
     if __init__.knn in name_models:
         models[__init__.knn] = KNeighborsClassifier(n_neighbors=int(settings["best_k"]), weights='distance')
@@ -419,26 +492,82 @@ def build_models(name_models, file_name):
     if __init__.svc in name_models:
         if settings["best_gamma"] == "'auto'":
             models[__init__.svc] = OneVsRestClassifier(SVC(kernel=settings["best_kernel"], C=float(settings["best_C"]),
-                                                    degree=int(settings["best_degree"])))
+                                                           degree=int(settings["best_degree"])))
         else:
             models[__init__.svc] = OneVsRestClassifier(SVC(kernel=settings["best_kernel"], C=float(settings["best_C"]),
-                                                    gamma=float(settings["best_gamma"]),
-                                                    degree=int(settings["best_degree"])))
+                                                           gamma=float(settings["best_gamma"]),
+                                                           degree=int(settings["best_degree"])))
+    if __init__.dec_tree_regressor in name_models:
+        models[__init__.dec_tree_regressor] = DecisionTreeRegressor(random_state=int(settings["seed"]))
+
+    if __init__.rand_forest_regressor in name_models:
+        models[__init__.rand_forest_regressor] = RandomForestRegressor(random_state=int(settings["seed"]),
+                                                                       max_features=int(settings["best_max_features"]),
+                                                                       n_estimators=int(settings["best_n_trees"]))
+
+    if __init__.knr in name_models:
+        models[__init__.knr] = KNeighborsRegressor(n_neighbors=int(settings["best_k"]), weights='distance')
+
+    if __init__.svr in name_models:
+        if settings["best_gamma"] == "'auto'":
+            models[__init__.svr] = OneVsRestClassifier(SVR(kernel=settings["best_kernel"], C=float(settings["best_C"]),
+                                                           degree=int(settings["best_degree"]),
+                                                           epsilon=float(settings["best_eps"])))
+        else:
+            models[__init__.svr] = OneVsRestClassifier(SVR(kernel=settings["best_kernel"], C=float(settings["best_C"]),
+                                                           gamma=float(settings["best_gamma"]),
+                                                           degree=int(settings["best_degree"]),
+                                                           epsilon=float(settings["best_eps"])))
 
     fl.close()
 
     return models
 
 
+def training_regressor(X, Y, name_models, scoring, k=[5], list_n_trees=[10], seed=111, n_split=10, mean=True,
+                       file_name="best_setting.txt"):
+    """
+    Write on file the best setting for the specific dataset. Every line of file contains "the name of the parameter"
+    + " " + "the value of parameter"
+    :param file_name: name of file with the best setting
+    :param mean: True if you want the mean in the K_fold_cross_validation, False if you want all the scores of the fold
+    :param n_split: number of fold
+    :param X: features set
+    :param Y: label set
+    :param name_models:list, lista nomi modelli
+    :param scoring: dict,dizionario di scoring
+    :param k: list,lista dei possibili k per KNN
+    :param list_n_trees: list,lista dei possibili numeri di alberi per il random forest
+    :param seed: int,seme per generatore pseudocasuale
+    """
+    path = os.path.abspath('')
+    fl = open(path + model_setting_test_dir + file_name, "w")
+    fl.writelines(["seed " + str(seed) + "\n", "n_split " + str(n_split) + "\n"])
+    if __init__.rand_forest in name_models:
+        best_n_trees, best_max_features = RANDOMFOREST_training(X, Y, list_n_trees, scoring, seed, n_split, mean)
+        fl.writelines(["best_n_trees " + str(best_n_trees) + "\n", "best_max_features " +
+                       str(best_max_features) + "\n"])
+    if __init__.knn in name_models:
+        best_k = KNN_training(X, Y, k, scoring, seed, n_split, mean)
+        fl.writelines(["best_k " + str(best_k) + "\n"])
+    if __init__.svc in name_models:
+        best_C, best_degree, best_gamma, best_kernel = SVC_training(X, Y, scoring, seed, n_split, mean)
+        fl.writelines(["best_C " + str(best_C) + "\n", "best_degree " + str(best_degree) + "\n", "best_gamma " +
+                       str(best_gamma) + "\n", "best_kernel " + str(best_kernel) + "\n"])
+
+    fl.close()
+
+
 if __name__ == '__main__':
     warnings.filterwarnings('always')
     seed = 100
-    name_models = [__init__.randforest,__init__.dec_tree,__init__.knn, __init__.svc]
-    dataset_name = __init__.balance
+    name_models = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
+    dataset_name = __init__.seed
     k_range = range(3, 21, 1)
     n_trees_range = range(5, 21, 1)
 
-    X, Y, scoring, name_setting_file, name_radar_plot_file = main.case_NaN_dataset_classification(dataset_name, "mode", seed, 0.15)
+    X, Y, scoring, name_setting_file, name_radar_plot_file = main.case_NaN_dataset_classification(dataset_name,
+                                                                                                  "mean", seed, 0.15)
 
-    training(X, Y, name_models, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
-             n_split=10, mean=True, file_name=name_setting_file)
+    training_classificator(X, Y, name_models, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
+                           n_split=10, mean=True, file_name=name_setting_file)
