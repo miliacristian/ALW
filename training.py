@@ -332,7 +332,7 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
     for C in C_range:
         for eps in eps_range:
             for gamma in gamma_range:
-                model = OneVsRestClassifier(SVR(kernel='rbf', C=C, gamma=gamma, epsilon=eps))
+                model = SVR(kernel='rbf', C=C, gamma=gamma, epsilon=eps)
                 result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
                 total_score = total_score_regression(scoring, result)
                 if best_total_score < total_score:
@@ -360,7 +360,7 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
                     if printValue:
                         print("Starting cycle with C =", C, "eps =", eps, "degree =", degree, "gamma =", gamma)
                         start_time_poly2 = time()
-                    model = OneVsRestClassifier(SVC(kernel='poly', C=C, gamma=gamma, degree=degree))
+                    model = SVC(kernel='poly', C=C, gamma=gamma, degree=degree)
                     result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
                     total_score = total_score_regression(scoring, result)
                     if best_total_score < total_score:
@@ -385,7 +385,7 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
     for C in C_range:
         for eps in eps_range:
             for gamma in gamma_range:
-                model = OneVsRestClassifier(SVR(kernel='sigmoid', C=C, gamma=gamma, epsilon=eps))
+                model = SVR(kernel='sigmoid', C=C, gamma=gamma, epsilon=eps)
                 result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
                 total_score = total_score_regression(scoring, result)
                 if best_total_score < total_score:
