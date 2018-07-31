@@ -6,6 +6,7 @@ import os
 from sklearn.preprocessing import Imputer
 from __init__ import classification_datasets_dir, regression_dataset_dir
 from math import floor
+import __init__
 
 
 def print_dataset(X, Y):
@@ -267,19 +268,19 @@ def load_energy_efficiency_dataset():
     return X, Y
 
 def load_classification_dataset(dataset):
-    if dataset == 'tris':
+    if dataset == __init__.tris:
         X, Y = load_tris_dataset()
-    elif dataset == 'seed':
+    elif dataset == __init__.seed:
         X, Y = load_seed_dataset()
-    elif dataset == 'balance':
+    elif dataset == __init__.balance:
         X, Y = load_balance_dataset()
-    elif dataset == 'zoo':
+    elif dataset == __init__.zoo:
         X, Y = load_zoo_dataset()
-    elif dataset == 'indians':
+    elif dataset == __init__.indians:
         X, Y = load_pima_indians_diabetes_dataset()
-    elif dataset == 'eye':
+    elif dataset == __init__.eye:
         X, Y = load_eye_dataset()
-    elif dataset == 'page':
+    elif dataset == __init__.page:
         X, Y = load_page_dataset()
     else:
         print("input must be 'tris' or 'seed' or 'balance' or 'zoo' or 'indians' or 'eye' or 'page'.")
@@ -289,15 +290,15 @@ def load_classification_dataset(dataset):
 
 
 def load_regression_dataset(dataset):
-    if dataset == 'compressive_strength':
+    if dataset ==__init__.compress_strength:
         X, Y = load_com_dataset()
-    elif dataset == 'airfoil':
+    elif dataset == __init__.airfoil:
         X, Y = load_airfoil_dataset()
-    elif dataset == 'auto':
+    elif dataset == __init__.auto:
         X, Y, = load_auto_dataset()
-    elif dataset == 'power_plant':
+    elif dataset == __init__.power_plant:
         X,Y = load_power_plant_dataset()
-    elif dataset=='energy':
+    elif dataset==__init__.energy:
         X,Y=load_energy_efficiency_dataset()
     else:
         print("input must be 'compressive_strength' or 'airfoil' or 'auto' or 'power_plant' or 'energy'.")
@@ -457,7 +458,7 @@ def one_hot_encoding(Y):
 
 
 if __name__ == '__main__':
-    X, Y = load_regression_dataset('auto')
+    X, Y = load_regression_dataset(__init__.auto)
     print(X)
     print(Y)
     exit(0)

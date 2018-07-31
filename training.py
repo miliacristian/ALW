@@ -19,6 +19,7 @@ from time import time
 import warnings
 import os
 import main
+import __init__
 
 
 def KNN_training(X, Y, k, scoring, seed, n_split, mean):
@@ -369,14 +370,14 @@ def training(X, Y, name_models,  scoring, k=[5], list_n_trees=[10], seed=111, n_
     path = os.path.abspath('')
     fl = open(path+ model_setting_test_dir +file_name, "w")
     fl.writelines(["seed " + str(seed) + "\n", "n_split " + str(n_split) + "\n"])
-    if 'RANDFOREST' in name_models:
+    if __init__.randforest in name_models:
         best_n_trees, best_max_features = RANDOMFOREST_training(X, Y, list_n_trees, scoring, seed, n_split, mean)
         fl.writelines(["best_n_trees " + str(best_n_trees) + "\n", "best_max_features " +
                        str(best_max_features) + "\n"])
-    if 'KNN' in name_models:
+    if __init__.knn in name_models:
         best_k = KNN_training(X, Y, k, scoring, seed, n_split, mean)
         fl.writelines(["best_k " + str(best_k) + "\n"])
-    if 'SVC' in name_models:
+    if __init__.svc in name_models:
         best_C, best_degree, best_gamma, best_kernel = SVC_training(X, Y, scoring, seed, n_split, mean)
         fl.writelines(["best_C " + str(best_C) + "\n","best_degree " + str(best_degree) + "\n", "best_gamma " +
                        str(best_gamma) + "\n", "best_kernel " + str(best_kernel) + "\n"])
@@ -404,23 +405,23 @@ def build_models(name_models, file_name):
         parameter, value = str.split(line, " ")
         settings[parameter] = value
 
-    if 'CART' in name_models:
-        models['CART'] = DecisionTreeClassifier(random_state=int(settings["seed"]))
+    if __init__.dec_tree in name_models:
+        models[__init__.dec_tree] = DecisionTreeClassifier(random_state=int(settings["seed"]))
 
-    if 'RANDFOREST' in name_models:
-        models['RANDFOREST'] = RandomForestClassifier(random_state=int(settings["seed"]),
+    if __init__.randforest in name_models:
+        models[__init__.randforest] = RandomForestClassifier(random_state=int(settings["seed"]),
                                                       max_features=int(settings["best_max_features"]),
                                                       n_estimators=int(settings["best_n_trees"]))
 
-    if 'KNN' in name_models:
-        models['KNN'] = KNeighborsClassifier(n_neighbors=int(settings["best_k"]), weights='distance')
+    if __init__.knn in name_models:
+        models[__init__.knn] = KNeighborsClassifier(n_neighbors=int(settings["best_k"]), weights='distance')
 
-    if 'SVC' in name_models:
+    if __init__.svc in name_models:
         if settings["best_gamma"] == "'auto'":
-            models['SVC'] = OneVsRestClassifier(SVC(kernel=settings["best_kernel"], C=float(settings["best_C"]),
+            models[__init__.svc] = OneVsRestClassifier(SVC(kernel=settings["best_kernel"], C=float(settings["best_C"]),
                                                     degree=int(settings["best_degree"])))
         else:
-            models['SVC'] = OneVsRestClassifier(SVC(kernel=settings["best_kernel"], C=float(settings["best_C"]),
+            models[__init__.svc] = OneVsRestClassifier(SVC(kernel=settings["best_kernel"], C=float(settings["best_C"]),
                                                     gamma=float(settings["best_gamma"]),
                                                     degree=int(settings["best_degree"])))
 
@@ -432,8 +433,8 @@ def build_models(name_models, file_name):
 if __name__ == '__main__':
     warnings.filterwarnings('always')
     seed = 100
-    name_models = ['RANDFOREST', 'CART', 'KNN', 'SVC']
-    dataset_name = 'balance'
+    name_models = [__init__.randforest,__init__.dec_tree,__init__.knn, __init__.svc]
+    dataset_name = __init__.balance
     k_range = range(3, 21, 1)
     n_trees_range = range(5, 21, 1)
 

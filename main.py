@@ -6,8 +6,7 @@ import training
 import scoringUtils
 from __init__ import setting
 from __init__ import radar_plot, printValue
-
-
+import __init__
 def testing(X, Y, models, scoring, seed, name_radar_plot_file):
     """
     Create a radar plot
@@ -56,15 +55,15 @@ def case_full_dataset_classification(dataset_name, standardize=False, normalize=
         dataset.print_dataset(X, Y)
 
     if standardize:
-        name_setting_file += '_standardize'
-        name_radar_plot_file += '_standardize'
+        name_setting_file += __init__.standardize
+        name_radar_plot_file +=__init__.standardize
         X = dataset.standardize_dataset(X)
         if printValue:
             dataset.print_dataset(X, Y)
 
     if normalize:
-        name_setting_file += '_normalize'
-        name_radar_plot_file += '_normalize'
+        name_setting_file += __init__.normalize
+        name_radar_plot_file += __init__.normalize
         X = dataset.normalize_dataset(X)
         if printValue:
             dataset.print_dataset(X, Y)
@@ -100,7 +99,7 @@ def case_NaN_dataset_classification(dataset_name, strategy, seed=100, perc_NaN=0
     if printValue:
         dataset.print_dataset(X, Y)
 
-    if dataset_name == 'balance':
+    if dataset_name == __init__.balance:
         if strategy == 'eliminate_row':
             name_setting_file += '_eliminate_row'
             name_radar_plot_file += '_eliminate_row'
@@ -121,7 +120,7 @@ def case_NaN_dataset_classification(dataset_name, strategy, seed=100, perc_NaN=0
             print("Strategy parameter for dataset balance must be 'eliminate_row' or 'mean' or 'mode' or 'median'.",
                   sys.stderr)
             exit(1)
-    elif dataset_name == 'seed':
+    elif dataset_name == __init__.seed:
         if strategy == 'eliminate_row':
             name_setting_file += '_eliminate_row'
             name_radar_plot_file += '_eliminate_row'
@@ -137,7 +136,7 @@ def case_NaN_dataset_classification(dataset_name, strategy, seed=100, perc_NaN=0
         else:
             print("Strategy parameter for dataset seed must be 'eliminate_row' or 'mean' or 'median'.", sys.stderr)
             exit(1)
-    elif dataset_name == 'tris':
+    elif dataset_name == __init__.tris:
         if strategy == 'eliminate_row':
             name_setting_file += '_eliminate_row'
             name_radar_plot_file += '_eliminate_row'
@@ -149,7 +148,7 @@ def case_NaN_dataset_classification(dataset_name, strategy, seed=100, perc_NaN=0
         else:
             print("Strategy parameter for dataset tris must be 'eliminate_row' or 'mode'.", sys.stderr)
             exit(1)
-    elif dataset_name == 'zoo':
+    elif dataset_name == __init__.zoo:
         if strategy == 'eliminate_row':
             name_setting_file += '_eliminate_row'
             name_radar_plot_file += '_eliminate_row'
@@ -164,7 +163,7 @@ def case_NaN_dataset_classification(dataset_name, strategy, seed=100, perc_NaN=0
     else:
         print("dataset name must be seed, balance, tris, or zoo.", sys.stderr)
         exit(1)
-
+    #mancano eye e page
     name_setting_file += '.txt'
 
     scoring = scoringUtils.create_dictionary_classification_scoring()
@@ -174,12 +173,12 @@ def case_NaN_dataset_classification(dataset_name, strategy, seed=100, perc_NaN=0
 
 if __name__ == '__main__':
     warnings.filterwarnings('always')
-    name_models = ['RANDFOREST', 'CART', 'KNN', 'SVC']
-    dataset_names = ['seed', 'tris', 'zoo', 'balance','eye','page']
+    name_models = [__init__.randforest,__init__.dec_tree,__init__.knn,__init__.svc]
+    dataset_names = [__init__.seed,__init__.tris,__init__.zoo,__init__.balance,__init__.eye,__init__.page]
     seed = 100
 
     strategies = ['mean', 'eliminate_row', 'mode', 'median']
-    percentuals_NaN = [0.05, 0.1, 0.15]
+    percentuals_NaN =__init__.percentuals_NaN
 
     for dataset_name in dataset_names:
         for stand in [True, False]:
@@ -192,42 +191,42 @@ if __name__ == '__main__':
                 testing(X, Y, models, scoring, seed, name_radar_plot_file)
 
     for dataset_name in dataset_names:
-        if dataset_name == "balance":
+        if dataset_name == __init__.balance:
             for perc_NaN in percentuals_NaN:
                 for strategy in strategies:
                     X, Y, scoring, name_setting_file, name_radar_plot_file = \
                         case_NaN_dataset_classification(dataset_name, strategy=strategy, seed=seed, perc_NaN=perc_NaN)
                     models = training.build_models(name_models, name_setting_file)
                     testing(X, Y, models, scoring, seed, name_radar_plot_file)
-        if dataset_name == "seed":
+        if dataset_name == __init__.seed:
             for perc_NaN in percentuals_NaN:
                 for strategy in ["mean", "median"]:
                     X, Y, scoring, name_setting_file, name_radar_plot_file = \
                         case_NaN_dataset_classification(dataset_name, strategy=strategy, seed=seed, perc_NaN=perc_NaN)
                     models = training.build_models(name_models, name_setting_file)
                     testing(X, Y, models, scoring, seed, name_radar_plot_file)
-        if dataset_name == "tris":
+        if dataset_name == __init__.tris:
             for perc_NaN in percentuals_NaN:
                 for strategy in ["mode", "eliminate_row"]:
                     X, Y, scoring, name_setting_file, name_radar_plot_file = \
                         case_NaN_dataset_classification(dataset_name, strategy=strategy, seed=seed, perc_NaN=perc_NaN)
                     models = training.build_models(name_models, name_setting_file)
                     testing(X, Y, models, scoring, seed, name_radar_plot_file)
-        if dataset_name == "zoo":
+        if dataset_name == __init__.zoo:
             for perc_NaN in percentuals_NaN:
                 for strategy in ["mode"]:
                     X, Y, scoring, name_setting_file, name_radar_plot_file = \
                         case_NaN_dataset_classification(dataset_name, strategy=strategy, seed=seed, perc_NaN=perc_NaN)
                     models = training.build_models(name_models, name_setting_file)
                     testing(X, Y, models, scoring, seed, name_radar_plot_file)
-        if dataset_name == 'eye':
+        if dataset_name == __init__.eye:
             for perc_NaN in percentuals_NaN:
                 for strategy in ["eliminate_row", "mean", "median"]:
                     X, Y, scoring, name_setting_file, name_radar_plot_file = \
                         case_NaN_dataset_classification(dataset_name, strategy=strategy, seed=seed, perc_NaN=perc_NaN)
                     models = training.build_models(name_models, name_setting_file)
                     testing(X, Y, models, scoring, seed, name_radar_plot_file)
-        if dataset_name == 'page':
+        if dataset_name == __init__.page:
             for perc_NaN in percentuals_NaN:
                 for strategy in ["eliminate_row", "mean", "median"]:
                     X, Y, scoring, name_setting_file, name_radar_plot_file = \
