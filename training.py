@@ -600,7 +600,7 @@ if __name__ == '__main__':
     k_range = range(3, 21, 1)
     n_trees_range = range(5, 21, 1)
 
-    X, Y, scoring, name_setting_file, name_radar_plot_file = main.case_NaN_dataset_classification(dataset_name,
+    X, Y, scoring, name_setting_file, name_radar_plot_file = main.case_NaN_dataset(dataset_name,
                                                                                                   "mean", seed, 0.15)
 
     training_classificator(X, Y, name_models, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,

@@ -77,7 +77,7 @@ def case_full_dataset_classification(dataset_name, standardize=False, normalize=
     return X, Y, scoring, name_setting_file, name_radar_plot_file
 
 
-def case_NaN_dataset_classification(dataset_name, strategy, seed=100, perc_NaN=0.1):
+def case_NaN_dataset(dataset_name, strategy, seed=100, perc_NaN=0.1, classification=True):
     """
     Do testing in the case of classification with dataset having value NaN.
     :param dataset_name: name of dataset use
@@ -94,7 +94,10 @@ def case_NaN_dataset_classification(dataset_name, strategy, seed=100, perc_NaN=0
     name_setting_file = dataset_name + setting
     name_radar_plot_file = dataset_name + radar_plot
 
-    X, Y = dataset.load_classification_dataset(dataset_name)
+    if classification:
+        X, Y = dataset.load_classification_dataset(dataset_name)
+    else:
+        X, Y = dataset.load_regression_dataset(dataset_name)
     name_setting_file += '_' + str(perc_NaN*100) + '%_NaN'
     name_radar_plot_file += '_' + str(perc_NaN*100) + '%_NaN'
     X = dataset.put_random_NaN(X, perc_NaN, seed=seed)
@@ -197,41 +200,41 @@ if __name__ == '__main__':
             for perc_NaN in percentuals_NaN:
                 for strategy in strategies:
                     X, Y, scoring, name_setting_file, name_radar_plot_file = \
-                        case_NaN_dataset_classification(dataset_name, strategy=strategy, seed=seed, perc_NaN=perc_NaN)
+                        case_NaN_dataset(dataset_name, strategy=strategy, seed=seed, perc_NaN=perc_NaN)
                     models = training.build_models(name_models, name_setting_file)
                     testing(X, Y, models, scoring, seed, name_radar_plot_file)
         if dataset_name == __init__.seed:
             for perc_NaN in percentuals_NaN:
                 for strategy in ["mean", "median"]:
                     X, Y, scoring, name_setting_file, name_radar_plot_file = \
-                        case_NaN_dataset_classification(dataset_name, strategy=strategy, seed=seed, perc_NaN=perc_NaN)
+                        case_NaN_dataset(dataset_name, strategy=strategy, seed=seed, perc_NaN=perc_NaN)
                     models = training.build_models(name_models, name_setting_file)
                     testing(X, Y, models, scoring, seed, name_radar_plot_file)
         if dataset_name == __init__.tris:
             for perc_NaN in percentuals_NaN:
                 for strategy in ["mode", "eliminate_row"]:
                     X, Y, scoring, name_setting_file, name_radar_plot_file = \
-                        case_NaN_dataset_classification(dataset_name, strategy=strategy, seed=seed, perc_NaN=perc_NaN)
+                        case_NaN_dataset(dataset_name, strategy=strategy, seed=seed, perc_NaN=perc_NaN)
                     models = training.build_models(name_models, name_setting_file)
                     testing(X, Y, models, scoring, seed, name_radar_plot_file)
         if dataset_name == __init__.zoo:
             for perc_NaN in percentuals_NaN:
                 for strategy in ["mode"]:
                     X, Y, scoring, name_setting_file, name_radar_plot_file = \
-                        case_NaN_dataset_classification(dataset_name, strategy=strategy, seed=seed, perc_NaN=perc_NaN)
+                        case_NaN_dataset(dataset_name, strategy=strategy, seed=seed, perc_NaN=perc_NaN)
                     models = training.build_models(name_models, name_setting_file)
                     testing(X, Y, models, scoring, seed, name_radar_plot_file)
         if dataset_name == __init__.eye:
             for perc_NaN in percentuals_NaN:
                 for strategy in ["eliminate_row", "mean", "median"]:
                     X, Y, scoring, name_setting_file, name_radar_plot_file = \
-                        case_NaN_dataset_classification(dataset_name, strategy=strategy, seed=seed, perc_NaN=perc_NaN)
+                        case_NaN_dataset(dataset_name, strategy=strategy, seed=seed, perc_NaN=perc_NaN)
                     models = training.build_models(name_models, name_setting_file)
                     testing(X, Y, models, scoring, seed, name_radar_plot_file)
         if dataset_name == __init__.page:
             for perc_NaN in percentuals_NaN:
                 for strategy in ["eliminate_row", "mean", "median"]:
                     X, Y, scoring, name_setting_file, name_radar_plot_file = \
-                        case_NaN_dataset_classification(dataset_name, strategy=strategy, seed=seed, perc_NaN=perc_NaN)
+                        case_NaN_dataset(dataset_name, strategy=strategy, seed=seed, perc_NaN=perc_NaN)
                     models = training.build_models(name_models, name_setting_file)
                     testing(X, Y, models, scoring, seed, name_radar_plot_file)
