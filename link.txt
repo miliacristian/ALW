@@ -36,7 +36,7 @@ in teoria se non esistono variabili da predirre si può fare regressione su qual
     balance --> all    FATTO
     eye --> mean, median, eliminate_row
     page --> mean, median, eliminate_row
-    seed --> mean, median
+    seed --> mean, median  FATTO
     tris --> mode, eliminate_row
     zoo --> mode
 

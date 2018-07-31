@@ -72,6 +72,22 @@ def create_dictionary_classification_scoring():
     return scoring
 
 
+def create_dictionary_regression_scoring():
+    """
+    Crea dizionario con key:'name_score' value:score da calcolare
+    :return: dict,dizionario con tutti gli scoring da calcolare
+    """
+    scoring = {
+        'explained_variance': 'explained_variance',
+        'neg_mean_absolute_error': 'neg_mean_absolute_error',
+        'neg_mean_squared_error': 'neg_mean_squared_error',
+        'neg_mean_squared_log_error': 'neg_mean_squared_log_error',
+        'neg_median_absolute_error': 'neg_median_absolute_error',
+        'r2': 'r2',
+               }
+    return scoring
+
+
 def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name="radar_plot", file_format=".png"):
     """
     Print and save the radar plot of the scoring
