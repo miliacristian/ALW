@@ -377,7 +377,6 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
         print("End training of SVR with kernel polynomial after", time() - start_time_poly, "s.")
 
     # case kernel is sigmoid
-
     if printValue:
         print("Start training of SVR with kernel sigmoid")
         start_time_sigmoid = time()
