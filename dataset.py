@@ -184,7 +184,7 @@ def load_eye_dataset():
     :return:features set X del dataset eye ,label set Y del dataset eye
     """
     path = os.path.abspath('')
-    X, Y = CSV.read_csv(path + classification_datasets_dir + 'EEG_eye_state.csv', skip_rows=24)
+    X, Y = CSV.read_csv(path + classification_datasets_dir + 'EEG_eye_state.csv', skip_rows=25)
     X = CSV.convert_type_to_float(X)
     Y = CSV.convert_type_to_float(Y)
     return X, Y

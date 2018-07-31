@@ -11,7 +11,7 @@ Relevant Information:
  Number of Attributes: 9 including the class attribute
  Attribute Information:
     1. mpg:           continuous
-    2. cylinders:     multi-valued discrete integer
+    2. cylinders:     multi-valued discrete integer (4,5,6,8)
     3. displacement:  continuous integer
     4. horsepower:    continuous integer
     5. weight:        continuous integer

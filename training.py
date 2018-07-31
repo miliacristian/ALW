@@ -630,12 +630,12 @@ if __name__ == '__main__':
     warnings.filterwarnings('always')
     seed = 100
     name_models = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
-    dataset_name = __init__.seed
+    dataset_name = __init__.page
     k_range = range(3, 21, 1)
     n_trees_range = range(5, 21, 1)
 
     X, Y, scoring, name_setting_file, name_radar_plot_file = main.case_NaN_dataset(dataset_name,
-                                                                                                  "mean", seed, 0.15)
+                                                                                                  "mean", seed, 0.10)
 
     training_classificator(X, Y, name_models, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
                            n_split=10, mean=True, file_name=name_setting_file)
