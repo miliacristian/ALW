@@ -558,6 +558,40 @@ def training_regressor(X, Y, name_models, scoring, k=[5], list_n_trees=[10], see
     fl.close()
 
 
+def check_strategies(dataset_name, strategies):
+    all_strategies = ['mean', 'eliminate_row', 'mode', 'median']
+    strategies_balance = all_strategies
+    strategies_eye = ['mean', 'eliminate_row', 'median']
+    strategies_page = ['mean', 'eliminate_row', 'median']
+    strategies_seed = ['mean', 'median']
+    strategies_tris = ['eliminate_row', 'mode']
+    strategies_zoo = ['mode']
+
+    if dataset_name == __init__.balance:
+        if not strategies in strategies_balance:
+            print('invalid strategy for', __init__.balance)
+            exit(1)
+    if dataset_name == __init__.eye:
+        if not strategies in strategies_eye:
+            print('invalid strategy for', __init__.eye)
+            exit(1)
+    if dataset_name == __init__.page:
+        if not strategies in strategies_page:
+            print('invalid strategy for', __init__.page)
+            exit(1)
+    if dataset_name == __init__.seed:
+        if not strategies in strategies_seed:
+            print('invalid strategy for', __init__.seed)
+            exit(1)
+    if dataset_name == __init__.tris:
+        if not strategies in strategies_tris:
+            print('invalid strategy for', __init__.tris)
+            exit(1)
+    if dataset_name == __init__.zoo:
+        if not strategies in strategies_zoo:
+            print('invalid strategy for', __init__.zoo)
+            exit(1)
+
 if __name__ == '__main__':
     warnings.filterwarnings('always')
     seed = 100

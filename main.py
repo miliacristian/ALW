@@ -90,7 +90,7 @@ def case_NaN_dataset_classification(dataset_name, strategy, seed=100, perc_NaN=0
     :param perc_NaN: percent of total entry of dataset that are setting randomly NaN
     :return: The dataset X, Y, the list of scoring for the test and the name of settings and radar plot files
     """
-
+    training.check_strategies(dataset_name,strategy)
     name_setting_file = dataset_name + setting
     name_radar_plot_file = dataset_name + radar_plot
 

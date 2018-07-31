@@ -1,5 +1,6 @@
 import numpy
 from pandas import read_csv
+import __init__
 def multiple_argument(*args):
     print(args)
     for arg in args:
@@ -18,5 +19,9 @@ def l():
     multi_key_word_arg(p,b='blue',c='cyano',p='turc',)
 
 
-if __name__== '__name__':
+
+if __name__== '__main__':
+    print("inizio")
+    check_strategies(__init__.zoo,"mode")
     pass
+
