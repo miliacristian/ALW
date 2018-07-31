@@ -6,15 +6,15 @@ Given are the variable name, variable type, the measurement unit and a brief des
 
 Name -- Data Type -- Measurement -- Description
 
-Cement (component 1) -- quantitative -- kg in a m3 mixture -- Input Variable
-Blast Furnace Slag (component 2) -- quantitative -- kg in a m3 mixture -- Input Variable
-Fly Ash (component 3) -- quantitative -- kg in a m3 mixture -- Input Variable
-Water (component 4) -- quantitative -- kg in a m3 mixture -- Input Variable
-Superplasticizer (component 5) -- quantitative -- kg in a m3 mixture -- Input Variable
-Coarse Aggregate (component 6) -- quantitative -- kg in a m3 mixture -- Input Variable
-Fine Aggregate (component 7) -- quantitative -- kg in a m3 mixture -- Input Variable
-Age -- quantitative -- Day (1~365) -- Input Variable
-Concrete compressive strength -- quantitative -- MPa -- Output Variable
+Cement (component 1) -- quantitative -- kg in a m3 mixture -- Input Variable continous
+Blast Furnace Slag (component 2) -- quantitative -- kg in a m3 mixture -- Input Variable continous
+Fly Ash (component 3) -- quantitative -- kg in a m3 mixture -- Input Variable continous
+Water (component 4) -- quantitative -- kg in a m3 mixture -- Input Variable continous
+Superplasticizer (component 5) -- quantitative -- kg in a m3 mixture -- Input Variable continous
+Coarse Aggregate (component 6) -- quantitative -- kg in a m3 mixture -- Input Variable continous
+Fine Aggregate (component 7) -- quantitative -- kg in a m3 mixture -- Input Variable continous
+Age -- quantitative -- Day (1~365) -- Input Variable integer (1,2,...365)
+Concrete compressive strength -- quantitative -- MPa -- Output Variable continous
 
 missing data:no,separatore spazio/tabulazione
 

@@ -14,16 +14,16 @@ The aim is to use the eight features to predict each of the two responses.
 missing values:no
 
 Specifically:
-X1 Relative Compactness
-X2 Surface Area
-X3 Wall Area
-X4 Roof Area
-X5 Overall Height
-X6 Orientation
-X7 Glazing Area
-X8 Glazing Area Distribution
-y1 Heating Load
-y2 Cooling Load
+X1 Relative Compactness continous
+X2 Surface Area continous
+X3 Wall Area continous
+X4 Roof Area continous
+X5 Overall Height 	discrete(3.5 7.0)
+X6 Orientation 	integer discrete (2,3,4,5)
+X7 Glazing Area discrete(0.0 0.1 0.25 0.4)
+X8 Glazing Area Distribution integer discrete(0,1,2,3,4,5)
+y1 Heating Load continous
+y2 Cooling Load continous
 
 0.98	514.50	294.00	110.25	7.00	2	0.00	0	15.55	21.33
 0.98	514.50	294.00	110.25	7.00	3	0.00	0	15.55	21.33
