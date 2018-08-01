@@ -163,7 +163,7 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
         start_time_linear = time()
 
     for C in C_range:
-        model = OneVsRestClassifier(SVC(kernel='linear', random_state=seed, C=C))
+        model = OneVsRestClassifier(SVC(kernel='linear', random_state=seed, C=C,max_iter=100))
         result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
         harmonic_mean = hmean_scores(scoring, result)
         if best_total_score is None or best_total_score < harmonic_mean:
@@ -182,7 +182,7 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
 
     for C in C_range:
         for gamma in gamma_range:
-            model = OneVsRestClassifier(SVC(kernel='rbf', random_state=seed, C=C, gamma=gamma))
+            model = OneVsRestClassifier(SVC(kernel='rbf', random_state=seed, C=C, gamma=gamma,max_iter=100))
             result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
             harmonic_mean = hmean_scores(scoring, result)
             if best_total_score < harmonic_mean:
@@ -208,7 +208,7 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
                 if printValue:
                     print("Starting cycle with C =", C, "degree =", degree, "gamma =", gamma)
                     start_time_poly2 = time()
-                model = OneVsRestClassifier(SVC(kernel='poly', random_state=seed, C=C, gamma=gamma, degree=degree))
+                model = OneVsRestClassifier(SVC(kernel='poly', random_state=seed, C=C, gamma=gamma, degree=degree,max_iter=100))
                 result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
                 harmonic_mean = hmean_scores(scoring, result)
                 if best_total_score < harmonic_mean:
@@ -231,7 +231,7 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
 
     for C in C_range:
         for gamma in gamma_range:
-            model = OneVsRestClassifier(SVC(kernel='sigmoid', random_state=seed, C=C, gamma=gamma))
+            model = OneVsRestClassifier(SVC(kernel='sigmoid', random_state=seed, C=C, gamma=gamma,max_iter=100))
             result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
             harmonic_mean = hmean_scores(scoring, result)
             if best_total_score < harmonic_mean:
@@ -501,8 +501,8 @@ def training_classificator(X, Y, name_models, scoring, k=[5], list_n_trees=[10],
         best_k = KNN_training(X, Y, k, scoring, seed, n_split, mean)
         fl.writelines(["best_k " + str(best_k) + "\n"])
     if __init__.svc in name_models:
-        #best_C, best_degree, best_gamma, best_kernel =SVC_training(X, Y, scoring, seed, n_split, mean)
-        best_C, best_degree, best_gamma, best_kernel=SVC_default_training(X, Y, scoring, seed, n_split, mean)
+        best_C, best_degree, best_gamma, best_kernel =SVC_training(X, Y, scoring, seed, n_split, mean)
+        #best_C, best_degree, best_gamma, best_kernel=SVC_default_training(X, Y, scoring, seed, n_split, mean)
         fl.writelines(["best_C " + str(best_C) + "\n", "best_degree " + str(best_degree) + "\n", "best_gamma " +
                        str(best_gamma) + "\n", "best_kernel " + str(best_kernel) + "\n"])
     if __init__.rand_forest_regressor in name_models:
