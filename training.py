@@ -494,8 +494,8 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
     return best_C, best_eps, best_degree, best_gamma, best_kernel, best_scores, best_total_score
 
 
-def training_classificator(X, Y, name_models, scoring, k=[5], list_n_trees=[10], seed=111, n_split=10, mean=True,
-                           file_name="best_setting.txt"):
+def training(X, Y, name_models, scoring, k=[5], list_n_trees=[10], seed=111, n_split=10, mean=True,
+             file_name="best_setting.txt"):
     """
     Write on file the best setting for the specific dataset. Every line of file contains "the name of the parameter"
     + " " + "the value of parameter"
@@ -765,19 +765,19 @@ if __name__ == '__main__':
     seed = 100
     name_models_classification = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
     name_models_regression = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
-    dataset_name = __init__.zoo
+    dataset_name = __init__.balance
     classification=is_a_classification_dataset(dataset_name)
     k_range = range(3, 21, 1)
     n_trees_range = range(5, 21, 1)
 
     X, Y, scoring, name_setting_file, name_radar_plot_file = \
-        main.case_full_dataset(dataset_name, standardize=False, normalize=False, classification=classification)
-    X, Y, scoring, name_setting_file, name_radar_plot_file = \
-        main.c(dataset_name, "mode", seed, 0.15, classification=classification)
+        main.case_full_dataset(dataset_name, standardize=True, normalize=False, classification=classification)
+    # X, Y, scoring, name_setting_file, name_radar_plot_file = \
+    #     main.case_NaN_dataset(dataset_name, "median", seed, 0.05, classification=classification)
 
     if classification:
-        training_classificator(X, Y, name_models_classification, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
-                           n_split=10, mean=True, file_name=name_setting_file)
+        training(X, Y, name_models_classification, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
+                 n_split=10, mean=True, file_name=name_setting_file)
     else:
-        training_classificator(X, Y, name_models_regression, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
-                           n_split=10, mean=True, file_name=name_setting_file)
+        training(X, Y, name_models_regression, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
+                 n_split=10, mean=True, file_name=name_setting_file)
