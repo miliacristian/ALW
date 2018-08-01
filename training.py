@@ -35,6 +35,7 @@ def KNN_training(X, Y, k, scoring, seed, n_split, mean):
 
     best_k = None
     best_total_score = None
+    best_scores = None
     for num_neighbors in k:
 
         if printValue:
@@ -45,6 +46,7 @@ def KNN_training(X, Y, k, scoring, seed, n_split, mean):
         result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
         harmonic_mean = hmean_scores(scoring, result)  # funzione che da result calcola media armonica
         if best_total_score is None or best_total_score < harmonic_mean:
+            best_scores = result
             best_total_score = harmonic_mean
             best_k = num_neighbors
 
@@ -53,7 +55,7 @@ def KNN_training(X, Y, k, scoring, seed, n_split, mean):
 
     if printValue:
         print("End training of KNN after", time() - start_time, "s.")
-    return best_k
+    return best_k, best_scores, best_total_score
 
 
 def RANDOMFOREST_training(X, Y, list_n_trees, scoring, seed, n_split, mean):
@@ -73,6 +75,7 @@ def RANDOMFOREST_training(X, Y, list_n_trees, scoring, seed, n_split, mean):
 
     best_n_trees = None
     best_max_features = None
+    best_scores = None
     best_total_score = None
 
     for trees in list_n_trees:
@@ -86,6 +89,7 @@ def RANDOMFOREST_training(X, Y, list_n_trees, scoring, seed, n_split, mean):
             result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
             harmonic_mean = hmean_scores(scoring, result)  # funzione che da result calcola media armonica
             if best_total_score is None or best_total_score < harmonic_mean:
+                best_scores = result
                 best_total_score = harmonic_mean
                 best_max_features = max_features
                 best_n_trees = trees
@@ -96,7 +100,7 @@ def RANDOMFOREST_training(X, Y, list_n_trees, scoring, seed, n_split, mean):
 
     if printValue:
         print("End training of Random Forest after", time() - start_time, "s.")
-    return best_n_trees, best_max_features
+    return best_n_trees, best_max_features, best_scores, best_total_score
 
 
 def SVC_default_training(X, Y, scoring, seed, n_split, mean):
@@ -146,15 +150,16 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
     best_C = None
     best_gamma = None
     best_degree = None
+    best_scores = None
     best_total_score = None
     # range in cui variano i parametri plausibili (lungo il training)
-    # C_range = np.logspace(-2, 2, 5)
-    # gamma_range = np.logspace(-5, 0, 6)
-    # degree_range = range(2, 4, 1)
+    C_range = np.logspace(-2, 2, 5)
+    gamma_range = np.logspace(-5, 0, 6)
+    degree_range = range(2, 4, 1)
     # default parameter
-    C_range = [1.0]
-    gamma_range = ['auto']
-    degree_range = [3]
+    # C_range = [1.0]
+    # gamma_range = ['auto']
+    # degree_range = [3]
 
     # case kernel is linear
 
@@ -163,10 +168,11 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
         start_time_linear = time()
 
     for C in C_range:
-        model = OneVsRestClassifier(SVC(kernel='linear', random_state=seed, C=C,max_iter=100))
+        model = OneVsRestClassifier(SVC(kernel='linear', random_state=seed, C=C, max_iter=1000))
         result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
         harmonic_mean = hmean_scores(scoring, result)
         if best_total_score is None or best_total_score < harmonic_mean:
+            best_scores = result
             best_total_score = harmonic_mean
             best_C = C
             best_kernel = 'linear'
@@ -182,10 +188,11 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
 
     for C in C_range:
         for gamma in gamma_range:
-            model = OneVsRestClassifier(SVC(kernel='rbf', random_state=seed, C=C, gamma=gamma,max_iter=100))
+            model = OneVsRestClassifier(SVC(kernel='rbf', random_state=seed, C=C, gamma=gamma,max_iter=1000))
             result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
             harmonic_mean = hmean_scores(scoring, result)
             if best_total_score < harmonic_mean:
+                best_scores = result
                 best_total_score = harmonic_mean
                 best_C = C
                 best_gamma = gamma
@@ -208,10 +215,11 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
                 if printValue:
                     print("Starting cycle with C =", C, "degree =", degree, "gamma =", gamma)
                     start_time_poly2 = time()
-                model = OneVsRestClassifier(SVC(kernel='poly', random_state=seed, C=C, gamma=gamma, degree=degree,max_iter=100))
+                model = OneVsRestClassifier(SVC(kernel='poly', random_state=seed, C=C, gamma=gamma, degree=degree,max_iter=1000))
                 result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
                 harmonic_mean = hmean_scores(scoring, result)
                 if best_total_score < harmonic_mean:
+                    best_scores = result
                     best_total_score = harmonic_mean
                     best_C = C
                     best_gamma = gamma
@@ -231,10 +239,11 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
 
     for C in C_range:
         for gamma in gamma_range:
-            model = OneVsRestClassifier(SVC(kernel='sigmoid', random_state=seed, C=C, gamma=gamma,max_iter=100))
+            model = OneVsRestClassifier(SVC(kernel='sigmoid', random_state=seed, C=C, gamma=gamma,max_iter=1000))
             result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
             harmonic_mean = hmean_scores(scoring, result)
             if best_total_score < harmonic_mean:
+                best_scores = result
                 best_total_score = harmonic_mean
                 best_C = C
                 best_gamma = gamma
@@ -253,7 +262,7 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
     if printValue:
         print("End training of SVC after", time() - start_time, "s.")
 
-    return best_C, best_degree, best_gamma, best_kernel
+    return best_C, best_degree, best_gamma, best_kernel, best_scores, best_total_score
 
 
 def KNR_training(X, Y, k, scoring, seed, n_split, mean):
@@ -272,6 +281,8 @@ def KNR_training(X, Y, k, scoring, seed, n_split, mean):
 
     best_k = None
     best_total_score = None
+    best_scores = None
+
     for num_neighbors in k:
 
         if printValue:
@@ -282,6 +293,7 @@ def KNR_training(X, Y, k, scoring, seed, n_split, mean):
         result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
         total_score = total_score_regression(scoring, result)  # funzione che da result calcola media armonica
         if best_total_score is None or best_total_score < total_score:
+            best_scores = result
             best_total_score = total_score
             best_k = num_neighbors
 
@@ -290,7 +302,8 @@ def KNR_training(X, Y, k, scoring, seed, n_split, mean):
 
     if printValue:
         print("End training of KNR after", time() - start_time, "s.")
-    return best_k
+
+    return best_k, best_scores, best_total_score
 
 
 def RANDOMFORESTRegressor_training(X, Y, list_n_trees, scoring, seed, n_split, mean):
@@ -310,6 +323,7 @@ def RANDOMFORESTRegressor_training(X, Y, list_n_trees, scoring, seed, n_split, m
 
     best_n_trees = None
     best_max_features = None
+    best_scores = None
     best_total_score = None
 
     for trees in list_n_trees:
@@ -323,6 +337,7 @@ def RANDOMFORESTRegressor_training(X, Y, list_n_trees, scoring, seed, n_split, m
             result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
             total_score = total_score_regression(scoring, result)  # funzione che da result calcola media armonica
             if best_total_score is None or best_total_score < total_score:
+                best_scores = result
                 best_total_score = total_score
                 best_max_features = max_features
                 best_n_trees = trees
@@ -333,7 +348,7 @@ def RANDOMFORESTRegressor_training(X, Y, list_n_trees, scoring, seed, n_split, m
 
     if printValue:
         print("End training of Random Forest after", time() - start_time, "s.")
-    return best_n_trees, best_max_features
+    return best_n_trees, best_max_features, best_scores, best_total_score
 
 
 def SVR_training(X, Y, scoring, seed, n_split, mean):
@@ -355,6 +370,7 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
     best_eps = None
     best_gamma = None
     best_degree = None
+    best_scores = None
     best_total_score = None
     # range in cui variano i parametri plausibili (lungo il training)
     C_range = np.logspace(-2, 2, 5)
@@ -375,10 +391,11 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
 
     for C in C_range:
         for eps in eps_range:
-            model = SVR(kernel='linear', C=C, epsilon=eps)
+            model = SVR(kernel='linear', C=C, epsilon=eps, max_iter=1000)
             result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
             total_score = total_score_regression(scoring, result)
             if best_total_score is None or best_total_score < total_score:
+                best_scores = result
                 best_total_score = total_score
                 best_C = C
                 best_eps = eps
@@ -396,10 +413,11 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
     for C in C_range:
         for eps in eps_range:
             for gamma in gamma_range:
-                model = SVR(kernel='rbf', C=C, gamma=gamma, epsilon=eps)
+                model = SVR(kernel='rbf', C=C, gamma=gamma, epsilon=eps, max_iter=1000)
                 result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
                 total_score = total_score_regression(scoring, result)
                 if best_total_score < total_score:
+                    best_scores = result
                     best_total_score = total_score
                     best_C = C
                     best_eps = eps
@@ -424,10 +442,11 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
                     if printValue:
                         print("Starting cycle with C =", C, "eps =", eps, "degree =", degree, "gamma =", gamma)
                         start_time_poly2 = time()
-                    model = SVC(kernel='poly', C=C, gamma=gamma, degree=degree)
+                    model = SVC(kernel='poly', C=C, gamma=gamma, degree=degree, max_iter=1000)
                     result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
                     total_score = total_score_regression(scoring, result)
                     if best_total_score < total_score:
+                        best_scores = result
                         best_total_score = total_score
                         best_C = C
                         best_eps = eps
@@ -448,10 +467,11 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
     for C in C_range:
         for eps in eps_range:
             for gamma in gamma_range:
-                model = SVR(kernel='sigmoid', C=C, gamma=gamma, epsilon=eps)
+                model = SVR(kernel='sigmoid', C=C, gamma=gamma, epsilon=eps, max_iter=1000)
                 result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
                 total_score = total_score_regression(scoring, result)
                 if best_total_score < total_score:
+                    best_scores = result
                     best_total_score = total_score
                     best_C = C
                     best_eps = eps
@@ -471,7 +491,7 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
     if printValue:
         print("End training of SVR after", time() - start_time, "s.")
 
-    return best_C, best_eps, best_degree, best_gamma, best_kernel
+    return best_C, best_eps, best_degree, best_gamma, best_kernel, best_scores, best_total_score
 
 
 def training_classificator(X, Y, name_models, scoring, k=[5], list_n_trees=[10], seed=111, n_split=10, mean=True,
@@ -493,31 +513,67 @@ def training_classificator(X, Y, name_models, scoring, k=[5], list_n_trees=[10],
     path = os.path.abspath('')
     fl = open(path + model_setting_test_dir + file_name, "w")
     fl.writelines(["seed " + str(seed) + "\n", "n_split " + str(n_split) + "\n"])
+    if __init__.dec_tree in name_models:
+        model = DecisionTreeClassifier(random_state=seed)
+        best_scores = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, seed=seed, n_split=n_split,
+                                                           mean=mean)
+        best_total_score = scoringUtils.hmean_scores(scoring, best_scores)
+        for key, value in best_scores.items():
+            fl.writelines([str(key) + "_CART " + str(value) + "\n"])
+        fl.writelines(["total_score_CART " + str(best_total_score) + "\n"])
     if __init__.rand_forest in name_models:
-        best_n_trees, best_max_features = RANDOMFOREST_training(X, Y, list_n_trees, scoring, seed, n_split, mean)
+        best_n_trees, best_max_features, best_scores, best_total_score = \
+            RANDOMFOREST_training(X, Y, list_n_trees, scoring, seed, n_split, mean)
         fl.writelines(["best_n_trees " + str(best_n_trees) + "\n", "best_max_features " +
                        str(best_max_features) + "\n"])
+        for key, value in best_scores.items():
+            fl.writelines([str(key) + "_RF " + str(value) + "\n"])
+        fl.writelines(["total_score_RF " + str(best_total_score) + "\n"])
     if __init__.knn in name_models:
-        best_k = KNN_training(X, Y, k, scoring, seed, n_split, mean)
+        best_k, best_scores, best_total_score = KNN_training(X, Y, k, scoring, seed, n_split, mean)
         fl.writelines(["best_k " + str(best_k) + "\n"])
+        for key, value in best_scores.items():
+            fl.writelines([str(key) + "_KNN " + str(value) + "\n"])
+        fl.writelines(["total_score_KNN " + str(best_total_score) + "\n"])
     if __init__.svc in name_models:
-        best_C, best_degree, best_gamma, best_kernel =SVC_training(X, Y, scoring, seed, n_split, mean)
-        #best_C, best_degree, best_gamma, best_kernel=SVC_default_training(X, Y, scoring, seed, n_split, mean)
+        best_C, best_degree, best_gamma, best_kernel, best_scores, best_total_score = \
+            SVC_training(X, Y, scoring, seed, n_split, mean)
         fl.writelines(["best_C " + str(best_C) + "\n", "best_degree " + str(best_degree) + "\n", "best_gamma " +
                        str(best_gamma) + "\n", "best_kernel " + str(best_kernel) + "\n"])
+        for key, value in best_scores.items():
+            fl.writelines([str(key) + "_SVC " + str(value) + "\n"])
+        fl.writelines(["total_score_SVC " + str(best_total_score) + "\n"])
+    if __init__.dec_tree in name_models:
+        model = DecisionTreeRegressor(random_state=seed)
+        best_scores = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, seed=seed, n_split=n_split,
+                                                           mean=mean)
+        best_total_score = scoringUtils.hmean_scores(scoring, best_scores)
+        for key, value in best_scores.items():
+            fl.writelines([str(key) + "_CARTRegr " + str(value) + "\n"])
+        fl.writelines(["total_score_CARTRegr " + str(best_total_score) + "\n"])
     if __init__.rand_forest_regressor in name_models:
-        best_n_trees, best_max_features = RANDOMFORESTRegressor_training(X, Y, list_n_trees, scoring, seed, n_split,
-                                                                         mean)
+        best_n_trees, best_max_features, best_scores, best_total_score = \
+            RANDOMFORESTRegressor_training(X, Y, list_n_trees, scoring, seed, n_split, mean)
         fl.writelines(["best_n_trees " + str(best_n_trees) + "\n", "best_max_features " +
                        str(best_max_features) + "\n"])
+        for key, value in best_scores.items():
+            fl.writelines([str(key) + "_RFRegr " + str(value) + "\n"])
+        fl.writelines(["total_score_RFRegr " + str(best_total_score) + "\n"])
     if __init__.knr in name_models:
-        best_k = KNR_training(X, Y, k, scoring, seed, n_split, mean)
+        best_k, best_scores, best_total_score = KNR_training(X, Y, k, scoring, seed, n_split, mean)
         fl.writelines(["best_k " + str(best_k) + "\n"])
+        for key, value in best_scores.items():
+            fl.writelines([str(key) + "_KNR " + str(value) + "\n"])
+        fl.writelines(["total_score_KNR " + str(best_total_score) + "\n"])
     if __init__.svr in name_models:
-        best_C, best_eps, best_degree, best_gamma, best_kernel = SVR_training(X, Y, scoring, seed, n_split, mean)
+        best_C, best_eps, best_degree, best_gamma, best_kernel, best_scores, best_total_score = \
+            SVR_training(X, Y, scoring, seed, n_split, mean)
         fl.writelines(["best_C " + str(best_C) + "\n", "best_eps " + str(best_eps) + "\n", "best_degree " +
                        str(best_degree) + "\n", "best_gamma " + str(best_gamma) + "\n", "best_kernel " +
                        str(best_kernel) + "\n"])
+        for key, value in best_scores.items():
+            fl.writelines([str(key) + "_SVR " + str(value) + "\n"])
+        fl.writelines(["total_score_SVR " + str(best_total_score) + "\n"])
 
     fl.close()
 
@@ -588,6 +644,29 @@ def build_models(name_models, file_name):
     return models
 
 
+def read_best_scores(name_models, file_name):
+    """
+    Return the best scoring of a test
+    :param name_models:
+    :param file_name:
+    :return: dict with the scores
+    """
+
+    path = os.path.abspath('')
+    fl = open(path + model_settings_dir + file_name, "r")  # aggiungere path
+    best_scoring = {}
+    while 1:
+        line = fl.readline()
+        line = line[:-1]
+        if len(line) == 0:
+            break
+        parameter, value = str.split(line, " ")
+        best_scoring[parameter] = value
+
+    return best_scoring
+
+
+
 def training_regressor(X, Y, name_models, scoring, k=[5], list_n_trees=[10], seed=111, n_split=10, mean=True,
                        file_name="best_setting.txt"):
     """
@@ -626,19 +705,21 @@ def is_a_classification_dataset(dataset_name):
         return True
     return False
 
+
 def check_percentage(percentage):
     """
     Verifica che la percentuale percentuage è una percentuale compresa nella lista delle percentuali scelte
     :param percentage:float,compreso tra 0 e 1 (estremi inclusi)
     :return: None
     """
-    if percentage>1 or percentage <0:
+    if percentage > 1 or percentage < 0:
         print('percentage must be between 0 and 1')
         exit(1)
     if not percentage in __init__.percentuals_NaN:
         print('invalid percentage')
         exit(1)
     return None
+
 
 def check_strategies(dataset_name, strategy):
     """
@@ -683,43 +764,43 @@ def check_strategies(dataset_name, strategy):
         if not strategy in strategies_zoo:
             print('invalid strategy for', __init__.zoo)
             exit(1)
-    elif dataset_name ==__init__.compress_strength:
+    elif dataset_name == __init__.compress_strength:
         if not strategy in strategies_compress_strength:
             print('invalid strategy for', __init__.compress_strength)
             exit(1)
-    elif dataset_name ==__init__.airfoil:
+    elif dataset_name == __init__.airfoil:
         if not strategy in strategies_airfoil:
             print('invalid strategy for', __init__.airfoil)
             exit(1)
-    elif dataset_name ==__init__.auto:
+    elif dataset_name == __init__.auto:
         if not strategy in strategies_auto:
             print('invalid strategy for', __init__.auto)
             exit(1)
-    elif dataset_name ==__init__.power_plant:
+    elif dataset_name == __init__.power_plant:
         if not strategy in strategies_power_plant:
             print('invalid strategy for', __init__.power_plant)
             exit(1)
-    elif dataset_name ==__init__.energy:
+    elif dataset_name == __init__.energy:
         if not strategy in strategies_energy:
             print('invalid strategy for', __init__.energy)
             exit(1)
     else:
-        print('invalid dataset_name',dataset_name)
+        print('invalid dataset_name', dataset_name)
         exit(1)
 
-mean='mean'
-eliminate_row='eliminate_row'
-median='median'
-mode='mode'
+
+mean = 'mean'
+eliminate_row = 'eliminate_row'
+median = 'median'
+mode = 'mode'
 
 if __name__ == '__main__':
     warnings.filterwarnings('always')
     seed = 100
-    name_models_classification=[__init__.svc]
-    #name_models_classification = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
+    name_models_classification = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
     name_models_regression = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
     dataset_name = __init__.eye
-    classification=is_a_classification_dataset(dataset_name)
+    classification=is_a_classification_dataset()
     k_range = range(3, 21, 1)
     n_trees_range = range(5, 21, 1)
 
