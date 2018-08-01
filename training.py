@@ -99,6 +99,35 @@ def RANDOMFOREST_training(X, Y, list_n_trees, scoring, seed, n_split, mean):
     return best_n_trees, best_max_features
 
 
+def SVC_default_training(X, Y, scoring, seed, n_split, mean):
+    """
+    do the training of a SVC with dataset X, Y and K_Fold_Cross_Validation. Find the best setting iterating on the type
+    of kernel function use (linear, rbf, polynomial or sigmoid)
+    :param X: feature set
+    :param Y: label set
+    :param scoring: dict of scoring use
+    :return: the best parameter C, gamma and degree with the best kernel function
+    """
+    if printValue:
+        print("Start training of default SVC")
+        start_time = time()
+    best_kernel = None
+    best_C = None
+    best_gamma = None
+    best_degree = None
+    best_total_score = None
+
+    if printValue:
+        print("Start training of default SVC")
+        start_time_linear = time()
+    model = OneVsRestClassifier(SVC(random_state=seed))
+    result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
+    harmonic_mean = hmean_scores(scoring, result)
+
+    if printValue:
+        print("End training of default SVC after", time() - start_time_linear, "s.")
+    return best_C, best_degree, best_gamma, best_kernel
+
 def SVC_training(X, Y, scoring, seed, n_split, mean):
     """
     do the training of a SVC with dataset X, Y and K_Fold_Cross_Validation. Find the best setting iterating on the type
@@ -472,7 +501,8 @@ def training_classificator(X, Y, name_models, scoring, k=[5], list_n_trees=[10],
         best_k = KNN_training(X, Y, k, scoring, seed, n_split, mean)
         fl.writelines(["best_k " + str(best_k) + "\n"])
     if __init__.svc in name_models:
-        best_C, best_degree, best_gamma, best_kernel = SVC_training(X, Y, scoring, seed, n_split, mean)
+        #best_C, best_degree, best_gamma, best_kernel =SVC_training(X, Y, scoring, seed, n_split, mean)
+        best_C, best_degree, best_gamma, best_kernel=SVC_default_training(X, Y, scoring, seed, n_split, mean)
         fl.writelines(["best_C " + str(best_C) + "\n", "best_degree " + str(best_degree) + "\n", "best_gamma " +
                        str(best_gamma) + "\n", "best_kernel " + str(best_kernel) + "\n"])
     if __init__.rand_forest_regressor in name_models:
@@ -688,7 +718,7 @@ if __name__ == '__main__':
     name_models_classification = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
     name_models_regression = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
     dataset_name = __init__.eye
-    classification=is_a_classification_dataset()
+    classification=is_a_classification_dataset(dataset_name)
     k_range = range(3, 21, 1)
     n_trees_range = range(5, 21, 1)
 
