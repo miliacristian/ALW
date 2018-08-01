@@ -36,12 +36,20 @@ def KNN_training(X, Y, k, scoring, seed, n_split, mean):
     best_k = None
     best_total_score = None
     for num_neighbors in k:
+
+        if printValue:
+            print("Start training of KNN with k =", num_neighbors)
+            start_time_cycle = time()
+
         model = KNeighborsClassifier(n_neighbors=num_neighbors, weights='distance')
         result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
         harmonic_mean = hmean_scores(scoring, result)  # funzione che da result calcola media armonica
         if best_total_score is None or best_total_score < harmonic_mean:
             best_total_score = harmonic_mean
             best_k = num_neighbors
+
+        if printValue:
+            print("Ending KNN with k =", num_neighbors, "in ", time() - start_time_cycle)
 
     if printValue:
         print("End training of KNN after", time() - start_time, "s.")
@@ -82,10 +90,7 @@ def RANDOMFOREST_training(X, Y, list_n_trees, scoring, seed, n_split, mean):
                 best_max_features = max_features
                 best_n_trees = trees
 
-            if printV
-best_C None
-best_degree None
-best_gamma Nalue:
+            if printValue:
                 print("Ending RF with num_trees =", trees, "and max_features =", max_features, "in ",
                       time() - start_time_cycle)
 
@@ -117,10 +122,10 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
     # C_range = np.logspace(-2, 2, 5)
     # gamma_range = np.logspace(-5, 0, 6)
     # degree_range = range(2, 4, 1)
-    # range dataset grandi grandi
-    C_range = np.logspace(-1, 1, 3)
-    gamma_range = np.logspace(-3, 0, 4)
-    degree_range = range(2, 3, 1)
+    # default parameter
+    C_range = [1.0]
+    gamma_range = ['auto']
+    degree_range = [3]
 
     # case kernel is linear
 
@@ -211,10 +216,7 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
 
     # setto valori numerici per evitare problemi nella lettura e conversione da file, tanto non verranno visti dal
     # costruttore del modello se sono ancora None a questo punto del codice
-    if best_gamma is Non
-best_C None
-best_degree None
-best_gamma Ne:
+    if best_gamma is None:
         best_gamma = 'auto'
     if best_degree is None:
         best_degree = 0
