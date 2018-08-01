@@ -555,6 +555,10 @@ def training_regressor(X, Y, name_models, scoring, k=[5], list_n_trees=[10], see
                        str(best_gamma) + "\n", "best_kernel " + str(best_kernel) + "\n"])
 
     fl.close()
+def is_a_classification_dataset(dataset_name):
+    if dataset_name in __init__.list_classification_dataset:
+        return True
+    return False
 
 def check_percentage(percentage):
     """
@@ -645,14 +649,17 @@ mode='mode'
 if __name__ == '__main__':
     warnings.filterwarnings('always')
     seed = 100
-    name_models = [__init__.svc]
-    # name_models = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
-    # name_models = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
+    name_models_classification = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
+    name_models_regression = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
     dataset_name = __init__.eye
+    classification=is_a_classification_dataset()
     k_range = range(3, 21, 1)
     n_trees_range = range(5, 21, 1)
 
-    X, Y, scoring, name_setting_file, name_radar_plot_file = main.case_NaN_dataset(dataset_name, "mean", seed, 0.05, classification=True)
-
-    training_classificator(X, Y, name_models, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
+    X, Y, scoring, name_setting_file, name_radar_plot_file = main.case_NaN_dataset(dataset_name, "mean", seed, 0.05, classification=classification)
+    if classification:
+        training_classificator(X, Y, name_models_classification, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
+                           n_split=10, mean=True, file_name=name_setting_file)
+    else :
+        training_classificator(X, Y, name_models_regression, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
                            n_split=10, mean=True, file_name=name_setting_file)

@@ -2,11 +2,12 @@ printValue = True
 file_name_radar_plot = "radar_plot"
 setting = '_settings'
 radar_plot = '_radar_plot'
+radar_plot_dir = '/radar_plot/'
 classification_datasets_dir = '/classification_datasets/'
 regression_dataset_dir = '/regression_datasets/'
 model_settings_dir = '/model_settings/'
 model_setting_test_dir = '/model_setting_test/'
-radar_plot_dir = '/radar_plot/'
+
 rand_forest= 'RANDFOREST'
 dec_tree='CART'
 knn='KNN'
@@ -15,6 +16,7 @@ rand_forest_regressor = 'RANDFORESTRegressor'
 dec_tree_regressor = 'CARTRegressor'
 knr = 'KNR'
 svr = 'SVR'
+
 seed='seed'
 tris='tris'
 zoo='zoo'
@@ -22,12 +24,18 @@ balance='balance'
 eye='eye'
 page='page'
 indians='indians'
-standardize='_standardize'
-normalize='_normalize'
-percentuals_NaN = [0.05, 0.1, 0.15]
+list_classification_dataset=[seed,tris,zoo,balance,eye,page,indians]
+
 compress_strength= 'compressive_strength'
 airfoil='airfoil'
 auto='auto'
 power_plant='power_plant'
 energy='energy'
+list_regression_dataset=[compress_strength,airfoil,auto,power_plant,energy]
+
+standardize='_standardize'
+normalize='_normalize'
+percentuals_NaN = [0.05, 0.1, 0.15]
+
+
 ##
