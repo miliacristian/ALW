@@ -36,20 +36,12 @@ def KNN_training(X, Y, k, scoring, seed, n_split, mean):
     best_k = None
     best_total_score = None
     for num_neighbors in k:
-
-        if printValue:
-            print("Start training of KNN with k =", num_neighbors)
-            start_time_cycle = time()
-
         model = KNeighborsClassifier(n_neighbors=num_neighbors, weights='distance')
         result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
         harmonic_mean = hmean_scores(scoring, result)  # funzione che da result calcola media armonica
         if best_total_score is None or best_total_score < harmonic_mean:
             best_total_score = harmonic_mean
             best_k = num_neighbors
-
-        if printValue:
-            print("Ending KNN with k =", num_neighbors, "in ", time() - start_time_cycle)
 
     if printValue:
         print("End training of KNN after", time() - start_time, "s.")
@@ -90,7 +82,10 @@ def RANDOMFOREST_training(X, Y, list_n_trees, scoring, seed, n_split, mean):
                 best_max_features = max_features
                 best_n_trees = trees
 
-            if printValue:
+            if printV
+best_C None
+best_degree None
+best_gamma Nalue:
                 print("Ending RF with num_trees =", trees, "and max_features =", max_features, "in ",
                       time() - start_time_cycle)
 
@@ -122,10 +117,10 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
     # C_range = np.logspace(-2, 2, 5)
     # gamma_range = np.logspace(-5, 0, 6)
     # degree_range = range(2, 4, 1)
-    # default parameter
-    C_range = [1.0]
-    gamma_range = ['auto']
-    degree_range = [3]
+    # range dataset grandi grandi
+    C_range = np.logspace(-1, 1, 3)
+    gamma_range = np.logspace(-3, 0, 4)
+    degree_range = range(2, 3, 1)
 
     # case kernel is linear
 
@@ -216,7 +211,10 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
 
     # setto valori numerici per evitare problemi nella lettura e conversione da file, tanto non verranno visti dal
     # costruttore del modello se sono ancora None a questo punto del codice
-    if best_gamma is None:
+    if best_gamma is Non
+best_C None
+best_degree None
+best_gamma Ne:
         best_gamma = 'auto'
     if best_degree is None:
         best_degree = 0
@@ -591,6 +589,24 @@ def training_regressor(X, Y, name_models, scoring, k=[5], list_n_trees=[10], see
 
     fl.close()
 
+def is_a_classification_dataset(dataset_name):
+    if dataset_name in __init__.list_classification_dataset:
+        return True
+    return False
+
+def check_percentage(percentage):
+    """
+    Verifica che la percentuale percentuage è una percentuale compresa nella lista delle percentuali scelte
+    :param percentage:float,compreso tra 0 e 1 (estremi inclusi)
+    :return: None
+    """
+    if percentage>1 or percentage <0:
+        print('percentage must be between 0 and 1')
+        exit(1)
+    if not percentage in __init__.percentuals_NaN:
+        print('invalid percentage')
+        exit(1)
+    return None
 
 def check_strategies(dataset_name, strategy):
     """
@@ -659,22 +675,25 @@ def check_strategies(dataset_name, strategy):
         print('invalid dataset_name',dataset_name)
         exit(1)
 
+mean='mean'
+eliminate_row='eliminate_row'
+median='median'
+mode='mode'
 
 if __name__ == '__main__':
     warnings.filterwarnings('always')
     seed = 100
-    # name_models = [__init__.svc]
-    name_models = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
-    # name_models = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
+    name_models_classification = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
+    name_models_regression = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
     dataset_name = __init__.eye
-    k_range = range(3, 16, 1)
+    classification=is_a_classification_dataset()
+    k_range = range(3, 21, 1)
     n_trees_range = range(5, 21, 1)
 
-    X, Y, scoring, name_setting_file, name_radar_plot_file = main.case_full_dataset(dataset_name,
-                                                                                    standardize=True, normalize=False,
-                                                                                    classification=True)
-    # X, Y, scoring, name_setting_file, name_radar_plot_file = main.case_NaN_dataset(dataset_name, "mean", seed,
-    #                                                                                0.05, classification=True)
-
-    training_classificator(X, Y, name_models, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
+    X, Y, scoring, name_setting_file, name_radar_plot_file = main.case_NaN_dataset(dataset_name, "mean", seed, 0.05, classification=classification)
+    if classification:
+        training_classificator(X, Y, name_models_classification, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
+                           n_split=10, mean=True, file_name=name_setting_file)
+    else :
+        training_classificator(X, Y, name_models_regression, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
                            n_split=10, mean=True, file_name=name_setting_file)
