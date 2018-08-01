@@ -519,52 +519,52 @@ def training_classificator(X, Y, name_models, scoring, k=[5], list_n_trees=[10],
                                                            mean=mean)
         best_total_score = scoringUtils.hmean_scores(scoring, best_scores)
         for key, value in best_scores.items():
-            fl.writelines([str(key) + "_CART " + str(value) + "\n"])
-        fl.writelines(["total_score_CART " + str(best_total_score) + "\n"])
+            fl.writelines([str(key) + "_" + str(__init__.dec_tree) + " " + str(value) + "\n"])
+        fl.writelines(["total_score_" + str(__init__.dec_tree) + " " + str(best_total_score) + "\n"])
     if __init__.rand_forest in name_models:
         best_n_trees, best_max_features, best_scores, best_total_score = \
             RANDOMFOREST_training(X, Y, list_n_trees, scoring, seed, n_split, mean)
         fl.writelines(["best_n_trees " + str(best_n_trees) + "\n", "best_max_features " +
                        str(best_max_features) + "\n"])
         for key, value in best_scores.items():
-            fl.writelines([str(key) + "_RF " + str(value) + "\n"])
-        fl.writelines(["total_score_RF " + str(best_total_score) + "\n"])
+            fl.writelines([str(key) + "_" + str(__init__.rand_forest) + " " + str(value) + "\n"])
+        fl.writelines(["total_score_" + str(__init__.rand_forest) + " " + str(best_total_score) + "\n"])
     if __init__.knn in name_models:
         best_k, best_scores, best_total_score = KNN_training(X, Y, k, scoring, seed, n_split, mean)
         fl.writelines(["best_k " + str(best_k) + "\n"])
         for key, value in best_scores.items():
-            fl.writelines([str(key) + "_KNN " + str(value) + "\n"])
-        fl.writelines(["total_score_KNN " + str(best_total_score) + "\n"])
+            fl.writelines([str(key) + "_" + str(__init__.knn) + " " + str(value) + "\n"])
+        fl.writelines(["total_score_" + str(__init__.knn) + " " + str(best_total_score) + "\n"])
     if __init__.svc in name_models:
         best_C, best_degree, best_gamma, best_kernel, best_scores, best_total_score = \
             SVC_training(X, Y, scoring, seed, n_split, mean)
         fl.writelines(["best_C " + str(best_C) + "\n", "best_degree " + str(best_degree) + "\n", "best_gamma " +
                        str(best_gamma) + "\n", "best_kernel " + str(best_kernel) + "\n"])
         for key, value in best_scores.items():
-            fl.writelines([str(key) + "_SVC " + str(value) + "\n"])
-        fl.writelines(["total_score_SVC " + str(best_total_score) + "\n"])
-    if __init__.dec_tree in name_models:
+            fl.writelines([str(key) + "_" + str(__init__.svc) + " " + str(value) + "\n"])
+        fl.writelines(["total_score_" + str(__init__.svc) + " " + str(best_total_score) + "\n"])
+    if __init__.dec_tree_regressor in name_models:
         model = DecisionTreeRegressor(random_state=seed)
         best_scores = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, seed=seed, n_split=n_split,
                                                            mean=mean)
         best_total_score = scoringUtils.hmean_scores(scoring, best_scores)
         for key, value in best_scores.items():
-            fl.writelines([str(key) + "_CARTRegr " + str(value) + "\n"])
-        fl.writelines(["total_score_CARTRegr " + str(best_total_score) + "\n"])
+            fl.writelines([str(key) + "_" + str(__init__.dec_tree_regressor) + " " + str(value) + "\n"])
+        fl.writelines(["total_score_" + str(__init__.dec_tree_regressor) + " " + str(best_total_score) + "\n"])
     if __init__.rand_forest_regressor in name_models:
         best_n_trees, best_max_features, best_scores, best_total_score = \
             RANDOMFORESTRegressor_training(X, Y, list_n_trees, scoring, seed, n_split, mean)
         fl.writelines(["best_n_trees " + str(best_n_trees) + "\n", "best_max_features " +
                        str(best_max_features) + "\n"])
         for key, value in best_scores.items():
-            fl.writelines([str(key) + "_RFRegr " + str(value) + "\n"])
-        fl.writelines(["total_score_RFRegr " + str(best_total_score) + "\n"])
+            fl.writelines([str(key) + "_" + str(__init__.rand_forest_regressor) + " " + str(value) + "\n"])
+        fl.writelines(["total_score_" + str(__init__.rand_forest_regressor) + " " + str(best_total_score) + "\n"])
     if __init__.knr in name_models:
         best_k, best_scores, best_total_score = KNR_training(X, Y, k, scoring, seed, n_split, mean)
         fl.writelines(["best_k " + str(best_k) + "\n"])
         for key, value in best_scores.items():
-            fl.writelines([str(key) + "_KNR " + str(value) + "\n"])
-        fl.writelines(["total_score_KNR " + str(best_total_score) + "\n"])
+            fl.writelines([str(key) + "_" + str(__init__.knr) + " " + str(value) + "\n"])
+        fl.writelines(["total_score_" + str(__init__.knr) + " " + str(best_total_score) + "\n"])
     if __init__.svr in name_models:
         best_C, best_eps, best_degree, best_gamma, best_kernel, best_scores, best_total_score = \
             SVR_training(X, Y, scoring, seed, n_split, mean)
@@ -572,8 +572,8 @@ def training_classificator(X, Y, name_models, scoring, k=[5], list_n_trees=[10],
                        str(best_degree) + "\n", "best_gamma " + str(best_gamma) + "\n", "best_kernel " +
                        str(best_kernel) + "\n"])
         for key, value in best_scores.items():
-            fl.writelines([str(key) + "_SVR " + str(value) + "\n"])
-        fl.writelines(["total_score_SVR " + str(best_total_score) + "\n"])
+            fl.writelines([str(key) + "_" + str(__init__.svr) + " " + str(value) + "\n"])
+        fl.writelines(["total_score_" + str(__init__.svr) + " " + str(best_total_score) + "\n"])
 
     fl.close()
 
@@ -644,7 +644,7 @@ def build_models(name_models, file_name):
     return models
 
 
-def read_best_scores(name_models, file_name):
+def read_setting(file_name):
     """
     Return the best scoring of a test
     :param name_models:
@@ -654,51 +654,17 @@ def read_best_scores(name_models, file_name):
 
     path = os.path.abspath('')
     fl = open(path + model_settings_dir + file_name, "r")  # aggiungere path
-    best_scoring = {}
+    setting = {}
     while 1:
         line = fl.readline()
         line = line[:-1]
         if len(line) == 0:
             break
         parameter, value = str.split(line, " ")
-        best_scoring[parameter] = value
+        setting[parameter] = value
 
-    return best_scoring
+    return setting
 
-
-
-def training_regressor(X, Y, name_models, scoring, k=[5], list_n_trees=[10], seed=111, n_split=10, mean=True,
-                       file_name="best_setting.txt"):
-    """
-    Write on file the best setting for the specific dataset. Every line of file contains "the name of the parameter"
-    + " " + "the value of parameter"
-    :param file_name: name of file with the best setting
-    :param mean: True if you want the mean in the K_fold_cross_validation, False if you want all the scores of the fold
-    :param n_split: number of fold
-    :param X: features set
-    :param Y: label set
-    :param name_models:list, lista nomi modelli
-    :param scoring: dict,dizionario di scoring
-    :param k: list,lista dei possibili k per KNN
-    :param list_n_trees: list,lista dei possibili numeri di alberi per il random forest
-    :param seed: int,seme per generatore pseudocasuale
-    """
-    path = os.path.abspath('')
-    fl = open(path + model_setting_test_dir + file_name, "w")
-    fl.writelines(["seed " + str(seed) + "\n", "n_split " + str(n_split) + "\n"])
-    if __init__.rand_forest in name_models:
-        best_n_trees, best_max_features = RANDOMFOREST_training(X, Y, list_n_trees, scoring, seed, n_split, mean)
-        fl.writelines(["best_n_trees " + str(best_n_trees) + "\n", "best_max_features " +
-                       str(best_max_features) + "\n"])
-    if __init__.knn in name_models:
-        best_k = KNN_training(X, Y, k, scoring, seed, n_split, mean)
-        fl.writelines(["best_k " + str(best_k) + "\n"])
-    if __init__.svc in name_models:
-        best_C, best_degree, best_gamma, best_kernel = SVC_training(X, Y, scoring, seed, n_split, mean)
-        fl.writelines(["best_C " + str(best_C) + "\n", "best_degree " + str(best_degree) + "\n", "best_gamma " +
-                       str(best_gamma) + "\n", "best_kernel " + str(best_kernel) + "\n"])
-
-    fl.close()
 
 def is_a_classification_dataset(dataset_name):
     if dataset_name in __init__.list_classification_dataset:
@@ -799,15 +765,19 @@ if __name__ == '__main__':
     seed = 100
     name_models_classification = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
     name_models_regression = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
-    dataset_name = __init__.eye
-    classification=is_a_classification_dataset()
+    dataset_name = __init__.zoo
+    classification=is_a_classification_dataset(dataset_name)
     k_range = range(3, 21, 1)
     n_trees_range = range(5, 21, 1)
 
-    X, Y, scoring, name_setting_file, name_radar_plot_file = main.case_NaN_dataset(dataset_name, "mean", seed, 0.05, classification=classification)
+    X, Y, scoring, name_setting_file, name_radar_plot_file = \
+        main.case_full_dataset(dataset_name, standardize=False, normalize=False, classification=classification)
+    X, Y, scoring, name_setting_file, name_radar_plot_file = \
+        main.c(dataset_name, "mode", seed, 0.15, classification=classification)
+
     if classification:
         training_classificator(X, Y, name_models_classification, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
                            n_split=10, mean=True, file_name=name_setting_file)
-    else :
+    else:
         training_classificator(X, Y, name_models_regression, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
                            n_split=10, mean=True, file_name=name_setting_file)

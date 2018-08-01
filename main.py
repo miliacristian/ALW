@@ -27,11 +27,26 @@ def testing(X, Y, models, scoring, seed, name_radar_plot_file):
         results.append(scores)
         list_scores.append(scores)
         list_names.append(name)
-        if printValue:
-            print(name)
-            print(scores)
-            print("total score =", scoringUtils.hmean_scores(scoring, scores))
+    if printValue:
+        print(list_names)
+        print(list_scores)
+        print("total score =", scoringUtils.hmean_scores(scoring, scores))
     scoringUtils.radar_plot(list_names, scoring, list_scores, file_name=name_radar_plot_file)
+
+
+def create_radar_plot_istance(name_models, scoring, setting_file_name, radar_plot_file_name):
+
+    list_scores = []
+    list_names = []
+    setting = training.read_setting(setting_file_name)
+    for m in name_models:
+        scores = {}
+        for s in scoring:
+            scores[s] = float(setting[s + "_" + m])
+        list_names.append(m)
+        list_scores.append(scores)
+
+    scoringUtils.radar_plot(list_names, scoring, list_scores, file_name=radar_plot_file_name)
 
 
 def case_full_dataset(dataset_name, standardize=False, normalize=False, classification=True):
@@ -144,8 +159,7 @@ def create_radar_plot(dataset_names, name_models):
                     continue
                 X, Y, scoring, name_setting_file, name_radar_plot_file = \
                     case_full_dataset(dataset_name, standardize=stand, normalize=norm)
-                models = training.build_models(name_models, name_setting_file)
-                testing(X, Y, models, scoring, seed, name_radar_plot_file)
+                create_radar_plot_istance(name_models, scoring, name_setting_file, name_radar_plot_file)
 
 
 def create_radar_plot_NaN(dataset_names, name_models, percentuals_NaN):
@@ -190,8 +204,7 @@ def create_radar_plot_NaN_cycle(dataset_name, name_models, percentuals_NaN, stra
         for strategy in strategies:
             X, Y, scoring, name_setting_file, name_radar_plot_file = \
                 case_NaN_dataset(dataset_name, strategy=strategy, seed=seed, perc_NaN=perc_NaN)
-            models = training.build_models(name_models, name_setting_file)
-            testing(X, Y, models, scoring, seed, name_radar_plot_file)
+            create_radar_plot_istance(name_models, scoring, name_setting_file, name_radar_plot_file)
 
 
 if __name__ == '__main__':
@@ -212,3 +225,5 @@ if __name__ == '__main__':
     # Regression
     create_radar_plot(dataset_names_regression, name_models_regression)
     create_radar_plot_NaN(dataset_names_regression, name_models_regression, percentuals_NaN)
+
+    # create_radar_plot_NaN([__init__.zoo], name_models_classification, percentuals_NaN)

@@ -114,6 +114,7 @@ def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name="rada
                 dict[value].append(list_dict_scores[i][value])
             else:
                 dict[str(value)[12:-1]].append(list_dict_scores[i][str(value)[12:-1]])
+
     df = pd.DataFrame(dict)
 
     # ------- PART 1: Create background
@@ -138,7 +139,8 @@ def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name="rada
 
     # Draw ylabels
     ax.set_rlabel_position(0)
-    plt.yticks([0.62, 0.65, 0.68, 0.71, 0.74, 0.77, 0.8, 0.83, 0.86, 0.89, 0.92, 0.95, 0.98], [str(i) for i in [0.62, 0.65, 0.68, 0.71, 0.74, 0.77, 0.8, 0.83, 0.86, 0.89, 0.92, 0.95, 0.98]], color="grey", size=7)
+    plt.yticks([0.62, 0.65, 0.68, 0.71, 0.74, 0.77, 0.8, 0.83, 0.86, 0.89, 0.92, 0.95, 0.98],
+               [str(i) for i in [0.62, 0.65, 0.68, 0.71, 0.74, 0.77, 0.8, 0.83, 0.86, 0.89, 0.92, 0.95, 0.98]], color="grey", size=7)
     plt.ylim(0.6, 1)
 
     # ------- PART 2: Add plots
@@ -154,7 +156,8 @@ def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name="rada
 
     # Add legend
     plt.legend(bbox_to_anchor=(0.1, 0.2))
-    plt.show()
+
+    # plt.show()
     path = os.path.abspath('')
     fig.savefig(path+radar_plot_dir+file_name+file_format)
     plt.close(fig)
