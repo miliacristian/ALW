@@ -109,7 +109,7 @@ def SVC_default_training(X, Y, scoring, seed, n_split, mean):
     :return: the best parameter C, gamma and degree with the best kernel function
     """
     if printValue:
-        print("Start training of default SVC")
+        print("Start training of SVC")
         start_time = time()
     best_kernel = None
     best_C = None
@@ -120,7 +120,7 @@ def SVC_default_training(X, Y, scoring, seed, n_split, mean):
     if printValue:
         print("Start training of default SVC")
         start_time_linear = time()
-    model = OneVsRestClassifier(SVC(random_state=seed))
+    model = OneVsRestClassifier(SVC(random_state=seed,max_iter=1000))
     result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
     harmonic_mean = hmean_scores(scoring, result)
 
@@ -715,7 +715,8 @@ mode='mode'
 if __name__ == '__main__':
     warnings.filterwarnings('always')
     seed = 100
-    name_models_classification = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
+    name_models_classification=[__init__.svc]
+    #name_models_classification = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
     name_models_regression = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
     dataset_name = __init__.eye
     classification=is_a_classification_dataset(dataset_name)
