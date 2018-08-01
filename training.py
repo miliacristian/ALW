@@ -556,6 +556,19 @@ def training_regressor(X, Y, name_models, scoring, k=[5], list_n_trees=[10], see
 
     fl.close()
 
+def check_percentage(percentage):
+    """
+    Verifica che la percentuale percentuage è una percentuale compresa nella lista delle percentuali scelte
+    :param percentage:float,compreso tra 0 e 1 (estremi inclusi)
+    :return: None
+    """
+    if percentage>1 or percentage <0:
+        print('percentage must be between 0 and 1')
+        exit(1)
+    if not percentage in __init__.percentuals_NaN:
+        print('invalid percentage')
+        exit(1)
+    return None
 
 def check_strategies(dataset_name, strategy):
     """
@@ -624,6 +637,10 @@ def check_strategies(dataset_name, strategy):
         print('invalid dataset_name',dataset_name)
         exit(1)
 
+mean='mean'
+eliminate_row='eliminate_row'
+median='median'
+mode='mode'
 
 if __name__ == '__main__':
     warnings.filterwarnings('always')

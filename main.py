@@ -96,6 +96,7 @@ def case_NaN_dataset(dataset_name, strategy, seed=100, perc_NaN=0.1, classificat
     """
     list_mode_columns = dataset.get_list_mode_columns_by_dataset(dataset_name)
     training.check_strategies(dataset_name, strategy)
+    training.check_percentage(perc_NaN)
     name_setting_file = dataset_name + setting
     name_radar_plot_file = dataset_name + radar_plot
 
