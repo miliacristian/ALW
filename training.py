@@ -153,13 +153,13 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
     best_scores = None
     best_total_score = None
     # range in cui variano i parametri plausibili (lungo il training)
-    C_range = np.logspace(-2, 2, 5)
-    gamma_range = np.logspace(-5, 0, 6)
-    degree_range = range(2, 4, 1)
+    # C_range = np.logspace(-2, 2, 5)
+    # gamma_range = np.logspace(-5, 0, 6)
+    # degree_range = range(2, 4, 1)
     # default parameter
-    # C_range = [1.0]
-    # gamma_range = ['auto']
-    # degree_range = [3]
+    C_range = [0.1, 1.0]
+    gamma_range = [0.01, 0.1, 1]
+    degree_range = [3]
 
     # case kernel is linear
 
@@ -168,6 +168,11 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
         start_time_linear = time()
 
     for C in C_range:
+
+        if printValue:
+            print("Starting cycle with C =", C)
+            start_time_linear2 = time()
+
         model = OneVsRestClassifier(SVC(kernel='linear', random_state=seed, C=C, max_iter=1000))
         result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
         harmonic_mean = hmean_scores(scoring, result)
@@ -176,6 +181,9 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
             best_total_score = harmonic_mean
             best_C = C
             best_kernel = 'linear'
+
+        if printValue:
+            print("Ending in", time() - start_time_linear2)
 
     if printValue:
         print("End training of SVC with kernel linear after", time() - start_time_linear, "s.")
@@ -188,6 +196,11 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
 
     for C in C_range:
         for gamma in gamma_range:
+
+            if printValue:
+                print("Starting cycle with C =", C, "gamma =", gamma)
+                start_time_rbf2 = time()
+
             model = OneVsRestClassifier(SVC(kernel='rbf', random_state=seed, C=C, gamma=gamma,max_iter=1000))
             result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
             harmonic_mean = hmean_scores(scoring, result)
@@ -197,6 +210,9 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
                 best_C = C
                 best_gamma = gamma
                 best_kernel = 'rbf'
+
+            if printValue:
+                print("Ending in", time() - start_time_rbf2)
 
     if printValue:
         print("End training of SVC with kernel rbf after", time() - start_time_rbf, "s.")
@@ -210,11 +226,14 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
     for C in C_range:
         for degree in degree_range:
             for gamma in gamma_range:
+
                 if C == 100 and gamma == 1:
                     continue
+
                 if printValue:
                     print("Starting cycle with C =", C, "degree =", degree, "gamma =", gamma)
                     start_time_poly2 = time()
+
                 model = OneVsRestClassifier(SVC(kernel='poly', random_state=seed, C=C, gamma=gamma, degree=degree,max_iter=1000))
                 result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
                 harmonic_mean = hmean_scores(scoring, result)
@@ -225,6 +244,7 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
                     best_gamma = gamma
                     best_degree = degree
                     best_kernel = 'poly'
+
                 if printValue:
                     print("Ending in", time() - start_time_poly2)
 
@@ -239,6 +259,11 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
 
     for C in C_range:
         for gamma in gamma_range:
+
+            if printValue:
+                print("Starting cycle with C =", C, "gamma =", gamma)
+                start_time_sigmoid2 = time()
+
             model = OneVsRestClassifier(SVC(kernel='sigmoid', random_state=seed, C=C, gamma=gamma,max_iter=1000))
             result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
             harmonic_mean = hmean_scores(scoring, result)
@@ -248,6 +273,9 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
                 best_C = C
                 best_gamma = gamma
                 best_kernel = 'sigmoid'
+
+            if printValue:
+                print("Ending in", time() - start_time_sigmoid2)
 
     if printValue:
         print("End training of SVC with kernel sigmoid after", time() - start_time_sigmoid, "s.")
@@ -765,15 +793,15 @@ if __name__ == '__main__':
     seed = 100
     name_models_classification = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
     name_models_regression = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
-    dataset_name = __init__.balance
+    dataset_name = __init__.eye
     classification=is_a_classification_dataset(dataset_name)
-    k_range = range(3, 21, 1)
-    n_trees_range = range(5, 21, 1)
+    k_range = range(3, 16, 1)
+    n_trees_range = range(5, 16, 1)
 
-    X, Y, scoring, name_setting_file, name_radar_plot_file = \
-        main.case_full_dataset(dataset_name, standardize=True, normalize=False, classification=classification)
     # X, Y, scoring, name_setting_file, name_radar_plot_file = \
-    #     main.case_NaN_dataset(dataset_name, "median", seed, 0.05, classification=classification)
+    #     main.case_full_dataset(dataset_name, standardize=True, normalize=False, classification=classification)
+    X, Y, scoring, name_setting_file, name_radar_plot_file = \
+        main.case_NaN_dataset(dataset_name, "mean", seed, 0.05, classification=classification)
 
     if classification:
         training(X, Y, name_models_classification, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
