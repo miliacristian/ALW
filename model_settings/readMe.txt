@@ -6,3 +6,4 @@ For the computation of the settings of models are used the following range of va
                         gamma = 0.00001 0.0001, ..., 1
                         degree = 2, 3
                         coef0 = 1.0
+                        eps = 0.0, 0.1, 1

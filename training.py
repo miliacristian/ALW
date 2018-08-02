@@ -153,13 +153,13 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
     best_scores = None
     best_total_score = None
     # range in cui variano i parametri plausibili (lungo il training)
-    # C_range = np.logspace(-2, 2, 5)
-    # gamma_range = np.logspace(-5, 0, 6)
-    # degree_range = range(2, 4, 1)
+    C_range = np.logspace(-2, 2, 5)
+    gamma_range = np.logspace(-5, 0, 6)
+    degree_range = range(2, 4, 1)
     # default parameter
-    C_range = [0.1, 1.0]
-    gamma_range = [0.01, 0.1, 1]
-    degree_range = [3]
+    # C_range = [0.1, 1.0]
+    # gamma_range = [0.01, 0.1, 1]
+    # degree_range = [3]
 
     # case kernel is linear
 
@@ -402,7 +402,7 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
     best_total_score = None
     # range in cui variano i parametri plausibili (lungo il training)
     C_range = np.logspace(-2, 2, 5)
-    eps_range = [0.0, 0.01, 0.1, 0.5, 1, 2, 4]
+    eps_range = [0.0, 0.1, 1]
     gamma_range = np.logspace(-5, 0, 6)
     degree_range = range(2, 4, 1)
     # default parameter
@@ -470,7 +470,7 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
                     if printValue:
                         print("Starting cycle with C =", C, "eps =", eps, "degree =", degree, "gamma =", gamma)
                         start_time_poly2 = time()
-                    model = SVC(kernel='poly', C=C, gamma=gamma, degree=degree, max_iter=1000)
+                    model = SVR(kernel='poly', C=C, gamma=gamma, degree=degree, max_iter=1000)
                     result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
                     total_score = total_score_regression(scoring, result)
                     if best_total_score < total_score:
@@ -575,7 +575,7 @@ def training(X, Y, name_models, scoring, k=[5], list_n_trees=[10], seed=111, n_s
         model = DecisionTreeRegressor(random_state=seed)
         best_scores = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, seed=seed, n_split=n_split,
                                                            mean=mean)
-        best_total_score = scoringUtils.hmean_scores(scoring, best_scores)
+        best_total_score = scoringUtils.total_score_regression(scoring, best_scores)
         for key, value in best_scores.items():
             fl.writelines([str(key) + "_" + str(__init__.dec_tree_regressor) + " " + str(value) + "\n"])
         fl.writelines(["total_score_" + str(__init__.dec_tree_regressor) + " " + str(best_total_score) + "\n"])
@@ -793,19 +793,24 @@ if __name__ == '__main__':
     seed = 100
     name_models_classification = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
     name_models_regression = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
-    dataset_name = __init__.eye
+    dataset_name = __init__.airfoil
     classification=is_a_classification_dataset(dataset_name)
-    k_range = range(3, 16, 1)
-    n_trees_range = range(5, 16, 1)
+    k_range = range(3, 21, 1)
+    n_trees_range = range(5, 21, 1)
 
     # X, Y, scoring, name_setting_file, name_radar_plot_file = \
     #     main.case_full_dataset(dataset_name, standardize=True, normalize=False, classification=classification)
     X, Y, scoring, name_setting_file, name_radar_plot_file = \
         main.case_NaN_dataset(dataset_name, "mean", seed, 0.05, classification=classification)
 
+    print("X =", X, "\n\nY =", Y)
     if classification:
         training(X, Y, name_models_classification, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
                  n_split=10, mean=True, file_name=name_setting_file)
     else:
-        training(X, Y, name_models_regression, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
+        training(X, Y, name_models_regression, {'neg_mean_absolute_error': 'neg_mean_absolute_error',
+                                        'explained_variance': 'explained_variance',
+                                        'neg_mean_squared_error': 'neg_mean_squared_error',
+                                        'r2': 'r2',
+                                        'neg_median_absolute_error': 'neg_median_absolute_error'}, k=k_range, list_n_trees=n_trees_range, seed=seed,
                  n_split=10, mean=True, file_name=name_setting_file)
