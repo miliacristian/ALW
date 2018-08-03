@@ -798,10 +798,10 @@ if __name__ == '__main__':
     k_range = range(3, 21, 1)
     n_trees_range = range(5, 21, 1)
 
-    # X, Y, scoring, name_setting_file, name_radar_plot_file = \
-    #     main.case_full_dataset(dataset_name, standardize=True, normalize=False, classification=classification)
     X, Y, scoring, name_setting_file, name_radar_plot_file = \
-        main.case_NaN_dataset(dataset_name, "eliminate_row", seed, 0.05, classification=classification)
+        main.case_full_dataset(dataset_name, standardize=False, normalize=True, classification=classification)
+    # X, Y, scoring, name_setting_file, name_radar_plot_file = \
+    #     main.case_NaN_dataset(dataset_name, "eliminate_row", seed, 0.1, classification=classification)
 
     if classification:
         training(X, Y, name_models_classification, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
