@@ -237,6 +237,7 @@ def load_com_dataset():
     X, Y = CSV.read_csv(path + regression_dataset_dir + 'concrete_compressive_strength.csv', skip_rows=20, delimiter='\t')
     Y = CSV.convert_type_to_float(Y)
     X = CSV.convert_type_to_float(X)
+    Y.ravel()
     return X, Y
 
 
