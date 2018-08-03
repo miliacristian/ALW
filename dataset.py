@@ -280,6 +280,7 @@ def load_energy_efficiency_dataset():
     X, Y = CSV.read_csv(path + regression_dataset_dir + 'energy_efficiency.csv', skip_rows=27,num_label=2,delimiter='\t')
     Y = CSV.convert_type_to_float(Y)
     X = CSV.convert_type_to_float(X)
+    # Y.ravel()
     return X, Y
 
 def load_classification_dataset(dataset):
