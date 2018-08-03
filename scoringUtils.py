@@ -1,5 +1,4 @@
 from sklearn import metrics
-from sklearn.exceptions import UndefinedMetricWarning
 from sklearn.metrics import make_scorer
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -9,6 +8,7 @@ from sklearn import model_selection
 from __init__ import radar_plot_dir
 import warnings
 import os
+from numpy import mean
 
 
 def roc_auc_micro(y_true, y_pred):
@@ -51,6 +51,47 @@ def average_precision_weighted(y_true, y_pred):
     return metrics.average_precision_score(y_true, y_pred, average="weighted")
 
 
+def neg_mean_absolute_error_uniform_average(y_true, y_pred):
+    """
+    Chiama neg_mean_absolute_error con multioutput='uniform_average'
+    :param y_true:
+    :param y_pred:
+    :return:
+    """
+
+    return -metrics.mean_absolute_error(y_true, y_pred, multioutput='uniform_average')
+
+
+def neg_mean_squared_error_uniform_average(y_true, y_pred):
+    """
+    Chiama neg_mean_squared_error con multioutput='uniform_average'
+    :param y_true:
+    :param y_pred:
+    :return:
+    """
+
+    return -metrics.mean_squared_error(y_true, y_pred, multioutput='uniform_average')
+
+
+def neg_median_absolute_error_uniform_average(y_true, y_pred):
+    """
+    Chiama neg_median_absolute_error con multioutput='uniform_average'
+    :param y_true:
+    :param y_pred:
+    :return:
+    """
+
+    # case monolabel
+    if len(y_true) == 1:
+        return -metrics.median_absolute_error(y_true, y_pred)
+
+    # case multilabel
+    median_abs_error = []
+    for i in range(len(y_true)):
+        median_abs_error.append(metrics.median_absolute_error(y_true[i], y_pred[i]))
+    return -mean(median_abs_error)
+
+
 def create_dictionary_classification_scoring():
     """
     Crea dizionario con key:'name_score' value:score da calcolare
@@ -79,9 +120,9 @@ def create_dictionary_regression_scoring():
     """
     scoring = {
         'explained_variance': 'explained_variance',
-        'neg_mean_absolute_error': 'neg_mean_absolute_error',
-        'neg_mean_squared_error': 'neg_mean_squared_error',
-        'neg_median_absolute_error': 'neg_median_absolute_error',
+        'neg_mean_absolute_error_uniform_average': make_scorer(neg_mean_absolute_error_uniform_average),
+        'neg_mean_squared_error_uniform_average': make_scorer(neg_mean_squared_error_uniform_average),
+        'neg_median_absolute_error_uniform_average': make_scorer(neg_median_absolute_error_uniform_average),
         'r2': 'r2',
                }
     return scoring
