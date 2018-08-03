@@ -801,7 +801,7 @@ if __name__ == '__main__':
     # X, Y, scoring, name_setting_file, name_radar_plot_file = \
     #     main.case_full_dataset(dataset_name, standardize=True, normalize=False, classification=classification)
     X, Y, scoring, name_setting_file, name_radar_plot_file = \
-        main.case_NaN_dataset(dataset_name, "mean", seed, 0.1, classification=classification)
+        main.case_NaN_dataset(dataset_name, "eliminate_row", seed, 0.05, classification=classification)
 
     if classification:
         training(X, Y, name_models_classification, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
