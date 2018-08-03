@@ -82,12 +82,12 @@ def neg_median_absolute_error_uniform_average(y_true, y_pred):
     """
 
     # case monolabel
-    if len(y_true) == 1:
+    if len(y_true[0]) == 1:
         return -metrics.median_absolute_error(y_true, y_pred)
 
     # case multilabel
     median_abs_error = []
-    for i in range(len(y_true)):
+    for i in range(len(y_true[0])):
         median_abs_error.append(metrics.median_absolute_error(y_true[i], y_pred[i]))
     return -mean(median_abs_error)
 
