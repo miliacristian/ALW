@@ -801,16 +801,11 @@ if __name__ == '__main__':
     # X, Y, scoring, name_setting_file, name_radar_plot_file = \
     #     main.case_full_dataset(dataset_name, standardize=True, normalize=False, classification=classification)
     X, Y, scoring, name_setting_file, name_radar_plot_file = \
-        main.case_NaN_dataset(dataset_name, "mean", seed, 0.05, classification=classification)
+        main.case_NaN_dataset(dataset_name, "mean", seed, 0.1, classification=classification)
 
-    print("X =", X, "\n\nY =", Y)
     if classification:
         training(X, Y, name_models_classification, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
                  n_split=10, mean=True, file_name=name_setting_file)
     else:
-        training(X, Y, name_models_regression, {'neg_mean_absolute_error': 'neg_mean_absolute_error',
-                                        'explained_variance': 'explained_variance',
-                                        'neg_mean_squared_error': 'neg_mean_squared_error',
-                                        'r2': 'r2',
-                                        'neg_median_absolute_error': 'neg_median_absolute_error'}, k=k_range, list_n_trees=n_trees_range, seed=seed,
+        training(X, Y, name_models_regression, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
                  n_split=10, mean=True, file_name=name_setting_file)
