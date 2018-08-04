@@ -241,9 +241,12 @@ def total_score_regression(dict_name_scoring, dict_scores):
     :return: total score
     """
 
+    values = scores_to_list(dict_name_scoring, dict_scores)
+    min_value, max_value = min(values), max(values)
     result = 0
-    for i in scores_to_list(dict_name_scoring, dict_scores):
-        result += i
+    for e in values:
+        normalize_value = (e - min_value)/(max_value - min_value)
+        result += normalize_value
     return result
 
 
