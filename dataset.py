@@ -284,7 +284,7 @@ def load_energy_efficiency_dataset():
     # Y.ravel()
     return X, Y
 
-def load_classification_dataset(dataset):
+def load_classification_dataset(dataset, multilabel=False):
     if dataset == __init__.tris:
         X, Y = load_tris_dataset()
     elif dataset == __init__.seed:
@@ -306,7 +306,7 @@ def load_classification_dataset(dataset):
     return X, Y
 
 
-def load_regression_dataset(dataset):
+def load_regression_dataset(dataset, multilabel=False):
     if dataset ==__init__.compress_strength:
         X, Y = load_com_dataset()
     elif dataset == __init__.airfoil:
@@ -320,7 +320,8 @@ def load_regression_dataset(dataset):
     else:
         print("input must be 'compressive_strength' or 'airfoil' or 'auto' or 'power_plant' or 'energy'.")
         exit(1)
-
+    if not multilabel:
+        Y = Y.ravel()
     return X, Y
 
 

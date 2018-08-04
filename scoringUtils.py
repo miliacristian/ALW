@@ -1,5 +1,5 @@
 from sklearn import metrics
-from sklearn.exceptions import UndefinedMetricWarning
+from sklearn.exceptions import UndefinedMetricWarning, ConvergenceWarning
 from sklearn.metrics import make_scorer
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -123,7 +123,7 @@ def create_dictionary_regression_scoring():
         'explained_variance': 'explained_variance',
         'neg_mean_absolute_error_uniform_average': make_scorer(neg_mean_absolute_error_uniform_average),
         'neg_mean_squared_error_uniform_average': make_scorer(neg_mean_squared_error_uniform_average),
-        'neg_median_absolute_error_uniform_average': make_scorer(neg_median_absolute_error_uniform_average),
+        # 'neg_median_absolute_error_uniform_average': make_scorer(neg_median_absolute_error_uniform_average),
         'r2': 'r2',
                }
     return scoring
@@ -260,6 +260,7 @@ def K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=True):
     """
 
     warnings.filterwarnings("ignore", category=UndefinedMetricWarning)
+    warnings.filterwarnings("ignore", category=ConvergenceWarning)
     kfold = model_selection.KFold(n_splits=n_split, shuffle=True, random_state=seed)
     scores = model_selection.cross_validate(model, X, Y, cv=kfold, scoring=scoring, return_train_score=True, n_jobs=1)
     result = {}

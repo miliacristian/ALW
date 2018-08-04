@@ -49,7 +49,7 @@ def create_radar_plot_istance(name_models, scoring, setting_file_name, radar_plo
     scoringUtils.radar_plot(list_names, scoring, list_scores, file_name=radar_plot_file_name)
 
 
-def case_full_dataset(dataset_name, standardize=False, normalize=False, classification=True):
+def case_full_dataset(dataset_name, standardize=False, normalize=False, classification=True, multilabel=False):
     """
     Do testing in the case of classification with full dataset.
     :param dataset_name: name of dataset use
@@ -66,25 +66,22 @@ def case_full_dataset(dataset_name, standardize=False, normalize=False, classifi
     name_radar_plot_file = dataset_name + radar_plot
 
     if classification:
-        X, Y = dataset.load_classification_dataset(dataset_name)
+        X, Y = dataset.load_classification_dataset(dataset_name, multilabel=multilabel)
     else:
-        X, Y = dataset.load_regression_dataset(dataset_name)
-    if printValue:
-        dataset.print_dataset(X, Y)
+        X, Y = dataset.load_regression_dataset(dataset_name, multilabel=multilabel)
 
     if standardize:
         name_setting_file += __init__.standardize
         name_radar_plot_file += __init__.standardize
         X = dataset.standardize_dataset(X)
-        if printValue:
-            dataset.print_dataset(X, Y)
 
     if normalize:
         name_setting_file += __init__.normalize
         name_radar_plot_file += __init__.normalize
         X = dataset.normalize_dataset(X)
-        if printValue:
-            dataset.print_dataset(X, Y)
+
+    # if printValue:
+    #     dataset.print_dataset(X, Y)
 
     name_setting_file += '.txt'
 
@@ -96,7 +93,7 @@ def case_full_dataset(dataset_name, standardize=False, normalize=False, classifi
     return X, Y, scoring, name_setting_file, name_radar_plot_file
 
 
-def case_NaN_dataset(dataset_name, strategy, seed=100, perc_NaN=0.1, classification=True):
+def case_NaN_dataset(dataset_name, strategy, seed=100, perc_NaN=0.1, classification=True, multilabel=False):
     """
     Do testing in the case of classification with dataset having value NaN.
     :param dataset_name: name of dataset use
@@ -116,14 +113,14 @@ def case_NaN_dataset(dataset_name, strategy, seed=100, perc_NaN=0.1, classificat
     name_radar_plot_file = dataset_name + radar_plot
 
     if classification:
-        X, Y = dataset.load_classification_dataset(dataset_name)
+        X, Y = dataset.load_classification_dataset(dataset_name, multilabel=multilabel)
     else:
-        X, Y = dataset.load_regression_dataset(dataset_name)
+        X, Y = dataset.load_regression_dataset(dataset_name, multilabel=multilabel)
     name_setting_file += '_' + str(perc_NaN * 100) + '%_NaN'
     name_radar_plot_file += '_' + str(perc_NaN * 100) + '%_NaN'
     X = dataset.put_random_NaN(X, perc_NaN, seed=seed)
-    if printValue:
-        dataset.print_dataset(X, Y)
+    # if printValue:
+    #     dataset.print_dataset(X, Y)
 
     name_setting_file += '_' + strategy
     name_radar_plot_file += '_' + strategy

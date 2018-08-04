@@ -1,5 +1,6 @@
 # rende un classificatore multiclass funzionante anche per multilabel
 from sklearn.multiclass import OneVsRestClassifier
+from sklearn.multioutput import MultiOutputRegressor
 
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
@@ -121,13 +122,14 @@ def SVC_default_training(X, Y, scoring, seed, n_split, mean):
     if printValue:
         print("Start training of default SVC")
         start_time_linear = time()
-    model = OneVsRestClassifier(SVC(random_state=seed,max_iter=1000))
+    model = OneVsRestClassifier(SVC(random_state=seed, max_iter=1000))
     result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
     harmonic_mean = hmean_scores(scoring, result)
 
     if printValue:
         print("End training of default SVC after", time() - start_time_linear, "s.")
     return best_C, best_degree, best_gamma, best_kernel
+
 
 def SVC_training(X, Y, scoring, seed, n_split, mean):
     """
@@ -198,7 +200,7 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
                 print("Starting cycle with C =", C, "gamma =", gamma)
                 start_time_rbf2 = time()
 
-            model = OneVsRestClassifier(SVC(kernel='rbf', random_state=seed, C=C, gamma=gamma,max_iter=1000))
+            model = OneVsRestClassifier(SVC(kernel='rbf', random_state=seed, C=C, gamma=gamma, max_iter=1000))
             result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
             harmonic_mean = hmean_scores(scoring, result)
             if best_total_score < harmonic_mean:
@@ -231,7 +233,8 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
                     print("Starting cycle with C =", C, "degree =", degree, "gamma =", gamma)
                     start_time_poly2 = time()
 
-                model = OneVsRestClassifier(SVC(kernel='poly', random_state=seed, C=C, gamma=gamma, degree=degree,max_iter=1000))
+                model = OneVsRestClassifier(
+                    SVC(kernel='poly', random_state=seed, C=C, gamma=gamma, degree=degree, max_iter=1000))
                 result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
                 harmonic_mean = hmean_scores(scoring, result)
                 if best_total_score < harmonic_mean:
@@ -261,7 +264,7 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
                 print("Starting cycle with C =", C, "gamma =", gamma)
                 start_time_sigmoid2 = time()
 
-            model = OneVsRestClassifier(SVC(kernel='sigmoid', random_state=seed, C=C, gamma=gamma,max_iter=1000))
+            model = OneVsRestClassifier(SVC(kernel='sigmoid', random_state=seed, C=C, gamma=gamma, max_iter=1000))
             result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
             harmonic_mean = hmean_scores(scoring, result)
             if best_total_score < harmonic_mean:
@@ -376,7 +379,7 @@ def RANDOMFORESTRegressor_training(X, Y, list_n_trees, scoring, seed, n_split, m
     return best_n_trees, best_max_features, best_scores, best_total_score
 
 
-def SVR_training(X, Y, scoring, seed, n_split, mean):
+def SVR_training(X, Y, scoring, seed, n_split, mean, multilabel=False):
     """
     do the training of a SVR with dataset X, Y and K_Fold_Cross_Validation. Find the best setting iterating on the type
     of kernel function use (linear, rbf, polynomial or sigmoid)
@@ -416,7 +419,15 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
 
     for C in C_range:
         for eps in eps_range:
-            model = SVR(kernel='linear', C=C, epsilon=eps, max_iter=1000)
+
+            if printValue:
+                print("Starting cycle with C =", C, "eps =", eps)
+                start_time_linear2 = time()
+
+            if multilabel:
+                model = MultiOutputRegressor(SVR(kernel='linear', C=C, epsilon=eps, max_iter=1000))
+            else:
+                model = SVR(kernel='linear', C=C, epsilon=eps, max_iter=1000)
             result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
             total_score = total_score_regression(scoring, result)
             if best_total_score is None or best_total_score < total_score:
@@ -425,6 +436,9 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
                 best_C = C
                 best_eps = eps
                 best_kernel = 'linear'
+
+            if printValue:
+                print("Ending in", time() - start_time_linear2)
 
     if printValue:
         print("End training of SVR with kernel linear after", time() - start_time_linear, "s.")
@@ -438,7 +452,15 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
     for C in C_range:
         for eps in eps_range:
             for gamma in gamma_range:
-                model = SVR(kernel='rbf', C=C, gamma=gamma, epsilon=eps, max_iter=1000)
+
+                if printValue:
+                    print("Starting cycle with C =", C, "eps =", eps, "gamma =", gamma)
+                    start_time_rbf2 = time()
+
+                if multilabel:
+                    model = MultiOutputRegressor(SVR(kernel='rbf', C=C, gamma=gamma, epsilon=eps, max_iter=1000))
+                else:
+                    model = SVR(kernel='rbf', C=C, gamma=gamma, epsilon=eps, max_iter=1000)
                 result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
                 total_score = total_score_regression(scoring, result)
                 if best_total_score < total_score:
@@ -448,6 +470,9 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
                     best_eps = eps
                     best_gamma = gamma
                     best_kernel = 'rbf'
+
+                if printValue:
+                    print("Ending in", time() - start_time_rbf2)
 
     if printValue:
         print("End training of SVR with kernel rbf after", time() - start_time_rbf, "s.")
@@ -462,12 +487,15 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
         for eps in eps_range:
             for degree in degree_range:
                 for gamma in gamma_range:
-                    if C == 100 and gamma == 1:
-                        continue
+
                     if printValue:
                         print("Starting cycle with C =", C, "eps =", eps, "degree =", degree, "gamma =", gamma)
                         start_time_poly2 = time()
-                    model = SVR(kernel='poly', C=C, gamma=gamma, degree=degree, max_iter=1000)
+
+                    if multilabel:
+                        model = MultiOutputRegressor(SVR(kernel='poly', C=C, gamma=gamma, degree=degree, max_iter=1000))
+                    else:
+                        model = SVR(kernel='poly', C=C, gamma=gamma, degree=degree, max_iter=1000)
                     result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
                     total_score = total_score_regression(scoring, result)
                     if best_total_score < total_score:
@@ -478,6 +506,7 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
                         best_gamma = gamma
                         best_degree = degree
                         best_kernel = 'poly'
+
                     if printValue:
                         print("Ending in", time() - start_time_poly2)
 
@@ -492,7 +521,15 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
     for C in C_range:
         for eps in eps_range:
             for gamma in gamma_range:
-                model = SVR(kernel='sigmoid', C=C, gamma=gamma, epsilon=eps, max_iter=1000)
+
+                if printValue:
+                    print("Starting cycle with C =", C, "eps =", eps, "gamma =", gamma)
+                    start_time_sigmoid2 = time()
+
+                if multilabel:
+                    model = MultiOutputRegressor(SVR(kernel='sigmoid', C=C, gamma=gamma, epsilon=eps, max_iter=1000))
+                else:
+                    model = SVR(kernel='sigmoid', C=C, gamma=gamma, epsilon=eps, max_iter=1000)
                 result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
                 total_score = total_score_regression(scoring, result)
                 if best_total_score < total_score:
@@ -502,6 +539,9 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
                     best_eps = eps
                     best_gamma = gamma
                     best_kernel = 'sigmoid'
+
+                if printValue:
+                    print("Ending in", time() - start_time_sigmoid2)
 
     if printValue:
         print("End training of SVR with kernel sigmoid after", time() - start_time_sigmoid, "s.")
@@ -520,7 +560,7 @@ def SVR_training(X, Y, scoring, seed, n_split, mean):
 
 
 def training(X, Y, name_models, scoring, k=[5], list_n_trees=[10], seed=111, n_split=10, mean=True,
-             file_name="best_setting.txt"):
+             file_name="best_setting.txt", multilabel=False):
     """
     Write on file the best setting for the specific dataset. Every line of file contains "the name of the parameter"
     + " " + "the value of parameter"
@@ -592,7 +632,7 @@ def training(X, Y, name_models, scoring, k=[5], list_n_trees=[10], seed=111, n_s
         fl.writelines(["total_score_" + str(__init__.knr) + " " + str(best_total_score) + "\n"])
     if __init__.svr in name_models:
         best_C, best_eps, best_degree, best_gamma, best_kernel, best_scores, best_total_score = \
-            SVR_training(X, Y, scoring, seed, n_split, mean)
+            SVR_training(X, Y, scoring, seed, n_split, mean, multilabel=multilabel)
         fl.writelines(["best_C " + str(best_C) + "\n", "best_eps " + str(best_eps) + "\n", "best_degree " +
                        str(best_degree) + "\n", "best_gamma " + str(best_gamma) + "\n", "best_kernel " +
                        str(best_kernel) + "\n"])
@@ -697,6 +737,12 @@ def is_a_classification_dataset(dataset_name):
     return False
 
 
+def is_a_multilabel_dataset(dataset_name):
+    if dataset_name in __init__.list_multilabel_dataset:
+        return True
+    return False
+
+
 def check_percentage(percentage):
     """
     Verifica che la percentuale percentuage è una percentuale compresa nella lista delle percentuali scelte
@@ -789,19 +835,21 @@ if __name__ == '__main__':
     seed = 100
     name_models_classification = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
     name_models_regression = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
-    dataset_name = __init__.zoo
-    classification=is_a_classification_dataset(dataset_name)
+    dataset_name = __init__.balance
+    classification = is_a_classification_dataset(dataset_name)
+    multilabel = is_a_multilabel_dataset(dataset_name)
     k_range = range(3, 21, 1)
     n_trees_range = range(5, 21, 1)
 
-    X, Y, scoring, name_setting_file, name_radar_plot_file = \
-        main.case_full_dataset(dataset_name, standardize=True, normalize=False, classification=classification)
     # X, Y, scoring, name_setting_file, name_radar_plot_file = \
-    #     main.case_NaN_dataset(dataset_name, "mean", seed, 0.1, classification=classification)
+    #     main.case_full_dataset(dataset_name, standardize=True, normalize=False, classification=classification,
+    #                            multilabel=multilabel)
+    X, Y, scoring, name_setting_file, name_radar_plot_file = \
+        main.case_NaN_dataset(dataset_name, "mean", seed, 0.1, classification=classification, multilabel=multilabel)
 
     if classification:
         training(X, Y, name_models_classification, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
-                 n_split=10, mean=True, file_name=name_setting_file)
+                 n_split=10, mean=True, file_name=name_setting_file, multilabel=multilabel)
     else:
         training(X, Y, name_models_regression, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
-                 n_split=10, mean=True, file_name=name_setting_file)
+                 n_split=10, mean=True, file_name=name_setting_file, multilabel=multilabel)
