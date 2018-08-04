@@ -466,6 +466,7 @@ def one_hot_encoding(Y):
     :return: label set Y con one ho encoding
     """
     label_encoder = LabelEncoder()
+    Y = Y.ravel()
     integer_encoded = label_encoder.fit_transform(Y)
     onehot_encoder = OneHotEncoder(sparse=False)
     integer_encoded = integer_encoded.reshape(len(integer_encoded), 1)

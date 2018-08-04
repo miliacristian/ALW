@@ -1,4 +1,5 @@
 from sklearn import metrics
+from sklearn.exceptions import UndefinedMetricWarning
 from sklearn.metrics import make_scorer
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -257,7 +258,8 @@ def K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=True):
     :param seed: int, seme generatore pseudocasuale
     :return: dictionary with key 'name metric' and value 'value mean of metric' or all values
     """
-    warnings.filterwarnings('always')
+
+    warnings.filterwarnings("ignore", category=UndefinedMetricWarning)
     kfold = model_selection.KFold(n_splits=n_split, shuffle=True, random_state=seed)
     scores = model_selection.cross_validate(model, X, Y, cv=kfold, scoring=scoring, return_train_score=True, n_jobs=1)
     result = {}
