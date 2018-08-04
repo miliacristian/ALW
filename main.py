@@ -144,7 +144,6 @@ def case_NaN_dataset(dataset_name, strategy, seed=100, perc_NaN=0.1, classificat
         scoring = scoringUtils.create_dictionary_classification_scoring()
     else:
         scoring = scoringUtils.create_dictionary_regression_scoring()
-
     return X, Y, scoring, name_setting_file, name_radar_plot_file
 
 

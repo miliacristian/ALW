@@ -840,17 +840,17 @@ if __name__ == '__main__':
     seed = 100
     name_models_classification = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
     name_models_regression = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
-    dataset_name = __init__.airfoil
+    dataset_name = __init__.energy
     classification = is_a_classification_dataset(dataset_name)
     multilabel = is_a_multilabel_dataset(dataset_name)
     k_range = range(3, 21, 1)
     n_trees_range = range(5, 21, 1)
 
-    # X, Y, scoring, name_setting_file, name_radar_plot_file = \
-    #     main.case_full_dataset(dataset_name, standardize=True, normalize=False, classification=classification,
-    #                            multilabel=multilabel)
     X, Y, scoring, name_setting_file, name_radar_plot_file = \
-        main.case_NaN_dataset(dataset_name, "mean", seed, 0.05, classification=classification, multilabel=multilabel)
+          main.case_full_dataset(dataset_name, standardize=False, normalize=True, classification=classification,
+                           multilabel=multilabel)
+    # X, Y, scoring, name_setting_file, name_radar_plot_file = \
+    #     main.case_NaN_dataset(dataset_name, "median", seed, 0.05, classification=classification, multilabel=multilabel)
 
     if classification:
         training(X, Y, name_models_classification, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
