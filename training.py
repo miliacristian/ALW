@@ -578,6 +578,7 @@ def training(X, Y, name_models, scoring, k=[5], list_n_trees=[10], seed=111, n_s
     :param list_n_trees: list,lista dei possibili numeri di alberi per il random forest
     :param seed: int,seme per generatore pseudocasuale
     """
+    start_time = time()
     path = os.path.abspath('')
     fl = open(path + model_setting_test_dir + file_name, "w")
     fl.writelines(["seed " + str(seed) + "\n", "n_split " + str(n_split) + "\n"])
@@ -644,6 +645,7 @@ def training(X, Y, name_models, scoring, k=[5], list_n_trees=[10], seed=111, n_s
         fl.writelines(["total_score_" + str(__init__.svr) + " " + str(best_total_score) + "\n"])
 
     fl.close()
+    print("End training after", time() - start_time, "s.")
 
 
 def build_models(name_models, file_name):

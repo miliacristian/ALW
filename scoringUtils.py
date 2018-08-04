@@ -3,7 +3,7 @@ from sklearn.exceptions import UndefinedMetricWarning, ConvergenceWarning
 from sklearn.metrics import make_scorer
 import matplotlib.pyplot as plt
 import pandas as pd
-from math import pi
+from math import pi, sqrt
 from scipy.stats import hmean
 from sklearn import model_selection
 from __init__ import radar_plot_dir
@@ -242,7 +242,7 @@ def total_score_regression(dict_name_scoring, dict_scores):
     """
 
     values = scores_to_list(dict_name_scoring, dict_scores)
-    min_value, max_value = min(values), max(values)
+    min_value, max_value = -100, 1
     result = 0
     for e in values:
         normalize_value = (e - min_value)/(max_value - min_value)
