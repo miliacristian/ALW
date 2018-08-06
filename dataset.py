@@ -149,7 +149,6 @@ def load_zoo_dataset():
     X, Y = CSV.read_csv(path + classification_datasets_dir + 'zoo.csv', skip_rows=31, skip_column_left=1)
     Y = CSV.convert_type_to_float(Y)
     X = CSV.convert_type_to_float(X)
-    print(type(X))
     return X, Y
 
 

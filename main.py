@@ -153,6 +153,8 @@ def create_radar_plot(dataset_names, name_models):
             for norm in [True, False]:
                 if norm is True and stand is True:
                     continue
+                if printValue:
+                    print("Cycle with dataset =", dataset_name + ", standardize =", stand, "and normalize =", norm)
                 X, Y, scoring, name_setting_file, name_radar_plot_file = \
                     case_full_dataset(dataset_name, standardize=stand, normalize=norm)
                 create_radar_plot_istance(name_models, scoring, name_setting_file, name_radar_plot_file)
@@ -198,6 +200,9 @@ def create_radar_plot_NaN(dataset_names, name_models, percentuals_NaN):
 def create_radar_plot_NaN_cycle(dataset_name, name_models, percentuals_NaN, strategies):
     for perc_NaN in percentuals_NaN:
         for strategy in strategies:
+            if printValue:
+                print("Cycle with dataset =", dataset_name + ", percentuals_NaN =", perc_NaN, "and strategy =",
+                      strategy)
             X, Y, scoring, name_setting_file, name_radar_plot_file = \
                 case_NaN_dataset(dataset_name, strategy=strategy, seed=seed, perc_NaN=perc_NaN)
             create_radar_plot_istance(name_models, scoring, name_setting_file, name_radar_plot_file)
@@ -219,7 +224,7 @@ if __name__ == '__main__':
     create_radar_plot_NaN(dataset_names_classification, name_models_classification, percentuals_NaN)
 
     # Regression
-    create_radar_plot(dataset_names_regression, name_models_regression)
-    create_radar_plot_NaN(dataset_names_regression, name_models_regression, percentuals_NaN)
+    # create_radar_plot(dataset_names_regression, name_models_regression)
+    # create_radar_plot_NaN(dataset_names_regression, name_models_regression, percentuals_NaN)
 
     # create_radar_plot_NaN([__init__.zoo], name_models_classification, percentuals_NaN)
