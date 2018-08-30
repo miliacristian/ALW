@@ -1,0 +1,8 @@
+seed 100
+n_split 10
+explained_variance_CARTRegressor 0.9714334110727091
+neg_mean_absolute_error_uniform_average_CARTRegressor -0.7505150375939851
+neg_mean_squared_error_uniform_average_CARTRegressor -2.627721893369788
+neg_median_absolute_error_uniform_average_CARTRegressor -0.750515037593985
+r2_CARTRegressor 0.9708643448115476
+total_score_CARTRegressor -2.1864542126735014
