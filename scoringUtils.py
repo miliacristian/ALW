@@ -6,7 +6,7 @@ import pandas as pd
 from math import pi, sqrt
 from scipy.stats import hmean
 from sklearn import model_selection
-from __init__ import radar_plot_dir
+from __init__ import radar_plot_classification_dir, radar_plot_regression_dir
 import warnings
 import os
 from numpy import mean
@@ -129,7 +129,8 @@ def create_dictionary_regression_scoring():
     return scoring
 
 
-def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name="radar_plot", file_format=".png"):
+def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name="radar_plot_classification",
+               file_format=".png", classification=True):
     """
     Print and save the radar plot of the scoring
 
@@ -200,7 +201,10 @@ def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name="rada
 
     # plt.show()
     path = os.path.abspath('')
-    fig.savefig(path+radar_plot_dir+file_name+file_format)
+    if classification:
+        fig.savefig(path + radar_plot_classification_dir + file_name + file_format)
+    else:
+        fig.savefig(path + radar_plot_regression_dir + file_name + file_format)
     plt.close(fig)
 
 

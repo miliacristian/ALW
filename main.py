@@ -7,34 +7,34 @@ from __init__ import radar_plot, printValue
 import __init__
 
 
-def testing(X, Y, models, scoring, seed, name_radar_plot_file):
-    """
-    Create a radar plot
-    :param X: features dataset
-    :param Y: label dataset
-    :param models: list of models use already training
-    :param scoring: list of metrics use
-    :param seed:
-    :param name_radar_plot_file: name of output file with radar plot
-    """
+# def testing(X, Y, models, scoring, seed, name_radar_plot_file):
+#     """
+#     Create a radar plot
+#     :param X: features dataset
+#     :param Y: label dataset
+#     :param models: list of models use already training
+#     :param scoring: list of metrics use
+#     :param seed:
+#     :param name_radar_plot_file: name of output file with radar plot
+#     """
+#
+#     results = []
+#     list_scores = []
+#     list_names = []
+#
+#     for name, model in models.items():
+#         scores = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split=10, seed=seed)
+#         results.append(scores)
+#         list_scores.append(scores)
+#         list_names.append(name)
+#     if printValue:
+#         print(list_names)
+#         print(list_scores)
+#         print("total score =", scoringUtils.hmean_scores(scoring, scores))
+#     scoringUtils.radar_plot(list_names, scoring, list_scores, file_name=name_radar_plot_file)
 
-    results = []
-    list_scores = []
-    list_names = []
 
-    for name, model in models.items():
-        scores = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split=10, seed=seed)
-        results.append(scores)
-        list_scores.append(scores)
-        list_names.append(name)
-    if printValue:
-        print(list_names)
-        print(list_scores)
-        print("total score =", scoringUtils.hmean_scores(scoring, scores))
-    scoringUtils.radar_plot(list_names, scoring, list_scores, file_name=name_radar_plot_file)
-
-
-def create_radar_plot_istance(name_models, scoring, setting_file_name, radar_plot_file_name):
+def create_radar_plot_istance(name_models, scoring, setting_file_name, radar_plot_file_name, classification=True):
 
     list_scores = []
     list_names = []
@@ -46,7 +46,8 @@ def create_radar_plot_istance(name_models, scoring, setting_file_name, radar_plo
         list_names.append(m)
         list_scores.append(scores)
 
-    scoringUtils.radar_plot(list_names, scoring, list_scores, file_name=radar_plot_file_name)
+    scoringUtils.radar_plot(list_names, scoring, list_scores, file_name=radar_plot_file_name,
+                            classification=classification)
 
 
 def case_full_dataset(dataset_name, standardize=False, normalize=False, classification=True, multilabel=False):
@@ -147,7 +148,7 @@ def case_NaN_dataset(dataset_name, strategy, seed=100, perc_NaN=0.1, classificat
     return X, Y, scoring, name_setting_file, name_radar_plot_file
 
 
-def create_radar_plot(dataset_names, name_models):
+def create_radar_plot(dataset_names, name_models, classification=True):
     for dataset_name in dataset_names:
         for stand in [True, False]:
             for norm in [True, False]:
@@ -156,8 +157,9 @@ def create_radar_plot(dataset_names, name_models):
                 if printValue:
                     print("Cycle with dataset =", dataset_name + ", standardize =", stand, "and normalize =", norm)
                 X, Y, scoring, name_setting_file, name_radar_plot_file = \
-                    case_full_dataset(dataset_name, standardize=stand, normalize=norm)
-                create_radar_plot_istance(name_models, scoring, name_setting_file, name_radar_plot_file)
+                    case_full_dataset(dataset_name, standardize=stand, normalize=norm, classification=classification)
+                create_radar_plot_istance(name_models, scoring, name_setting_file, name_radar_plot_file,
+                                          classification=classification)
 
 
 def create_radar_plot_NaN(dataset_names, name_models, percentuals_NaN):
@@ -182,22 +184,22 @@ def create_radar_plot_NaN(dataset_names, name_models, percentuals_NaN):
                                         ['mean', 'eliminate_row', 'median'])
         elif dataset_name == __init__.airfoil:
             create_radar_plot_NaN_cycle(dataset_name, name_models, percentuals_NaN,
-                                        ['mean', 'eliminate_row', 'median'])
+                                        ['mean', 'eliminate_row', 'median'], classification=False)
         elif dataset_name == __init__.auto:
             create_radar_plot_NaN_cycle(dataset_name, name_models, percentuals_NaN,
-                                        ['mean', 'eliminate_row', 'median'])
+                                        ['mean', 'eliminate_row', 'median'], classification=False)
         elif dataset_name == __init__.power_plant:
             create_radar_plot_NaN_cycle(dataset_name, name_models, percentuals_NaN,
-                                        ['mean', 'eliminate_row', 'median'])
+                                        ['mean', 'eliminate_row', 'median'], classification=False)
         elif dataset_name == __init__.energy:
             create_radar_plot_NaN_cycle(dataset_name, name_models, percentuals_NaN,
-                                        ['mean', 'eliminate_row', 'median'])
+                                        ['mean', 'eliminate_row', 'median'], classification=False)
         elif dataset_name == __init__.compress_strength:
             create_radar_plot_NaN_cycle(dataset_name, name_models, percentuals_NaN,
-                                        ['mean', 'eliminate_row', 'median'])
+                                        ['mean', 'eliminate_row', 'median'], classification=False)
 
 
-def create_radar_plot_NaN_cycle(dataset_name, name_models, percentuals_NaN, strategies):
+def create_radar_plot_NaN_cycle(dataset_name, name_models, percentuals_NaN, strategies, classification=True):
     for perc_NaN in percentuals_NaN:
         for strategy in strategies:
             if printValue:
@@ -205,7 +207,8 @@ def create_radar_plot_NaN_cycle(dataset_name, name_models, percentuals_NaN, stra
                       strategy)
             X, Y, scoring, name_setting_file, name_radar_plot_file = \
                 case_NaN_dataset(dataset_name, strategy=strategy, seed=seed, perc_NaN=perc_NaN)
-            create_radar_plot_istance(name_models, scoring, name_setting_file, name_radar_plot_file)
+            create_radar_plot_istance(name_models, scoring, name_setting_file, name_radar_plot_file,
+                                      classification=classification)
 
 
 if __name__ == '__main__':
@@ -220,11 +223,9 @@ if __name__ == '__main__':
     percentuals_NaN = __init__.percentuals_NaN
 
     # Classification
-    create_radar_plot(dataset_names_classification, name_models_classification)
-    create_radar_plot_NaN(dataset_names_classification, name_models_classification, percentuals_NaN)
+    # create_radar_plot(dataset_names_classification, name_models_classification, classification=True)
+    # create_radar_plot_NaN(dataset_names_classification, name_models_classification, percentuals_NaN)
 
     # Regression
-    # create_radar_plot(dataset_names_regression, name_models_regression)
-    # create_radar_plot_NaN(dataset_names_regression, name_models_regression, percentuals_NaN)
-
-    # create_radar_plot_NaN([__init__.zoo], name_models_classification, percentuals_NaN)
+    create_radar_plot(dataset_names_regression, name_models_regression, classification=False)
+    create_radar_plot_NaN(dataset_names_regression, name_models_regression, percentuals_NaN)

@@ -1,8 +1,9 @@
 printValue = True
-file_name_radar_plot = "radar_plot"
+file_name_radar_plot = "radar_plot_classification"
 setting = '_settings'
 radar_plot = '_radar_plot'
-radar_plot_dir = '/radar_plot/'
+radar_plot_classification_dir = '/radar_plot_classification/'
+radar_plot_regression_dir = '/radar_plot_regression/'
 classification_datasets_dir = '/classification_datasets/'
 regression_dataset_dir = '/regression_datasets/'
 model_settings_dir = '/model_settings/'
