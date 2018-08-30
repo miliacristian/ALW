@@ -23,8 +23,8 @@ best_eps 0.1
 best_degree 0
 best_gamma 0.0001
 best_kernel rbf
-explained_variance_SVR 0.23312154081182035
-neg_mean_absolute_error_uniform_average_SVR -4.713475731880891
+explained_variance_SVR 0.23312154081182043
+neg_mean_absolute_error_uniform_average_SVR -4.713475731880889
 neg_mean_squared_error_uniform_average_SVR -36.16104663425328
-r2_SVR 0.22036141255757197
+r2_SVR 0.22036141255757186
 total_score_SVR 3.5601877285864876

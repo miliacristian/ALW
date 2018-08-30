@@ -8,7 +8,6 @@ from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.svm import SVC, SVR
 import scoringUtils
 import numpy as np
-from scoringUtils import hmean_scores, total_score_regression
 from __init__ import printValue
 from __init__ import model_settings_dir, model_setting_test_dir
 from time import time
@@ -42,7 +41,7 @@ def KNN_training(X, Y, k, scoring, seed, n_split, mean):
 
         model = KNeighborsClassifier(n_neighbors=num_neighbors, weights='distance')
         result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
-        harmonic_mean = hmean_scores(scoring, result)  # funzione che da result calcola media armonica
+        harmonic_mean = scoringUtils.hmean_scores(scoring, result)  # funzione che da result calcola media armonica
         if best_total_score is None or best_total_score < harmonic_mean:
             best_scores = result
             best_total_score = harmonic_mean
@@ -85,7 +84,7 @@ def RANDOMFOREST_training(X, Y, list_n_trees, scoring, seed, n_split, mean):
 
             model = RandomForestClassifier(n_estimators=trees, random_state=seed, max_features=max_features)
             result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
-            harmonic_mean = hmean_scores(scoring, result)  # funzione che da result calcola media armonica
+            harmonic_mean = scoringUtils.hmean_scores(scoring, result)  # funzione che da result calcola media armonica
             if best_total_score is None or best_total_score < harmonic_mean:
                 best_scores = result
                 best_total_score = harmonic_mean
@@ -124,7 +123,7 @@ def SVC_default_training(X, Y, scoring, seed, n_split, mean):
         start_time_linear = time()
     model = OneVsRestClassifier(SVC(random_state=seed, max_iter=1000))
     result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
-    harmonic_mean = hmean_scores(scoring, result)
+    harmonic_mean = scoringUtils.hmean_scores(scoring, result)
 
     if printValue:
         print("End training of default SVC after", time() - start_time_linear, "s.")
@@ -174,7 +173,7 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
 
         model = OneVsRestClassifier(SVC(kernel='linear', random_state=seed, C=C, max_iter=1000))
         result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
-        harmonic_mean = hmean_scores(scoring, result)
+        harmonic_mean = scoringUtils.hmean_scores(scoring, result)
         if best_total_score is None or best_total_score < harmonic_mean:
             best_scores = result
             best_total_score = harmonic_mean
@@ -202,7 +201,7 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
 
             model = OneVsRestClassifier(SVC(kernel='rbf', random_state=seed, C=C, gamma=gamma, max_iter=1000))
             result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
-            harmonic_mean = hmean_scores(scoring, result)
+            harmonic_mean = scoringUtils.hmean_scores(scoring, result)
             if best_total_score < harmonic_mean:
                 best_scores = result
                 best_total_score = harmonic_mean
@@ -236,7 +235,7 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
                 model = OneVsRestClassifier(
                     SVC(kernel='poly', random_state=seed, C=C, gamma=gamma, degree=degree, max_iter=1000))
                 result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
-                harmonic_mean = hmean_scores(scoring, result)
+                harmonic_mean = scoringUtils.hmean_scores(scoring, result)
                 if best_total_score < harmonic_mean:
                     best_scores = result
                     best_total_score = harmonic_mean
@@ -266,7 +265,7 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
 
             model = OneVsRestClassifier(SVC(kernel='sigmoid', random_state=seed, C=C, gamma=gamma, max_iter=1000))
             result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
-            harmonic_mean = hmean_scores(scoring, result)
+            harmonic_mean = scoringUtils.hmean_scores(scoring, result)
             if best_total_score < harmonic_mean:
                 best_scores = result
                 best_total_score = harmonic_mean
@@ -319,7 +318,7 @@ def KNR_training(X, Y, k, scoring, seed, n_split, mean):
 
         model = KNeighborsRegressor(n_neighbors=num_neighbors, weights='distance')
         result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
-        total_score = total_score_regression(scoring, result)  # funzione che da result calcola media armonica
+        total_score = scoringUtils.total_score_regression(scoring, result)  # funzione che da result calcola media armonica
         if best_total_score is None or best_total_score < total_score:
             best_scores = result
             best_total_score = total_score
@@ -363,7 +362,7 @@ def RANDOMFORESTRegressor_training(X, Y, list_n_trees, scoring, seed, n_split, m
 
             model = RandomForestRegressor(n_estimators=trees, random_state=seed, max_features=max_features)
             result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
-            total_score = total_score_regression(scoring, result)  # funzione che da result calcola media armonica
+            total_score = scoringUtils.total_score_regression(scoring, result)  # funzione che da result calcola media armonica
             if best_total_score is None or best_total_score < total_score:
                 best_scores = result
                 best_total_score = total_score
@@ -429,7 +428,7 @@ def SVR_training(X, Y, scoring, seed, n_split, mean, multilabel=False):
             else:
                 model = SVR(kernel='linear', C=C, epsilon=eps, max_iter=1000)
             result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
-            total_score = total_score_regression(scoring, result)
+            total_score = scoringUtils.total_score_regression(scoring, result)
             if best_total_score is None or best_total_score < total_score:
                 best_scores = result
                 best_total_score = total_score
@@ -462,7 +461,7 @@ def SVR_training(X, Y, scoring, seed, n_split, mean, multilabel=False):
                 else:
                     model = SVR(kernel='rbf', C=C, gamma=gamma, epsilon=eps, max_iter=1000)
                 result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
-                total_score = total_score_regression(scoring, result)
+                total_score = scoringUtils.total_score_regression(scoring, result)
                 if best_total_score < total_score:
                     best_scores = result
                     best_total_score = total_score
@@ -500,7 +499,7 @@ def SVR_training(X, Y, scoring, seed, n_split, mean, multilabel=False):
                     else:
                         model = SVR(kernel='poly', C=C, gamma=gamma, degree=degree, max_iter=1000)
                     result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
-                    total_score = total_score_regression(scoring, result)
+                    total_score = scoringUtils.total_score_regression(scoring, result)
                     if best_total_score < total_score:
                         best_scores = result
                         best_total_score = total_score
@@ -534,7 +533,7 @@ def SVR_training(X, Y, scoring, seed, n_split, mean, multilabel=False):
                 else:
                     model = SVR(kernel='sigmoid', C=C, gamma=gamma, epsilon=eps, max_iter=1000)
                 result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
-                total_score = total_score_regression(scoring, result)
+                total_score = scoringUtils.total_score_regression(scoring, result)
                 if best_total_score < total_score:
                     best_scores = result
                     best_total_score = total_score
@@ -717,7 +716,6 @@ def build_models(name_models, file_name):
 def read_setting(file_name):
     """
     Return the best scoring of a test
-    :param name_models:
     :param file_name:
     :return: dict with the scores
     """
@@ -840,18 +838,18 @@ if __name__ == '__main__':
     seed = 100
     name_models_classification = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
     name_models_regression = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
-    dataset_name = __init__.compress_strength
+    dataset_name = __init__.airfoil
     classification = is_a_classification_dataset(dataset_name)
     multilabel = is_a_multilabel_dataset(dataset_name)
     k_range = range(3, 21, 1)
     n_trees_range = range(5, 21, 1)
 
-    X, Y, scoring, name_setting_file, name_radar_plot_file = \
-        main.case_full_dataset(dataset_name, standardize=False, normalize=False, classification=classification,
-                               multilabel=multilabel)
-    # X, Y, scoring, name_setting_file, name_radar_plot_file = \
-    #     main.case_NaN_dataset(dataset_name, "eliminate_row", seed, 0.05, classification=classification,
-    #                           multilabel=multilabel)
+    # X, Y, scoring, name_setting_file, name_radar_plot_file, title_radar_plot = \
+    #     main.case_full_dataset(name_models_classification, dataset_name, standardize=False, normalize=False, classification=classification,
+    #                            multilabel=multilabel)
+    X, Y, scoring, name_setting_file, name_radar_plot_file, title_radar_plot = \
+        main.case_NaN_dataset(name_models_regression, dataset_name, "eliminate_row", seed, 0.05, classification=classification,
+                              multilabel=multilabel)
 
     if classification:
         training(X, Y, name_models_classification, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,

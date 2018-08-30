@@ -2,6 +2,7 @@ from sklearn import metrics
 from sklearn.exceptions import UndefinedMetricWarning, ConvergenceWarning
 from sklearn.metrics import make_scorer
 import matplotlib.pyplot as plt
+import matplotlib.text
 import pandas as pd
 from math import pi, sqrt
 from scipy.stats import hmean
@@ -10,6 +11,7 @@ from __init__ import radar_plot_classification_dir, radar_plot_regression_dir
 import warnings
 import os
 from numpy import mean
+import training
 
 
 def roc_auc_micro(y_true, y_pred):
@@ -130,7 +132,7 @@ def create_dictionary_regression_scoring():
 
 
 def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name="radar_plot_classification",
-               file_format=".png", classification=True):
+               file_format=".png", classification=True, title_radar_plot=""):
     """
     Print and save the radar plot of the scoring
 
@@ -168,7 +170,8 @@ def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name="rada
     angles = [n / float(N) * 2 * pi for n in range(N)]
     angles += angles[:1]
     # Initialise the spider plot
-    #plt.suptitle(name_plot,loc='left')
+    t = matplotlib.text.Text
+    plt.suptitle(title_radar_plot, x=0.01, horizontalalignment='left')
     ax = plt.subplot(111, polar=True)
     plt.rc('axes', titlesize=25)
     # plt.title(name_plot,loc='right')
@@ -181,9 +184,10 @@ def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name="rada
 
     # Draw ylabels
     ax.set_rlabel_position(0)
-    plt.yticks([0.62, 0.65, 0.68, 0.71, 0.74, 0.77, 0.8, 0.83, 0.86, 0.89, 0.92, 0.95, 0.98],
-               [str(i) for i in [0.62, 0.65, 0.68, 0.71, 0.74, 0.77, 0.8, 0.83, 0.86, 0.89, 0.92, 0.95, 0.98]], color="grey", size=7)
-    plt.ylim(0.6, 1)
+    # axis_grid = [0.62, 0.65, 0.68, 0.71, 0.74, 0.77, 0.8, 0.83, 0.86, 0.89, 0.92, 0.95, 0.98]
+    axis_grid = [round(0.55 + i * 0.05, 2) for i in range(10)]
+    plt.yticks(axis_grid, [str(i) for i in axis_grid], color="grey", size=7)
+    plt.ylim(0.5, 1)
 
     # ------- PART 2: Add plots
 
@@ -237,6 +241,21 @@ def hmean_scores(dict_name_scoring, dict_scores):
     return hmean(scores_to_list(dict_name_scoring, dict_scores))
 
 
+def normalize_score(dict_scores):
+    """
+
+    :param dict_name_scoring:
+    :param dict_scores:
+    :return:
+    """
+    min_value, max_value = -100, 1
+    norm_score_dict = {}
+    for key, value in dict_scores.items():
+        normalize_value = (value - min_value) / (max_value - min_value)
+        norm_score_dict[key] = normalize_value
+    return norm_score_dict
+
+
 def total_score_regression(dict_name_scoring, dict_scores):
     """
     Calcola il total score per la regressione
@@ -245,6 +264,7 @@ def total_score_regression(dict_name_scoring, dict_scores):
     :return: total score
     """
 
+    print(dict_scores)
     values = scores_to_list(dict_name_scoring, dict_scores)
     min_value, max_value = -100, 1
     result = 0
@@ -252,6 +272,24 @@ def total_score_regression(dict_name_scoring, dict_scores):
         normalize_value = (e - min_value)/(max_value - min_value)
         result += normalize_value
     return result
+
+def getBestModel(name_models, file_name):
+    """
+    Read from file the best model for this setting
+    :param name_models:
+    :param file_name:
+    :return:
+    """
+    settings_dict = training.read_setting(file_name)
+    best_model = ""
+    if not settings_dict:
+        return best_model
+    best_score = -1000
+    for model in name_models:
+        if float(settings_dict["total_score_" + model]) > best_score:
+            best_score = float(settings_dict["total_score_" + model])
+            best_model = model
+    return best_model
 
 
 def K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=True):
