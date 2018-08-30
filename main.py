@@ -226,6 +226,6 @@ if __name__ == '__main__':
     create_radar_plot(dataset_names_classification, name_models_classification, classification=True)
     create_radar_plot_NaN(dataset_names_classification, name_models_classification, percentuals_NaN)
 
-    # Regression
+    # # Regression
     # create_radar_plot(dataset_names_regression, name_models_regression, classification=False)
     # create_radar_plot_NaN(dataset_names_regression, name_models_regression, percentuals_NaN)
