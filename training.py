@@ -1,6 +1,6 @@
-# rende un classificatore multiclass funzionante anche per multilabel
-from sklearn.multiclass import OneVsRestClassifier
-from sklearn.multioutput import MultiOutputRegressor
+from sklearn.multiclass import OneVsRestClassifier  # trasform a multiclass classificator into a multilabel
+# classificator
+from sklearn.multioutput import MultiOutputRegressor # trasform a multiclass regressor into a multilabel regressor
 
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
@@ -307,8 +307,9 @@ def KNR_training(X, Y, k, scoring, seed, n_split, mean):
         start_time = time()
 
     best_k = None
-    best_total_score = None
+    # best_total_score = None
     best_scores = None
+
 
     for num_neighbors in k:
 
@@ -318,10 +319,13 @@ def KNR_training(X, Y, k, scoring, seed, n_split, mean):
 
         model = KNeighborsRegressor(n_neighbors=num_neighbors, weights='distance')
         result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
-        total_score = scoringUtils.total_score_regression(scoring, result)  # funzione che da result calcola media armonica
-        if best_total_score is None or best_total_score < total_score:
+        # total_score = scoringUtils.total_score_regression(scoring, result)  # funzione che da result calcola media armonica
+        # if best_total_score is None or best_total_score < total_score:
+        #     best_scores = result
+        #     best_total_score = total_score
+        #     best_k = num_neighbors
+        if scoringUtils.compareRegressorScores(best_scores, result, scoring):
             best_scores = result
-            best_total_score = total_score
             best_k = num_neighbors
 
         if printValue:
@@ -330,7 +334,7 @@ def KNR_training(X, Y, k, scoring, seed, n_split, mean):
     if printValue:
         print("End training of KNR after", time() - start_time, "s.")
 
-    return best_k, best_scores, best_total_score
+    return best_k, best_scores #, best_total_score
 
 
 def RANDOMFORESTRegressor_training(X, Y, list_n_trees, scoring, seed, n_split, mean):
@@ -628,11 +632,11 @@ def training(X, Y, name_models, scoring, k=[5], list_n_trees=[10], seed=111, n_s
             fl.writelines([str(key) + "_" + str(__init__.rand_forest_regressor) + " " + str(value) + "\n"])
         fl.writelines(["total_score_" + str(__init__.rand_forest_regressor) + " " + str(best_total_score) + "\n"])
     if __init__.knr in name_models:
-        best_k, best_scores, best_total_score = KNR_training(X, Y, k, scoring, seed, n_split, mean)
+        best_k, best_scores = KNR_training(X, Y, k, scoring, seed, n_split, mean)
         fl.writelines(["best_k " + str(best_k) + "\n"])
         for key, value in best_scores.items():
             fl.writelines([str(key) + "_" + str(__init__.knr) + " " + str(value) + "\n"])
-        fl.writelines(["total_score_" + str(__init__.knr) + " " + str(best_total_score) + "\n"])
+        # fl.writelines(["total_score_" + str(__init__.knr) + " " + str(best_total_score) + "\n"])
     if __init__.svr in name_models:
         best_C, best_eps, best_degree, best_gamma, best_kernel, best_scores, best_total_score = \
             SVR_training(X, Y, scoring, seed, n_split, mean, multilabel=multilabel)
@@ -837,19 +841,20 @@ mode = 'mode'
 if __name__ == '__main__':
     seed = 100
     name_models_classification = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
-    name_models_regression = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
-    dataset_name = __init__.airfoil
+    # name_models_regression = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
+    name_models_regression = [__init__.knr]
+    dataset_name = __init__.auto
     classification = is_a_classification_dataset(dataset_name)
     multilabel = is_a_multilabel_dataset(dataset_name)
     k_range = range(3, 21, 1)
     n_trees_range = range(5, 21, 1)
 
-    # X, Y, scoring, name_setting_file, name_radar_plot_file, title_radar_plot = \
-    #     main.case_full_dataset(name_models_classification, dataset_name, standardize=False, normalize=False, classification=classification,
-    #                            multilabel=multilabel)
     X, Y, scoring, name_setting_file, name_radar_plot_file, title_radar_plot = \
-        main.case_NaN_dataset(name_models_regression, dataset_name, "eliminate_row", seed, 0.05, classification=classification,
-                              multilabel=multilabel)
+        main.case_full_dataset(name_models_classification, dataset_name, standardize=False, normalize=False, classification=classification,
+                               multilabel=multilabel)
+    # X, Y, scoring, name_setting_file, name_radar_plot_file, title_radar_plot = \
+    #     main.case_NaN_dataset(name_models_regression, dataset_name, "eliminate_row", seed, 0.05, classification=classification,
+    #                           multilabel=multilabel)
 
     if classification:
         training(X, Y, name_models_classification, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,

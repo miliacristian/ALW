@@ -112,7 +112,7 @@ def create_dictionary_classification_scoring():
         # 'f1_weighted': 'f1_weighted',
         'average_precision_micro': make_scorer(average_precision_micro),
         # 'average_precision_weighted': make_scorer(average_precision_weighted),
-               }
+    }
     return scoring
 
 
@@ -127,7 +127,7 @@ def create_dictionary_regression_scoring():
         'neg_mean_squared_error_uniform_average': make_scorer(neg_mean_squared_error_uniform_average),
         # 'neg_median_absolute_error_uniform_average': make_scorer(neg_median_absolute_error_uniform_average),
         'r2': 'r2',
-               }
+    }
     return scoring
 
 
@@ -221,10 +221,10 @@ def scores_to_list(dict_name_scoring, dict_scores):
     """
     scores_list = []
     for key, value in dict_name_scoring.items():
-            if type(value) is str:
-                scores_list.append(dict_scores[value].mean())
-            else:
-                scores_list.append(dict_scores[str(value)[12:-1]].mean())
+        if type(value) is str:
+            scores_list.append(dict_scores[value].mean())
+        else:
+            scores_list.append(dict_scores[str(value)[12:-1]].mean())
     return scores_list
 
 
@@ -269,9 +269,10 @@ def total_score_regression(dict_name_scoring, dict_scores):
     min_value, max_value = -100, 1
     result = 0
     for e in values:
-        normalize_value = (e - min_value)/(max_value - min_value)
+        normalize_value = (e - min_value) / (max_value - min_value)
         result += normalize_value
     return result
+
 
 def getBestModel(name_models, file_name):
     """
@@ -323,3 +324,34 @@ def K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=True):
     return result
 
 
+def comparingFunction(m_A, m_B):
+    """
+    Applying formula (m_A-m_B)/(|m_A|+|m_B|)
+    :param m_A: metric regressor A
+    :param m_B: metric regressor B
+    :return: (m_A-m_B)/(|m_A|+|m_B|)
+    """
+    return (m_A - m_B) / (abs(m_A) + abs(m_B))
+
+
+def compareRegressorScores(best_scores, result, dict_name_scoring):
+    """
+    Compare best_scores with result from two different regressor using the formula
+    sum{i in list of metrics} {(mi_A - mi_B)/(|mi_A| + |mi_B|)},
+    where mi_A is the scores of metrics i with regressor A and mi_B is the scores of metrics i with regressor B
+    :param best_scores: list of scores of actual best regressor
+    :param result: list of scores of new regressor
+    :param dict_name_scoring: dict with scoring's name
+    :return: True if the new regressor is better, False otherwise
+    """
+    if best_scores is None:
+        return True
+    best_values = scores_to_list(dict_name_scoring, best_scores)
+    new_values = scores_to_list(dict_name_scoring, result)
+    result = 0
+    for i in range(len(best_values)):
+        result += comparingFunction(best_values[i], new_values[i])
+
+    if result >= 0:
+        return False
+    return True

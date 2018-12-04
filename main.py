@@ -9,7 +9,6 @@ import __init__
 
 def create_radar_plot_istance(name_models, scoring, setting_file_name, radar_plot_file_name, classification=True,
                               title_radar_plot=""):
-
     list_scores = []
     list_names = []
     setting = training.read_setting(setting_file_name)
@@ -26,9 +25,10 @@ def create_radar_plot_istance(name_models, scoring, setting_file_name, radar_plo
                             classification=classification, title_radar_plot=title_radar_plot)
 
 
-def case_full_dataset(name_models, dataset_name, standardize=False, normalize=False, classification=True, multilabel=False):
+def case_full_dataset(name_models, dataset_name, standardize=False, normalize=False, classification=True,
+                      multilabel=False):
     """
-    Do testing in the case of classification with full dataset.
+    Do testing in the case of classification/regression with full dataset.
     :param dataset_name: name of dataset use
     :param standardize: is True if the dataset must be standardize
     :param normalize: is True if the dataset must be normalize
@@ -67,17 +67,18 @@ def case_full_dataset(name_models, dataset_name, standardize=False, normalize=Fa
     else:
         scoring = scoringUtils.create_dictionary_regression_scoring()
 
-    if scoringUtils.getBestModel(name_models, name_setting_file) == __init__.rand_forest:
-        title_radar_plot += "Best model: RF"
-    elif scoringUtils.getBestModel(name_models, name_setting_file) == __init__.rand_forest_regressor:
-        title_radar_plot += "Best model: RFRegressor"
-    else:
-        title_radar_plot += "Best model: " + scoringUtils.getBestModel(name_models, name_setting_file)
+    # if scoringUtils.getBestModel(name_models, name_setting_file) == __init__.rand_forest:
+    #     title_radar_plot += "Best model: RF"
+    # elif scoringUtils.getBestModel(name_models, name_setting_file) == __init__.rand_forest_regressor:
+    #     title_radar_plot += "Best model: RFRegressor"
+    # else:
+    #     title_radar_plot += "Best model: " + scoringUtils.getBestModel(name_models, name_setting_file)
 
     return X, Y, scoring, name_setting_file, name_radar_plot_file, title_radar_plot
 
 
-def case_NaN_dataset(name_models, dataset_name, strategy, seed=100, perc_NaN=0.1, classification=True, multilabel=False):
+def case_NaN_dataset(name_models, dataset_name, strategy, seed=100, perc_NaN=0.1, classification=True,
+                     multilabel=False):
     """
     Do testing in the case of classification with dataset having value NaN.
     :param dataset_name: name of dataset use
@@ -97,7 +98,6 @@ def case_NaN_dataset(name_models, dataset_name, strategy, seed=100, perc_NaN=0.1
     name_radar_plot_file = dataset_name + radar_plot
     title_radar_plot = "Dataset: " + dataset_name + "\n"
     title_radar_plot += "Strategy: " + strategy + "\nPerc. of NaN: "
-
 
     if classification:
         X, Y = dataset.load_classification_dataset(dataset_name, multilabel=multilabel)
@@ -150,7 +150,8 @@ def create_radar_plot(dataset_names, name_models, classification=True):
                 if printValue:
                     print("Cycle with dataset =", dataset_name + ", standardize =", stand, "and normalize =", norm)
                 X, Y, scoring, name_setting_file, name_radar_plot_file, title_radar_plot = \
-                    case_full_dataset(name_models, dataset_name, standardize=stand, normalize=norm, classification=classification)
+                    case_full_dataset(name_models, dataset_name, standardize=stand, normalize=norm,
+                                      classification=classification)
                 create_radar_plot_istance(name_models, scoring, name_setting_file, name_radar_plot_file,
                                           classification=classification, title_radar_plot=title_radar_plot)
 

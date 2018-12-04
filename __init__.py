@@ -38,6 +38,3 @@ standardize='_standardize'
 normalize='_normalize'
 percentuals_NaN = [0.05, 0.1, 0.15]
 list_multilabel_dataset = [energy]
-
-
-##

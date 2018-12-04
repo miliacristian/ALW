@@ -11,7 +11,7 @@ import __init__
 
 def print_dataset(X, Y):
     """
-    Stampa features set X e label set Y
+    Print features set X and label set Y
     :param X: features set
     :param Y: label set
     :return: None
@@ -24,9 +24,9 @@ def print_dataset(X, Y):
 def replace_value_in_column(X, list_column, value_to_replace, new_value):
     """
     :param X: features set
-    :param list_column: list,lista delle colonne in cui sostituire i valori
-    :param value_to_replace: valore da sostituire
-    :param new_value: nuovo valore
+    :param list_column: list, list of columns where swap values
+    :param value_to_replace: value to swap
+    :param new_value: new value
     :return: X con valori sostituiti nelle colonne list column
     """
     for k in list_column:
@@ -136,7 +136,7 @@ def put_random_NaN(X, fraction_missing_value, seed=100):
     num_missing_example = floor(fraction_missing_value * num_values)
     list_index_missing_samples = rng.choice(num_values, num_missing_example, replace=False)
     for i in list_index_missing_samples:
-        X[floor(i/num_features)][i - (floor(i/num_features) * num_features)] = numpy.nan
+        X[floor(i / num_features)][i - (floor(i / num_features) * num_features)] = numpy.nan
 
     return X
 
@@ -215,25 +215,13 @@ def load_page_dataset():
     return X, Y
 
 
-def load_pima_indians_diabetes_dataset():
-    """
-    :return:features set X del dataset pima_indians_diabetes ,label set Y del dataset pima_indians_diabetes
-    """
-    path = os.path.abspath('')
-    X, Y = CSV.read_csv(path + classification_datasets_dir + 'pima_indians_diabetes.csv', skip_rows=18)
-    Y = CSV.convert_type_to_float(Y)
-    X = CSV.convert_type_to_float(X)
-    X = replace_value_in_column(X, [1, 2, 3, 4, 5], 0, numpy.nan)
-    # numpy.isnan(X)
-    return X, Y
-
-
 def load_com_dataset():
     """
     :return:features set X del dataset com ,label set Y del dataset com
     """
     path = os.path.abspath('')
-    X, Y = CSV.read_csv(path + regression_dataset_dir + 'concrete_compressive_strength.csv', skip_rows=20, delimiter='\t')
+    X, Y = CSV.read_csv(path + regression_dataset_dir + 'concrete_compressive_strength.csv', skip_rows=20,
+                        delimiter='\t')
     Y = CSV.convert_type_to_float(Y)
     X = CSV.convert_type_to_float(X)
     Y.ravel()
@@ -261,6 +249,8 @@ def load_auto_dataset():
     Y = CSV.convert_type_to_float(Y)
     X = CSV.convert_type_to_float(X)
     return X, Y
+
+
 def load_power_plant_dataset():
     """
     :return:features set X del dataset power_plant ,label set Y del dataset power_plant
@@ -277,11 +267,13 @@ def load_energy_efficiency_dataset():
     :return:features set X del dataset energy_efficency ,label set Y del dataset energy_efficency
     """
     path = os.path.abspath('')
-    X, Y = CSV.read_csv(path + regression_dataset_dir + 'energy_efficiency.csv', skip_rows=27,num_label=2,delimiter='\t')
+    X, Y = CSV.read_csv(path + regression_dataset_dir + 'energy_efficiency.csv', skip_rows=27, num_label=2,
+                        delimiter='\t')
     Y = CSV.convert_type_to_float(Y)
     X = CSV.convert_type_to_float(X)
     # Y.ravel()
     return X, Y
+
 
 def load_classification_dataset(dataset, multilabel=False):
     if dataset == __init__.tris:
@@ -306,16 +298,16 @@ def load_classification_dataset(dataset, multilabel=False):
 
 
 def load_regression_dataset(dataset, multilabel=False):
-    if dataset ==__init__.compress_strength:
+    if dataset == __init__.compress_strength:
         X, Y = load_com_dataset()
     elif dataset == __init__.airfoil:
         X, Y = load_airfoil_dataset()
     elif dataset == __init__.auto:
         X, Y, = load_auto_dataset()
     elif dataset == __init__.power_plant:
-        X,Y = load_power_plant_dataset()
-    elif dataset==__init__.energy:
-        X,Y=load_energy_efficiency_dataset()
+        X, Y = load_power_plant_dataset()
+    elif dataset == __init__.energy:
+        X, Y = load_energy_efficiency_dataset()
     else:
         print("input must be 'compressive_strength' or 'airfoil' or 'auto' or 'power_plant' or 'energy'.")
         exit(1)

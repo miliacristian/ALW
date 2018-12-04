@@ -22,7 +22,7 @@ https://www.datacamp.com/community/tutorials/random-forests-classifier-python#fi
 
 in teoria se non esistono variabili da predirre si può fare regressione su qualsiasi variabile continua(sfruttando le altre?)
 
-#TODO
+
     -   training --> testing su ogni caso
     -   i casi sono:
         -   dataset originali (senza norm e stand, solo norm, solo stand).
@@ -59,13 +59,19 @@ in teoria se non esistono variabili da predirre si può fare regressione su qual
                                 MLPRegressor (reti neurali per regressione),
                                 RandomForestRegressor (RF per regressione)
         -   scegliere metriche: 'explained_variance' (tra -inf e 1),
-                                'neg_mean_absolute_error',
-                                'neg_mean_squared_error',
+                                'neg_mean_absolute_error' (tra -inf e 0),
+                                'neg_mean_squared_error' (tra -inf e 0),
                                 'neg_mean_squared_log_error',
                                 'neg_median_absolute_error',
-                                'r2'
+                                'r2' (tra -inf e 0)
 
-#TODO COMPITI:
-    - setting con nuove percentuali  Ema
-    - importare csv regressione     Cri
-    - implementare modelli      Ema
+#TODO
+	- eliminare p.py
+	- link.txt serve per la relazione
+	- fare tabella risultati regressione --> cri
+	- scrivere relazione
+	- preparare la presentazione
+	- eliminare cartella model_setting_test
+	- commentare tt i file .py in inglese e formattarli ripsetto PEP9 (ctrl+alt+L)--> cri
+	- main riga 70 (grafica commentata) -->  ema
+	- scrivere compareSCore per tt i regressori  --> ema

@@ -1,11 +1,11 @@
-import numpy, csv,re
+import numpy, csv
 
 
-def read_csv(filecsv, skip_rows=0, delimiter=',', skip_column_left=0, skip_column_right=0, last_column_is_label=True,num_label=1):
+def read_csv(filecsv, skip_rows=0, delimiter=',', skip_column_left=0, skip_column_right=0, last_column_is_label=True,
+             num_label=1):
     """
     Legge un file csv con delimitatore delimiter saltando le prime skip_rows righe e saltando le prime
     skip_column_left e skip_column_right colonne rispettivamente da sinistra e da destra
-    da destra
     precondizioni:le label solo nell'ultima colonna
     :param filecsv: string,path to csv file
     :param skip_rows:int,row to skip
@@ -26,9 +26,9 @@ def read_csv(filecsv, skip_rows=0, delimiter=',', skip_column_left=0, skip_colum
     if last_column_is_label:
         X = result[:, skip_column_left:num_col - skip_column_right - num_label]  # dati senza le colonne delle label
         Y = result[:, num_col - skip_column_right - num_label:]  # array di label
-    else:#first column is label
+    else:  # first column is label
         X = result[:, 0 + skip_column_left + num_label:num_col - skip_column_right]
-        Y = result[:, 0 + skip_column_left:skip_column_left+num_label]  # array di label nelle prime num_label colonne
+        Y = result[:, 0 + skip_column_left:skip_column_left + num_label]  # array di label nelle prime num_label colonne
     return X, Y
 
 
