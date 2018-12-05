@@ -53,10 +53,9 @@ def replace_value_in_row(X, list_rows, value_to_replace, new_value):
 
 def replace_NaN_with_strategy(X, strategy, list_mode_columns=[]):
     """
-
-    :param X:
+    :param X:features set
     :param strategy: must be 'mean' or 'median or 'most_frequent'
-    :return:
+    :return:X with Nan values replaced by value conform with strategy
     """
     imputer = Imputer(strategy=strategy)
     imputer_mode = Imputer(strategy="most_frequent")
@@ -69,6 +68,10 @@ def replace_NaN_with_strategy(X, strategy, list_mode_columns=[]):
 
 
 def get_list_mode_columns_by_dataset(dataset_name):
+    """
+    :param dataset_name:string,dataset name
+    :return:list of column index where is possible to apply strategy mode for the dataset dataset_name
+    """
     if dataset_name == __init__.auto:
         return [0, 5, 6]
     elif dataset_name == __init__.compress_strength:
@@ -92,10 +95,9 @@ def put_random_NaN_per_row(X, fraction_sample_missing_value, seed=100):
     Put one Nan in a percent of random row of dataset
     :param X: dataset features
     :param fraction_sample_missing_value: percent of row with NaN
-    :param seed:
+    :param seed:seed number for pseudo number generator
     :return: the dataset with NaN
     """
-
     if fraction_sample_missing_value >= 1 or fraction_sample_missing_value < 0:
         print("invalid parameter fraction sample missing value")
         exit(1)
@@ -122,10 +124,9 @@ def put_random_NaN(X, fraction_missing_value, seed=100):
     Put Nan in a percent of random component of dataset
     :param X: dataset features
     :param fraction_missing_value: percent of row with NaN
-    :param seed:
+    :param seed:sedd number for pseudo number generator
     :return: the dataset with NaN
     """
-
     if fraction_missing_value >= 1 or fraction_missing_value < 0:
         print("invalid parameter fraction sample missing value")
         exit(1)
@@ -143,7 +144,7 @@ def put_random_NaN(X, fraction_missing_value, seed=100):
 
 def load_zoo_dataset():
     """
-    :return:features set X del dataset zoo ,label set Y del dataset zoo
+    :return:features set X of the dataset zoo ,label set Y of the dataset zoo
     """
     path = os.path.abspath('')
     X, Y = CSV.read_csv(path + classification_datasets_dir + 'zoo.csv', skip_rows=31, skip_column_left=1)
@@ -154,7 +155,7 @@ def load_zoo_dataset():
 
 def load_balance_dataset():
     """
-    :return:features set X del dataset balance ,label set Y del dataset balance
+    :return:features set X of the  dataset balance ,label set Y of the dataset balance
     """
     path = os.path.abspath('')
     X, Y = CSV.read_csv(path + classification_datasets_dir + 'balance.csv', skip_rows=29, last_column_is_label=False)
@@ -165,7 +166,7 @@ def load_balance_dataset():
 
 def load_seed_dataset():
     """
-    :return:features set X del dataset seed ,label set Y del dataset zoo
+    :return:features set X of the dataset seed ,label set Y of the dataset zoo
     """
     path = os.path.abspath('')
     X, Y = CSV.read_csv(path + classification_datasets_dir + 'seeds.csv', skip_rows=2, delimiter='\t')
@@ -176,7 +177,7 @@ def load_seed_dataset():
 
 def load_tris_dataset():
     """
-    :return:features set X del dataset tris ,label set Y del dataset tris
+    :return:features set X of the dataset tris ,label set Y of the dataset tris
     """
     path = os.path.abspath('')
     X, Y = CSV.read_csv(path + classification_datasets_dir + 'tris.csv', skip_rows=17)
@@ -195,7 +196,7 @@ def load_tris_dataset():
 
 def load_eye_dataset():
     """
-    :return:features set X del dataset eye ,label set Y del dataset eye
+    :return:features set X of the dataset eye ,label set Y of the dataset eye
     """
     path = os.path.abspath('')
     X, Y = CSV.read_csv(path + classification_datasets_dir + 'EEG_eye_state.csv', skip_rows=25)
@@ -206,7 +207,7 @@ def load_eye_dataset():
 
 def load_page_dataset():
     """
-    :return:features set X del dataset page ,label set Y del dataset page
+    :return:features set X of the dataset page ,label set Y of the dataset page
     """
     path = os.path.abspath('')
     X, Y = CSV.read_csv(path + classification_datasets_dir + 'page_block.csv', skip_rows=48, delimiter=' ')
@@ -217,7 +218,7 @@ def load_page_dataset():
 
 def load_com_dataset():
     """
-    :return:features set X del dataset com ,label set Y del dataset com
+    :return:features set X of the dataset com ,label set Y of the dataset com
     """
     path = os.path.abspath('')
     X, Y = CSV.read_csv(path + regression_dataset_dir + 'concrete_compressive_strength.csv', skip_rows=20,
@@ -230,7 +231,7 @@ def load_com_dataset():
 
 def load_airfoil_dataset():
     """
-    :return:features set X del dataset airfoil ,label set Y del dataset airfoil
+    :return:features set X of the dataset airfoil ,label set Y of the dataset airfoil
     """
     path = os.path.abspath('')
     X, Y = CSV.read_csv(path + regression_dataset_dir + 'airfoil_self_noise.csv', skip_rows=16, delimiter='\t')
@@ -241,7 +242,7 @@ def load_airfoil_dataset():
 
 def load_auto_dataset():
     """
-    :return:features set X del dataset auto ,label set Y del dataset auto
+    :return:features set X of the dataset auto ,label set Y of the dataset auto
     """
     path = os.path.abspath('')
     X, Y = CSV.read_csv(path + regression_dataset_dir + 'auto_mpg.csv', skip_rows=24, delimiter=' ',
@@ -253,7 +254,7 @@ def load_auto_dataset():
 
 def load_power_plant_dataset():
     """
-    :return:features set X del dataset power_plant ,label set Y del dataset power_plant
+    :return:features set X of the dataset power_plant ,label set Y of the dataset power_plant
     """
     path = os.path.abspath('')
     X, Y = CSV.read_csv(path + regression_dataset_dir + 'combined_cycle_power_plant.csv', skip_rows=15)
@@ -264,7 +265,7 @@ def load_power_plant_dataset():
 
 def load_energy_efficiency_dataset():
     """
-    :return:features set X del dataset energy_efficency ,label set Y del dataset energy_efficency
+    :return:features set X of the dataset energy_efficency ,label set Y of the dataset energy_efficency
     """
     path = os.path.abspath('')
     X, Y = CSV.read_csv(path + regression_dataset_dir + 'energy_efficiency.csv', skip_rows=27, num_label=2,
@@ -276,6 +277,12 @@ def load_energy_efficiency_dataset():
 
 
 def load_classification_dataset(dataset, multilabel=False):
+    """
+    Load clasification dataset dataset
+    :param dataset:string, dataset name
+    :param multilabel: boolean,true if dataset is multilabel,false otherwise
+    :return: features set X and label set Y of the dataset dataset
+    """
     if dataset == __init__.tris:
         X, Y = load_tris_dataset()
     elif dataset == __init__.seed:
@@ -284,8 +291,6 @@ def load_classification_dataset(dataset, multilabel=False):
         X, Y = load_balance_dataset()
     elif dataset == __init__.zoo:
         X, Y = load_zoo_dataset()
-    elif dataset == __init__.indians:
-        X, Y = load_pima_indians_diabetes_dataset()
     elif dataset == __init__.eye:
         X, Y = load_eye_dataset()
     elif dataset == __init__.page:
@@ -298,6 +303,12 @@ def load_classification_dataset(dataset, multilabel=False):
 
 
 def load_regression_dataset(dataset, multilabel=False):
+    """
+    Load regression dataset dataset
+    :param dataset:string, dataset name
+    :param multilabel: boolean,true if dataset is multilabel,false otherwise
+    :return: features set X and label set Y of the dataset dataset
+    """
     if dataset == __init__.compress_strength:
         X, Y = load_com_dataset()
     elif dataset == __init__.airfoil:
@@ -317,10 +328,16 @@ def load_regression_dataset(dataset, multilabel=False):
 
 
 def remove_rows_with_NaN(X, Y):
+    """
+    Removed rows which contains almost one element nan
+    :param X: features set X
+    :param Y: label set Y
+    :return: X,Y with row Nan removed
+    """
     length = len(X[:, 0])
     i = 0
-    while i < length:  # tutte le righe
-        for j in range(len(X[0, :])):  # tutte le colonne
+    while i < length:  # all rows
+        for j in range(len(X[0, :])):  # all column
             if numpy.isnan(X[i][j]):
                 Y = numpy.delete(Y, i, axis=0)
                 X = numpy.delete(X, i, axis=0)
@@ -333,11 +350,11 @@ def remove_rows_with_NaN(X, Y):
 
 def remove_row_with_label_L(X, Y, L):
     """
-    Rimuove le labels L dal label set Y e le righe corrispondenti nel features set X
+    Remove labels L from label set Y and respective rows in the features set X
     :param X: features set
     :param Y: label set
-    :param L: lista di label da rimuovere
-    :return: X,Y con label rimosse
+    :param L: list of label to remove
+    :return: X,Y with label removed
     """
     length = len(Y)
     i = 0
@@ -355,10 +372,10 @@ def remove_row_dataset(X, Y, A, B, step=1):
     """
     :param X: features set
     :param Y: label set
-    :param A: int,indice prima riga da eliminare
-    :param B: int,indice ultima riga-1 da eliminare
-    :param step: int,quante righe saltare prima di eliminare la prossima riga
-    :return: X,Y con righe da A,B eliminate con step step
+    :param A: int,index of first row to remove
+    :param B: int,index of last row-1 to remove
+    :param step: int,skip number
+    :return: X,Y with rows from A to B with step step removed
     """
     temp_X = numpy.delete(X, numpy.s_[A:B:step], axis=0)  # axis=0==riga,axis=1==colonna
     temp_Y = numpy.delete(Y, numpy.s_[A:B:step], axis=0)
@@ -367,23 +384,24 @@ def remove_row_dataset(X, Y, A, B, step=1):
 
 def remove_column_dataset(X, Y, A, B, step=1):
     """
+    Remove column of the dataset starting from column index A to column index B with skip column step
     :param X: features set
     :param Y: label set
-    :param A: int,indice prima colonna da eliminare
-    :param B: int,indice ultima colonna-1 da eliminare
-    :param step: int,quante colonne saltare prima di eliminare la prossima colonna
-    :return: X,Y con colonne da A,B eliminate con step step
+    :param A: int,index of first column to remove
+    :param B: int,index of last column-1 to remove
+    :param step: int,skip number
+    :return: X,Y with columns from A to B with step step removed
     """
-    temp_X = numpy.delete(X, numpy.s_[A:B:step], axis=1)  # axis=0==riga,axis=1==colonna
+    temp_X = numpy.delete(X, numpy.s_[A:B:step], axis=1)  # axis=0==row,axis=1==column
     temp_Y = numpy.delete(Y, numpy.s_[A:B:step], axis=1)
     return temp_X, temp_Y
 
 
 def dataset_minmax(X):
     """
-    Calcola il minimo e massimo per ogni features e ritorna una lista di coppie (min,max)
+    Calculate min e max for each features and return list of couple (min,max)
     :param X:features set
-    :return: list,list max,min per ogni features
+    :return: list,list max,min for each features
     """
     minmax = list()
     for i in range(len(X[0])):
@@ -396,9 +414,9 @@ def dataset_minmax(X):
 
 def normalize_dataset(X):
     """
-    Normalizza i valori degli attributi di X
+    Normalize values of X's attributes
     :param X: features set
-    :return: X normalizato,scaled_value =(value - min) / (max - min)
+    :return: X normalized,scaled_value =(value - min) / (max - min)
     """
     minmax = dataset_minmax(X)
     X_normalized = X.copy()
@@ -410,9 +428,9 @@ def normalize_dataset(X):
 
 def column_means(X):
     """
-    Calcola la media di ogni features
+    Calculate mean for each featues
     :param X: features set
-    :return: list,lista di medie per ogni features
+    :return: list,list of means for each features
     """
     means = [0 for i in range(len(X[0]))]
     for i in range(len(X[0])):  # per ogni attributo
@@ -423,10 +441,10 @@ def column_means(X):
 
 def column_stdevs(X, means):
     """
-    Calcola la media di ogni features
+    Calculate standard deviation for each features
     :param X: features set
-    :param means:list,lista di medie per ogni features
-    :return: list,lista di medie per ogni features
+    :param means:list,list of means for each features
+    :return: list,list of standard deviation for each features
     """
     stdevs = [0 for i in range(len(X[0]))]
     for i in range(len(X[0])):
@@ -438,9 +456,9 @@ def column_stdevs(X, means):
 
 def standardize_dataset(X):
     """
-    Standardizza il dataset X
+    Standardize the dataset X
     :param X: features set
-    :return:X_ standardizzato,standard deviation = sqrt( (value_i - mean)^2 / (total_values-1))
+    :return:X standardized,standard deviation = sqrt( (value_i - mean)^2 / (total_values-1))
     """
     means = column_means(X)
     stdevs = column_stdevs(X, means)
@@ -453,9 +471,9 @@ def standardize_dataset(X):
 
 def one_hot_encoding(Y):
     """
-    Effettua il one hot encoding sul label set Y
+    Do the one hot encoding on label set Y
     :param Y: label set Y
-    :return: label set Y con one ho encoding
+    :return: label set Y with one ho encoding
     """
     label_encoder = LabelEncoder()
     Y = Y.ravel()
