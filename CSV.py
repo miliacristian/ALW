@@ -4,12 +4,11 @@ import numpy, csv
 def read_csv(filecsv, skip_rows=0, delimiter=',', skip_column_left=0, skip_column_right=0, last_column_is_label=True,
              num_label=1):
     """
-    Legge un file csv con delimitatore delimiter saltando le prime skip_rows righe e saltando le prime
-    skip_column_left e skip_column_right colonne rispettivamente da sinistra e da destra
-    precondizioni:le label solo nell'ultima colonna
+    Read file.csv filecsv with delimiter delimiter skipping the first skip_rows and skipping the first skip_column_left and the first skip_column_right from the left and the right respectively
+    precondition:the labels are in the last columns
     :param filecsv: string,path to csv file
     :param skip_rows:int,row to skip
-    :param last_column_is_label:boolean se last_column_is_label==True la lebel deve essere letta dall'ultima colonna
+    :param last_column_is_label:boolean,if last_column_is_label==True la lebel deve essere letta dall'ultima colonna
     (dopo aver tolto le skip_column_right colonne a destra),altrimenti è la prima label(dopo aver tolto le skip_column_left colonne a sinistra)
     :return features set: X,labels set:Y
     """
@@ -24,21 +23,21 @@ def read_csv(filecsv, skip_rows=0, delimiter=',', skip_column_left=0, skip_colum
         num_row = len(result)
         num_col = len(result[skip_rows])
     if last_column_is_label:
-        X = result[:, skip_column_left:num_col - skip_column_right - num_label]  # dati senza le colonne delle label
-        Y = result[:, num_col - skip_column_right - num_label:]  # array di label
+        X = result[:, skip_column_left:num_col - skip_column_right - num_label]  # data without columns of the labels
+        Y = result[:, num_col - skip_column_right - num_label:]  # array of label
     else:  # first column is label
         X = result[:, 0 + skip_column_left + num_label:num_col - skip_column_right]
-        Y = result[:, 0 + skip_column_left:skip_column_left + num_label]  # array di label nelle prime num_label colonne
+        Y = result[:, 0 + skip_column_left:skip_column_left + num_label]  # array of label in the first num_label columns
     return X, Y
 
 
 def convert_label_values(Y, list_old_label, list_new_label):
     """
-    converte il valore delle label contentute in Y da un valore old value (preso dalla list_old_label) ad un nuovo valore new_value(preso dalla lista list_new value)
-    list_old_label[i] diventa list_new_label[i]
+    Convert label's value in label set Y from oldvalue(taken from list old_label) to new value(taken from list new_label)
+    list_old_label[i] became list_new_label[i]
     :param Y:label set
-    :param list_old_label: lista delle label da convertire
-    :param list_new_label: lista delle nuove label
+    :param list_old_label: list of label to convert
+    :param list_new_label: list of new label
     :return: Y convertito
     """
     for j in range(len(Y)):
@@ -51,9 +50,9 @@ def convert_label_values(Y, list_old_label, list_new_label):
 
 def convert_type_to_float(data):
     """
-    converte i dati numerici in float64,necessari alla libreria scikit-learn
-    :param data:any,dati da convertire
-    :return: data convertiti in float64
+    convert numeric values in float64,needed to scikit-learn library
+    :param data:any,data to convert
+    :return: data converted in float64
     """
     data = data.astype('float64')
     return data
