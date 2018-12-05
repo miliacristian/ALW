@@ -72,10 +72,13 @@ in teoria se non esistono variabili da predirre si può fare regressione su qual
 	- scrivere relazione
 	- preparare la presentazione
 	- eliminare cartella model_setting_test
-	- commentare tt i file .py in inglese e formattarli ripsetto PEP9 (ctrl+alt+L)--> cri
+	- formattare il codice entro i margini
+	- commentare funzioni da riga 10 a 79 in file main.py
 	- main riga 70 (grafica commentata) -->  ema
 	- vedere parti di codice inutilizzate(es radarplot_regression_dir in init.py)
 	- scrivere compareSCore per tt i regressori  --> ema
 	- completare docstring(mancano i commenti sui parametri e sui valori di ritorno) da riga 1 fino a riga 91 nel file scoringUtils.py
 	- rivedere tutti i file ed eliminare codice commentato
+	- eliminare cartella radar plot regression
+	- cosa fa e dove è utilizzata la funzione build models riga 648 file training?
 	- rimuovere main da dataset.py e da altri file

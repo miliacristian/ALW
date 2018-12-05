@@ -273,14 +273,14 @@ def total_score_regression(dict_name_scoring, dict_scores):
     return result
 
 
-def getBestModel(name_models, file_name):
+def getBestModel(name_models, file_name,classification):
     """
     Read from file the best model for this setting
     :param name_models:name models
     :param file_name:filename
     :return:best_model readed from file
     """
-    settings_dict = training.read_setting(file_name)
+    settings_dict = training.read_setting(file_name,classification)
     best_model = ""
     if not settings_dict:
         return best_model

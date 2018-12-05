@@ -484,6 +484,7 @@ def one_hot_encoding(Y):
     inverted = label_encoder.inverse_transform(integer_encoded)
     return Y_onehot_encoded
 
+
 if __name__ == '__main__':
     X = numpy.array([[1], [numpy.nan], [1], [5]])
     imputer = Imputer(strategy="most_frequent")

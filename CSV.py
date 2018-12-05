@@ -8,8 +8,7 @@ def read_csv(filecsv, skip_rows=0, delimiter=',', skip_column_left=0, skip_colum
     precondition:the labels are in the last columns
     :param filecsv: string,path to csv file
     :param skip_rows:int,row to skip
-    :param last_column_is_label:boolean,if last_column_is_label==True la lebel deve essere letta dall'ultima colonna
-    (dopo aver tolto le skip_column_right colonne a destra),altrimenti è la prima label(dopo aver tolto le skip_column_left colonne a sinistra)
+    :param last_column_is_label:boolean,if last_column_is_label==True the label must be read from last column(after remove the skip_column_right column from the right),otherwise is the first label(after remove the skip_column_left column from the left
     :return features set: X,labels set:Y
     """
     with open(filecsv) as csvfile:
@@ -27,7 +26,8 @@ def read_csv(filecsv, skip_rows=0, delimiter=',', skip_column_left=0, skip_colum
         Y = result[:, num_col - skip_column_right - num_label:]  # array of label
     else:  # first column is label
         X = result[:, 0 + skip_column_left + num_label:num_col - skip_column_right]
-        Y = result[:, 0 + skip_column_left:skip_column_left + num_label]  # array of label in the first num_label columns
+        Y = result[:,
+            0 + skip_column_left:skip_column_left + num_label]  # array of label in the first num_label columns
     return X, Y
 
 

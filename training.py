@@ -1,6 +1,6 @@
 from sklearn.multiclass import OneVsRestClassifier  # trasform a multiclass classificator into a multilabel
 # classificator
-from sklearn.multioutput import MultiOutputRegressor # trasform a multiclass regressor into a multilabel regressor
+from sklearn.multioutput import MultiOutputRegressor  # trasform a multiclass regressor into a multilabel regressor
 
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
@@ -9,7 +9,7 @@ from sklearn.svm import SVC, SVR
 import scoringUtils
 import numpy as np
 from __init__ import printValue
-from __init__ import model_settings_dir, model_setting_test_dir
+from __init__ import model_setting_test_dir,regression_model_settings_dir,classification_model_settings_dir
 from time import time
 import os
 import main
@@ -308,7 +308,6 @@ def KNR_training(X, Y, k, scoring, seed, n_split, mean):
     # best_total_score = None
     best_scores = None
 
-
     for num_neighbors in k:
 
         if printValue:
@@ -332,7 +331,7 @@ def KNR_training(X, Y, k, scoring, seed, n_split, mean):
     if printValue:
         print("End training of KNR after", time() - start_time, "s.")
 
-    return best_k, best_scores #, best_total_score
+    return best_k, best_scores  # , best_total_score
 
 
 def RANDOMFORESTRegressor_training(X, Y, list_n_trees, scoring, seed, n_split, mean):
@@ -653,10 +652,12 @@ def build_models(name_models, file_name):
     :param file_name: name of settings file
     :return: the list of models training
     """
-
     models = {}
     path = os.path.abspath('')
-    fl = open(path + model_settings_dir + file_name, "r")
+    if name_models in __init__.list_classification_model:
+        fl = open(path + classification_model_settings_dir + file_name, "r")
+    else:
+        fl = open(path + regression_model_settings_dir + file_name, "r")
     settings = {}
     while 1:
         line = fl.readline()
@@ -712,15 +713,18 @@ def build_models(name_models, file_name):
     return models
 
 
-def read_setting(file_name):
+def read_setting(file_name,classification):
     """
     Return the best scoring of a test
-    :param file_name:
+    :param file_name:name of settings file
+    :param classification:boolean,classification is true if filename corresponds to classification dataset
     :return: dict with the scores
     """
-
     path = os.path.abspath('')
-    fl = open(path + model_settings_dir + file_name, "r")  # aggiungere path
+    if classification:
+        fl = open(path + classification_model_settings_dir + file_name, "r")  # aggiungere path
+    else:
+        fl = open(path + regression_model_settings_dir+ file_name, "r")  # aggiungere path
     setting = {}
     while 1:
         line = fl.readline()
@@ -734,12 +738,22 @@ def read_setting(file_name):
 
 
 def is_a_classification_dataset(dataset_name):
+    """
+    Check if dataset_name is the name of a classification_dataset
+    :param dataset_name:
+    :return: boolean,return true if dataset_name is a classification_dataset,false otherwise
+    """
     if dataset_name in __init__.list_classification_dataset:
         return True
     return False
 
 
 def is_a_multilabel_dataset(dataset_name):
+    """
+    Check if dataset_name is a multilabel dataset
+    :param dataset_name:
+    :return: boolean,return true if dataset_name is a multilabel dataset,false otherwise
+    """
     if dataset_name in __init__.list_multilabel_dataset:
         return True
     return False
@@ -845,7 +859,8 @@ if __name__ == '__main__':
     n_trees_range = range(5, 21, 1)
 
     X, Y, scoring, name_setting_file, name_radar_plot_file, title_radar_plot = \
-        main.case_full_dataset(name_models_classification, dataset_name, standardize=False, normalize=False, classification=classification,
+        main.case_full_dataset(name_models_classification, dataset_name, standardize=False, normalize=False,
+                               classification=classification,
                                multilabel=multilabel)
     # X, Y, scoring, name_setting_file, name_radar_plot_file, title_radar_plot = \
     #     main.case_NaN_dataset(name_models_regression, dataset_name, "eliminate_row", seed, 0.05, classification=classification,
