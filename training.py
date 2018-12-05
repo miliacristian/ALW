@@ -57,8 +57,7 @@ def KNN_training(X, Y, k, scoring, seed, n_split, mean):
 
 def RANDOMFOREST_training(X, Y, list_n_trees, scoring, seed, n_split, mean):
     """
-     do the training of a Random Forest with dataset X, Y and K_Fold_Cross_Validation. Trova il setting migliore iterando su
-    tutte i valori possibili di max_features
+     do the training of a Random Forest with dataset X, Y and K_Fold_Cross_Validation.Find the best setting iterating on the number of features up to max_features
     :param X: feature set
     :param Y: label set
     :param scoring: dict of scoring used
@@ -76,7 +75,7 @@ def RANDOMFOREST_training(X, Y, list_n_trees, scoring, seed, n_split, mean):
     best_total_score = None
 
     for trees in list_n_trees:
-        for max_features in range(1, len(X[0]) + 1):  # len(X[0])==numero features
+        for max_features in range(1, len(X[0]) + 1):  # len(X[0])==number of features
 
             if printValue:
                 print("Start training of RF with num_trees =", trees, "and max_features =", max_features)
@@ -84,7 +83,7 @@ def RANDOMFOREST_training(X, Y, list_n_trees, scoring, seed, n_split, mean):
 
             model = RandomForestClassifier(n_estimators=trees, random_state=seed, max_features=max_features)
             result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
-            harmonic_mean = scoringUtils.hmean_scores(scoring, result)  # funzione che da result calcola media armonica
+            harmonic_mean = scoringUtils.hmean_scores(scoring, result)  # calculate harmonic mean from result
             if best_total_score is None or best_total_score < harmonic_mean:
                 best_scores = result
                 best_total_score = harmonic_mean
@@ -150,7 +149,7 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
     best_degree = None
     best_scores = None
     best_total_score = None
-    # range in cui variano i parametri plausibili (lungo il training)
+    # range of variation of parameters(along the training)
     C_range = np.logspace(-2, 2, 5)
     gamma_range = np.logspace(-5, 0, 6)
     degree_range = range(2, 4, 1)
@@ -279,8 +278,7 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
     if printValue:
         print("End training of SVC with kernel sigmoid after", time() - start_time_sigmoid, "s.")
 
-    # setto valori numerici per evitare problemi nella lettura e conversione da file, tanto non verranno visti dal
-    # costruttore del modello se sono ancora None a questo punto del codice
+    # set numeric value to avoid issue in the read/conversion from file(anyway they aren't see from model's constructor if they are still "None" in this point of code
     if best_gamma is None:
         best_gamma = 'auto'
     if best_degree is None:
@@ -339,8 +337,7 @@ def KNR_training(X, Y, k, scoring, seed, n_split, mean):
 
 def RANDOMFORESTRegressor_training(X, Y, list_n_trees, scoring, seed, n_split, mean):
     """
-     do the training of a Random Forest with dataset X, Y and K_Fold_Cross_Validation. Trova il setting migliore iterando su
-    tutte i valori possibili di max_features
+     do the training of a Random Forest with dataset X, Y and K_Fold_Cross_Validation.Find the best setting iterating on the number of features up to max_features
     :param X: feature set
     :param Y: label set
     :param scoring: dict of scoring used
@@ -358,7 +355,7 @@ def RANDOMFORESTRegressor_training(X, Y, list_n_trees, scoring, seed, n_split, m
     best_total_score = None
 
     for trees in list_n_trees:
-        for max_features in range(1, len(X[0]) + 1):  # len(X[0])==numero features
+        for max_features in range(1, len(X[0]) + 1):  # len(X[0])==number of features
 
             if printValue:
                 print("Start training of RFRegressor with num_trees =", trees, "and max_features =", max_features)
@@ -366,7 +363,7 @@ def RANDOMFORESTRegressor_training(X, Y, list_n_trees, scoring, seed, n_split, m
 
             model = RandomForestRegressor(n_estimators=trees, random_state=seed, max_features=max_features)
             result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
-            total_score = scoringUtils.total_score_regression(scoring, result)  # funzione che da result calcola media armonica
+            total_score = scoringUtils.total_score_regression(scoring, result)
             if best_total_score is None or best_total_score < total_score:
                 best_scores = result
                 best_total_score = total_score
@@ -403,7 +400,7 @@ def SVR_training(X, Y, scoring, seed, n_split, mean, multilabel=False):
     best_degree = None
     best_scores = None
     best_total_score = None
-    # range in cui variano i parametri plausibili (lungo il training)
+    # range of variation of parameters(along the training)
     C_range = np.logspace(-2, 2, 5)
     eps_range = [0.0, 0.1, 1]
     gamma_range = np.logspace(-5, 0, 6)
@@ -551,9 +548,7 @@ def SVR_training(X, Y, scoring, seed, n_split, mean, multilabel=False):
 
     if printValue:
         print("End training of SVR with kernel sigmoid after", time() - start_time_sigmoid, "s.")
-
-    # setto valori numerici per evitare problemi nella lettura e conversione da file, tanto non verranno visti dal
-    # costruttore del modello se sono ancora None a questo punto del codice
+    # set numeric value to avoid issue in the read/conversion from file(anyway they aren't see from model's constructor if they are still "None" in this point of code
     if best_gamma is None:
         best_gamma = 'auto'
     if best_degree is None:
@@ -578,8 +573,8 @@ def training(X, Y, name_models, scoring, k=[5], list_n_trees=[10], seed=111, n_s
     :param name_models:list, lista nomi modelli
     :param scoring: dict,dizionario di scoring
     :param k: list,lista dei possibili k per KNN
-    :param list_n_trees: list,lista dei possibili numeri di alberi per il random forest
-    :param seed: int,seme per generatore pseudocasuale
+    :param list_n_trees: list,list of possible number of trees for randomforest
+    :param seed: int,seed for pseudo number generator
     """
     start_time = time()
     path = os.path.abspath('')
@@ -661,7 +656,7 @@ def build_models(name_models, file_name):
 
     models = {}
     path = os.path.abspath('')
-    fl = open(path + model_settings_dir + file_name, "r")  # aggiungere path
+    fl = open(path + model_settings_dir + file_name, "r")
     settings = {}
     while 1:
         line = fl.readline()
@@ -752,8 +747,8 @@ def is_a_multilabel_dataset(dataset_name):
 
 def check_percentage(percentage):
     """
-    Verifica che la percentuale percentuage è una percentuale compresa nella lista delle percentuali scelte
-    :param percentage:float,compreso tra 0 e 1 (estremi inclusi)
+    check if percentage of nan is into the list of the chosen percentuages
+    :param percentage:float,number beetween 0 and 1 (extremes included)
     :return: None
     """
     if percentage > 1 or percentage < 0:
@@ -767,9 +762,9 @@ def check_percentage(percentage):
 
 def check_strategies(dataset_name, strategy):
     """
-    Verifica che il dataset supporta la strategia strategy
-    :param dataset_name:string,nome del dataset
-    :param strategy: string,nome strategia
+    check if dataset is compatible with strategy "strategy"
+    :param dataset_name:string,dataset name
+    :param strategy: string,strategy name
     :return: none
     """
     all_strategies = ['mean', 'eliminate_row', 'mode', 'median']
