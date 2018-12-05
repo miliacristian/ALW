@@ -83,10 +83,10 @@ def case_NaN_dataset(name_models, dataset_name, strategy, seed=100, perc_NaN=0.1
     Do testing in the case of classification with dataset having value NaN.
     :param dataset_name: name of dataset use
     :param strategy: must be 'eliminate_row' or 'mean' or 'mode' or 'median'. In particular it depends on the dataset:
-                -   balance --> all
-                -   seed --> mean or median or eliminate_row
-                -   tris --> mode or eliminate_row
-                -   zoo --> mode or eliminate_row
+    e.g. for balance dataset  --> all
+         for seed dataset -->only  mean or median or eliminate_row are admitted
+         for tris dataset -->only  mode or eliminate_row are admitted
+         for zoo dataset --> only mode or eliminate_row are admitted
     :param seed:
     :param perc_NaN: percent of total entry of dataset that are setting randomly NaN
     :return: The dataset X, Y, the list of scoring for the test and the name of settings and radar plot files

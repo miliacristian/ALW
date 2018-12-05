@@ -76,3 +76,6 @@ in teoria se non esistono variabili da predirre si può fare regressione su qual
 	- main riga 70 (grafica commentata) -->  ema
 	- vedere parti di codice inutilizzate(es radarplot_regression_dir in init.py)
 	- scrivere compareSCore per tt i regressori  --> ema
+	- completare docstring(mancano i commenti sui parametri e sui valori di ritorno) da riga 1 fino a riga 91 nel file scoringUtils.py
+	- rivedere tutti i file ed eliminare codice commentato
+	- rimuovere main da dataset.py e da altri file

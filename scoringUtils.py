@@ -4,7 +4,7 @@ from sklearn.metrics import make_scorer
 import matplotlib.pyplot as plt
 import matplotlib.text
 import pandas as pd
-from math import pi, sqrt
+from math import pi
 from scipy.stats import hmean
 from sklearn import model_selection
 from __init__ import radar_plot_classification_dir, radar_plot_regression_dir
@@ -16,7 +16,7 @@ import training
 
 def roc_auc_micro(y_true, y_pred):
     """
-    Chiama roc_auc_score con average=micro
+    Call roc_auc_score function with average=micro
     :param y_true:
     :param y_pred:
     :return:
@@ -26,7 +26,7 @@ def roc_auc_micro(y_true, y_pred):
 
 def roc_auc_weighted(y_true, y_pred):
     """
-    Chiama roc_auc_score con average=weighted
+    Call roc_auc_score function with average=weighted
     :param y_true:
     :param y_pred:
     :return:
@@ -36,7 +36,7 @@ def roc_auc_weighted(y_true, y_pred):
 
 def average_precision_micro(y_true, y_pred):
     """
-    Chiama average_precision_score con average=micro
+    Call average_precision_score function with average=micro
     :param y_true:
     :param y_pred:
     :return:
@@ -46,7 +46,7 @@ def average_precision_micro(y_true, y_pred):
 
 def average_precision_weighted(y_true, y_pred):
     """
-    Chiama average_precision_score con average=weigthed
+    Call average_precision_score function with average=weigthed
     :param y_true:
     :param y_pred:
     :return:
@@ -56,7 +56,7 @@ def average_precision_weighted(y_true, y_pred):
 
 def neg_mean_absolute_error_uniform_average(y_true, y_pred):
     """
-    Chiama neg_mean_absolute_error con multioutput='uniform_average'
+    Call neg_mean_absolute_error function with multioutput='uniform_average'
     :param y_true:
     :param y_pred:
     :return:
@@ -64,21 +64,9 @@ def neg_mean_absolute_error_uniform_average(y_true, y_pred):
 
     return -metrics.mean_absolute_error(y_true, y_pred, multioutput='uniform_average')
 
-
-def neg_mean_squared_error_uniform_average(y_true, y_pred):
-    """
-    Chiama neg_mean_squared_error con multioutput='uniform_average'
-    :param y_true:
-    :param y_pred:
-    :return:
-    """
-
-    return -metrics.mean_squared_error(y_true, y_pred, multioutput='uniform_average')
-
-
 def neg_median_absolute_error_uniform_average(y_true, y_pred):
     """
-    Chiama neg_median_absolute_error con multioutput='uniform_average'
+    Call neg_median_absolute_error function with multioutput='uniform_average'
     :param y_true:
     :param y_pred:
     :return:
@@ -95,10 +83,22 @@ def neg_median_absolute_error_uniform_average(y_true, y_pred):
     return -mean(median_abs_error)
 
 
+def neg_mean_squared_error_uniform_average(y_true, y_pred):
+    """
+    Call neg_mean_squared_error function with multioutput='uniform_average'
+    :param y_true:
+    :param y_pred:
+    :return:
+    """
+
+    return -metrics.mean_squared_error(y_true, y_pred, multioutput='uniform_average')
+
+
+
 def create_dictionary_classification_scoring():
     """
-    Crea dizionario con key:'name_score' value:score da calcolare
-    :return: dict,dizionario con tutti gli scoring da calcolare
+    Create dictionary with key:'name_score' and  value:score (to calcutate)
+    :return: dict,dict with all classification's scoring to calculate
     """
     scoring = {
         'accuracy': 'accuracy',
@@ -118,8 +118,8 @@ def create_dictionary_classification_scoring():
 
 def create_dictionary_regression_scoring():
     """
-    Crea dizionario con key:'name_score' value:score da calcolare
-    :return: dict,dizionario con tutti gli scoring da calcolare
+    Create dictionary with key:'name_score' and  value:score (to calcutate)
+    :return: dict,dict with all regression's scoring to calculate
     """
     scoring = {
         'explained_variance': 'explained_variance',
@@ -194,7 +194,7 @@ def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name="rada
     # Plot each individual = each line of the data
     # I don't do a loop, because plotting more than 3 groups makes the chart unreadable
     for i in range(len(name_models)):
-        # loc[i] preleva la colonna i-esima dei valori del dataframe
+        # loc[i] get column i that contains dataframe's values
         values = df.loc[i].values.flatten().tolist()
         values += values[:1]
         ax.plot(angles, values, linewidth=1, linestyle='solid', label=name_models[i])
@@ -214,10 +214,10 @@ def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name="rada
 
 def scores_to_list(dict_name_scoring, dict_scores):
     """
-    Trasforma il dizionario degli scores in una lista di valori
-    :param dict_name_scoring: dict,dizionario dei nomi degli scores
-    :param dict_scores: dict,dizionario dei valori degli scores
-    :return: list,lista degli scores
+    Transform dict of scores into list of values
+    :param dict_name_scoring: dict,dict with scorers' name
+    :param dict_scores:  dict,dict with scorers'values
+    :return: list,list of scores'values
     """
     scores_list = []
     for key, value in dict_name_scoring.items():
@@ -230,10 +230,10 @@ def scores_to_list(dict_name_scoring, dict_scores):
 
 def hmean_scores(dict_name_scoring, dict_scores):
     """
-    Calcola la media armonica degli scores
-    :param dict_name_scoring: dict,dizionario dei nomi degli scorer
-    :param dict_scores: dict,dizionario dei valori degli scores
-    :return: media armonica degli scores
+    Calculate harmonic mean of scores
+    :param dict_name_scoring: dict,dict with scorers' name
+    :param dict_scores: dict,dict with scorers'values
+    :return: harmonic mean of scores
     """
 
     if list(dict_scores.values()).__contains__(0.0):
@@ -243,10 +243,9 @@ def hmean_scores(dict_name_scoring, dict_scores):
 
 def normalize_score(dict_scores):
     """
-
-    :param dict_name_scoring:
-    :param dict_scores:
-    :return:
+    Calculate normalize score from dict_scores
+    :param dict_scores:dict,dict of scores
+    :return:normalize score
     """
     min_value, max_value = -100, 1
     norm_score_dict = {}
@@ -258,9 +257,9 @@ def normalize_score(dict_scores):
 
 def total_score_regression(dict_name_scoring, dict_scores):
     """
-    Calcola il total score per la regressione
-    :param dict_name_scoring: dict,dizionario dei nomi degli scorer
-    :param dict_scores: dict,dizionario dei valori degli scores
+    Calculate total score for regression
+    :param dict_name_scoring: dict,dict with scorers' name
+    :param dict_scores: dict,dict with scorers'values
     :return: total score
     """
 
@@ -277,9 +276,9 @@ def total_score_regression(dict_name_scoring, dict_scores):
 def getBestModel(name_models, file_name):
     """
     Read from file the best model for this setting
-    :param name_models:
-    :param file_name:
-    :return:
+    :param name_models:name models
+    :param file_name:filename
+    :return:best_model readed from file
     """
     settings_dict = training.read_setting(file_name)
     best_model = ""
@@ -295,13 +294,13 @@ def getBestModel(name_models, file_name):
 
 def K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=True):
     """
-    Esegue Kfold cross validation su X,Y usando il modello model dividendo il dataset in n_split fold
-    :param model:  modello machine learning
+    Execute Kfold cross validation on X;Y using model model dividing dataset into n_split fold
+    :param model:  machine learning model
     :param X:features set
     :param Y:label set
-    :param scoring:dict,dizionario di scoring
-    :param n_split: int, numero di test fold
-    :param seed: int, seme generatore pseudocasuale
+    :param scoring:dict,dict of scoring
+    :param n_split: int,number of test fold
+    :param seed: int,seed for pseudonumber generator
     :return: dictionary with key 'name metric' and value 'value mean of metric' or all values
     """
 

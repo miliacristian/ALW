@@ -21,30 +21,30 @@ def print_dataset(X, Y):
     return None
 
 
-def replace_value_in_column(X, list_column, value_to_replace, new_value):
+def replace_value_in_column(X, list_columns, value_to_replace, new_value):
     """
     :param X: features set
-    :param list_column: list, list of columns where swap values
+    :param list_columns: list, list of columns where swap values
     :param value_to_replace: value to swap
     :param new_value: new value
-    :return: X con valori sostituiti nelle colonne list column
+    :return: X with values swapped in the columns list column
     """
-    for k in list_column:
+    for k in list_columns:
         for i in range(len(X[:, 0])):
             if X[i][k] == value_to_replace:
                 X[i][k] = new_value
     return X
 
 
-def replace_value_in_row(X, list_row, value_to_replace, new_value):
+def replace_value_in_row(X, list_rows, value_to_replace, new_value):
     """
     :param X: features set
-    :param list_row: list,lista delle righe in cui sostituire i valori
-    :param value_to_replace: valore da sostituire
-    :param new_value: nuovo valore
-    :return: X con valori sostituiti nelle righe list row
+    :param list_rows: list,list of rows where swap values
+    :param value_to_replace: value to replace
+    :param new_value: new value
+    :return:X with values swapped in the rows list rows
     """
-    for k in list_row:
+    for k in list_rows:
         for j in range(len(X[0, :])):
             if X[k, j] == value_to_replace:
                 X[k, j] = new_value
@@ -81,7 +81,7 @@ def get_list_mode_columns_by_dataset(dataset_name):
 def remove_row_with_Nan(X):
     """
     :param X: features set
-    :return: X togliendo le righe che hanno almeno 1 valore NaN
+    :return: X but removing all X's rows which contains almost one nan value
     """
     X = X[~numpy.isnan(X).any(axis=1)]
     return X
@@ -465,7 +465,6 @@ def one_hot_encoding(Y):
     Y_onehot_encoded = onehot_encoder.fit_transform(integer_encoded)
     inverted = label_encoder.inverse_transform(integer_encoded)
     return Y_onehot_encoded
-
 
 if __name__ == '__main__':
     X = numpy.array([[1], [numpy.nan], [1], [5]])
