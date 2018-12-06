@@ -110,7 +110,7 @@ def case_full_dataset(name_models, dataset_name, standardize=False, normalize=Fa
         name_plot_file = dataset_name + radar_plot
     else:
         name_plot_file = dataset_name + table_plot
-    title_radar_plot = "Dataset: " + dataset_name + "\n"
+    title_plot = "Dataset: " + dataset_name + "\n"
 
     if classification:
         X, Y = dataset.load_classification_dataset(dataset_name, multilabel=multilabel)
@@ -120,13 +120,13 @@ def case_full_dataset(name_models, dataset_name, standardize=False, normalize=Fa
     if standardize:
         name_setting_file += __init__.standardize
         name_plot_file += __init__.standardize
-        title_radar_plot += "Strategy: standardize\n"
+        title_plot += "Strategy: standardize\n"
         X = dataset.standardize_dataset(X)
 
     if normalize:
         name_setting_file += __init__.normalize
         name_plot_file += __init__.normalize
-        title_radar_plot += "Strategy: normalize\n"
+        title_plot += "Strategy: normalize\n"
         X = dataset.normalize_dataset(X)
 
     name_setting_file += '.txt'
@@ -137,13 +137,13 @@ def case_full_dataset(name_models, dataset_name, standardize=False, normalize=Fa
         scoring = scoringUtils.create_dictionary_regression_scoring()
 
     if scoringUtils.getBestModel(name_models, name_setting_file, classification) == __init__.rand_forest:
-        title_radar_plot += "Best model: RF"
+        title_plot += "Best model: RF"
     elif scoringUtils.getBestModel(name_models, name_setting_file, classification) == __init__.rand_forest_regressor:
-        title_radar_plot += "Best model: RFRegressor"
+        title_plot += "Best model: RFRegressor"
     else:
-        title_radar_plot += "Best model: " + scoringUtils.getBestModel(name_models, name_setting_file, classification)
+        title_plot += "Best model: " + scoringUtils.getBestModel(name_models, name_setting_file, classification)
 
-    return X, Y, scoring, name_setting_file, name_plot_file, title_radar_plot
+    return X, Y, scoring, name_setting_file, name_plot_file, title_plot
 
 
 def case_NaN_dataset(name_models, dataset_name, strategy, seed=100, perc_NaN=0.1, classification=True,
@@ -168,8 +168,8 @@ def case_NaN_dataset(name_models, dataset_name, strategy, seed=100, perc_NaN=0.1
         name_plot_file = dataset_name + radar_plot
     else:
         name_plot_file = dataset_name + table_plot
-    title_radar_plot = "Dataset: " + dataset_name + "\n"
-    title_radar_plot += "Strategy: " + strategy + "\nPerc. of NaN: "
+    title_plot = "Dataset: " + dataset_name + "\n"
+    title_plot += "Strategy: " + strategy + "\nPerc. of NaN: "
 
     if classification:
         X, Y = dataset.load_classification_dataset(dataset_name, multilabel=multilabel)
@@ -177,7 +177,7 @@ def case_NaN_dataset(name_models, dataset_name, strategy, seed=100, perc_NaN=0.1
         X, Y = dataset.load_regression_dataset(dataset_name, multilabel=multilabel)
     name_setting_file += '_' + str(perc_NaN * 100) + '%_NaN'
     name_plot_file += '_' + str(perc_NaN * 100) + '%_NaN'
-    title_radar_plot += str(int(perc_NaN * 100)) + "%\n"
+    title_plot += str(int(perc_NaN * 100)) + "%\n"
     X = dataset.put_random_NaN(X, perc_NaN, seed=seed)
 
     name_setting_file += '_' + strategy
@@ -204,13 +204,13 @@ def case_NaN_dataset(name_models, dataset_name, strategy, seed=100, perc_NaN=0.1
         scoring = scoringUtils.create_dictionary_regression_scoring()
 
     if scoringUtils.getBestModel(name_models, name_setting_file, classification) == __init__.rand_forest:
-        title_radar_plot += "Best model: RF"
+        title_plot += "Best model: RF"
     elif scoringUtils.getBestModel(name_models, name_setting_file, classification) == __init__.rand_forest_regressor:
-        title_radar_plot += "Best model: RFRegressor"
+        title_plot += "Best model: RFRegressor"
     else:
-        title_radar_plot += "Best model: " + scoringUtils.getBestModel(name_models, name_setting_file, classification)
+        title_plot += "Best model: " + scoringUtils.getBestModel(name_models, name_setting_file, classification)
 
-    return X, Y, scoring, name_setting_file, name_plot_file, title_radar_plot
+    return X, Y, scoring, name_setting_file, name_plot_file, title_plot
 
 
 if __name__ == '__main__':
@@ -231,8 +231,8 @@ if __name__ == '__main__':
     percentuals_NaN = __init__.percentuals_NaN
 
     # # Classification
-    # create_radar_plot(dataset_names_classification, name_models_classification, classification=True)
-    # create_radar_plot_NaN(dataset_names_classification, name_models_classification, percentuals_NaN)
+    #create_plot(dataset_names_classification, name_models_classification, classification=True)
+    #create_plot_NaN(dataset_names_classification, name_models_classification, percentuals_NaN)
 
     # Regression
     create_plot(dataset_names_regression, name_models_regression, classification=False)
