@@ -259,19 +259,11 @@ def normalize_score(dict_scores):
 
 def total_score_regression(dict_name_scoring, dict_scores):
     """
-    Calculate total score for regression
+    Calculate total score for regression applying weighted mean of the regression metrics
     :param dict_name_scoring: dict,dict with scorers' name
     :param dict_scores: dict,dict with scorers'values
-    :return: total score
+    :return: total score,totalscore=weighted mean of the regression metrics
     """
-
-    print(dict_scores)
-    # values = scores_to_list(dict_name_scoring, dict_scores)
-    # min_value, max_value = -100, 1
-    # result = 0
-    # for e in values:
-    #     normalize_value = (e - min_value) / (max_value - min_value)
-    #     result += normalize_value
     if dict_scores['neg_mean_squared_error_uniform_average'] < 0:
         RMSE = -sqrt(-dict_scores['neg_mean_squared_error_uniform_average'])
     else:
@@ -334,7 +326,7 @@ def K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=True):
 
 
 def table_plot(dict_name_scoring, list_dict_scores, list_name_model, title_table_plot="title",
-               file_name='prova', file_format=".png"):
+               file_name='test', file_format=".png"):
     """
     Create table for regression result
     :param dict_name_scoring: dictionary with name of scoring
@@ -344,9 +336,7 @@ def table_plot(dict_name_scoring, list_dict_scores, list_name_model, title_table
     :param file_format: format of file
     """
     path = os.path.abspath('') + __init__.table_plot_regression_dir + file_name + file_format
-    print(title_table_plot)
     title_table_plot = title_table_plot.replace('\n', " - ")
-    print(title_table_plot)
     dict = {}
     for key, value in dict_name_scoring.items():
         if type(value) is str:
@@ -359,9 +349,7 @@ def table_plot(dict_name_scoring, list_dict_scores, list_name_model, title_table
                 dict[(title_table_plot, value)][list_name_model[i]] = list_dict_scores[i][value]
             else:
                 dict[(title_table_plot, str(value)[12:-19])][list_name_model[i]] = list_dict_scores[i][str(value)[12:-1]]
-
     table = pd.DataFrame(dict)
-
     cm = sns.light_palette("seagreen", as_cmap=True)
     styled_table = table.style.background_gradient(cmap=cm)
     html = styled_table.render()
