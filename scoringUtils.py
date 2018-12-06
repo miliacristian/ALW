@@ -334,20 +334,27 @@ def K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=True):
 
 
 def table_plot(dict_name_scoring, list_dict_scores, list_name_model, file_name='prova', file_format=".png"):
-
+    """
+    Create table for regression result
+    :param dict_name_scoring: dictionary with name of scoring
+    :param list_dict_scores: list of dictionaries with scores
+    :param list_name_model: list of model's name
+    :param file_name: name of file cointaing table
+    :param file_format: format of file
+    """
     path = os.path.abspath('') + __init__.table_plot_regression_dir + file_name + file_format
     dict = {}
     for key, value in dict_name_scoring.items():
         if type(value) is str:
             dict[value] = {}
         else:
-            dict[str(value)[12:-1]] = {}
+            dict[str(value)[12:-19]] = {}
     for i in range(len(list_dict_scores)):
         for key, value in dict_name_scoring.items():
             if type(value) is str:
                 dict[value][list_name_model[i]] = list_dict_scores[i][value]
             else:
-                dict[str(value)[12:-1]][list_name_model[i]] = list_dict_scores[i][str(value)[12:-1]]
+                dict[str(value)[12:-19]][list_name_model[i]] = list_dict_scores[i][str(value)[12:-1]]
 
     table = pd.DataFrame(dict)
 
