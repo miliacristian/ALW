@@ -784,8 +784,7 @@ def check_strategies(dataset_name, strategy):
     :param strategy: string,strategy name
     :return: none
     """
-    all_strategies = ['mean', 'eliminate_row', 'mode', 'median']
-    strategies_balance = all_strategies
+    strategies_balance = __init__.all_strategies
     strategies_eye = ['mean', 'eliminate_row', 'median']
     strategies_page = ['mean', 'eliminate_row', 'median']
     strategies_seed = ['mean', 'median']
@@ -844,29 +843,30 @@ def check_strategies(dataset_name, strategy):
         print('invalid dataset_name', dataset_name)
         exit(1)
 
-
-mean = 'mean'
-eliminate_row = 'eliminate_row'
-median = 'median'
-mode = 'mode'
-
 if __name__ == '__main__':
+    dataset_name = __init__.auto #dataset to train
+    case_full_dataset=True#if true we work with full dataset,else work with nan dataset
+    standardize=False#considered only if case_full_dataset is true
+    normalize=False#considered only if case_full_dataset is true
+    nan_percentage = 0.05#list possible values=[0.05,0.1,0.15]considered only if case_full_dataset is false
+    strategy='mode'#list possible values=['mean','eliminate_row','median','mode']considered only if case_full_dataset is true
+
     seed = 100
-    name_models_classification = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
-    name_models_regression = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
-    dataset_name = __init__.auto
-    classification = is_a_classification_dataset(dataset_name)
-    multilabel = is_a_multilabel_dataset(dataset_name)
     k_range = range(3, 21, 1)
     n_trees_range = range(5, 21, 1)
-
-    X, Y, scoring, name_setting_file, name_radar_plot_file, title_radar_plot = \
-        resultAnalysis.case_full_dataset(name_models_classification, dataset_name, standardize=False, normalize=False,
+    name_models_classification = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
+    name_models_regression = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
+    classification = is_a_classification_dataset(dataset_name)
+    multilabel = is_a_multilabel_dataset(dataset_name)
+    if case_full_dataset:
+        X, Y, scoring, name_setting_file, name_plot_file, title_plot = \
+        resultAnalysis.case_full_dataset(name_models_classification, dataset_name, standardize=standardize, normalize=normalize,
                                          classification=classification,
                                          multilabel=multilabel)
-    # X, Y, scoring, name_setting_file, name_radar_plot_file, title_radar_plot = \
-    #     main.case_NaN_dataset(name_models_regression, dataset_name, "eliminate_row", seed, 0.05, classification=classification,
-    #                           multilabel=multilabel)
+    else:
+     X, Y, scoring, name_setting_file, name_radar_plot_file, title_radar_plot = \
+         resultAnalysis.case_NaN_dataset(name_models_regression, dataset_name, strategy, seed,nan_percentage, classification=classification,
+                               multilabel=multilabel)
 
     if classification:
         training(X, Y, name_models_classification, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,

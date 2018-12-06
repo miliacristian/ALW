@@ -43,10 +43,10 @@ power_plant = 'power_plant'
 energy = 'energy'
 list_regression_dataset = [compress_strength, airfoil, auto, power_plant, energy]
 
-# strategies
 standardize = '_standardize'
 normalize = '_normalize'
 percentuals_NaN = [0.05, 0.1, 0.15]
+all_strategies = ['mean', 'eliminate_row', 'mode', 'median']
 list_multilabel_dataset = [energy]
 
 # weight regression metrics
