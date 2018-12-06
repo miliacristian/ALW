@@ -4,11 +4,14 @@ import numpy, csv
 def read_csv(filecsv, skip_rows=0, delimiter=',', skip_column_left=0, skip_column_right=0, last_column_is_label=True,
              num_label=1):
     """
-    Read file.csv filecsv with delimiter delimiter skipping the first skip_rows and skipping the first skip_column_left and the first skip_column_right from the left and the right respectively
+    Read file.csv filecsv with delimiter delimiter skipping the first skip_rows and skipping the first skip_column_left
+     and the first skip_column_right from the left and the right respectively
     precondition:the labels are in the last columns
     :param filecsv: string,path to csv file
     :param skip_rows:int,row to skip
-    :param last_column_is_label:boolean,if last_column_is_label==True the label must be read from last column(after remove the skip_column_right column from the right),otherwise is the first label(after remove the skip_column_left column from the left
+    :param last_column_is_label:boolean,if last_column_is_label==True the label must be read from last column(after
+     remove the skip_column_right column from the right),otherwise is the first label(after remove the skip_column_left
+      column from the left
     :return features set: X,labels set:Y
     """
     with open(filecsv) as csvfile:
@@ -33,7 +36,8 @@ def read_csv(filecsv, skip_rows=0, delimiter=',', skip_column_left=0, skip_colum
 
 def convert_label_values(Y, list_old_label, list_new_label):
     """
-    Convert label's value in label set Y from oldvalue(taken from list old_label) to new value(taken from list new_label)
+    Convert label's value in label set Y from oldvalue(taken from list old_label)
+     to new value(taken from list new_label)
     list_old_label[i] became list_new_label[i]
     :param Y:label set
     :param list_old_label: list of label to convert

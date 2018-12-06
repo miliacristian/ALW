@@ -63,7 +63,7 @@ def create_plot_NaN(dataset_names, name_models, percentuals_NaN):
                                   ['mean', 'eliminate_row', 'median'])
         elif dataset_name == __init__.airfoil:
             create_plot_NaN_cycle(dataset_name, name_models, percentuals_NaN,
-                                        ['mean', 'eliminate_row', 'median'], classification=False)
+                                  ['mean', 'eliminate_row', 'median'], classification=False)
         elif dataset_name == __init__.auto:
             create_plot_NaN_cycle(dataset_name, name_models, percentuals_NaN,
                                   ['mean', 'eliminate_row', 'median'], classification=False)
@@ -231,8 +231,8 @@ if __name__ == '__main__':
     percentuals_NaN = __init__.percentuals_NaN
 
     # # Classification
-    #create_plot(dataset_names_classification, name_models_classification, classification=True)
-    #create_plot_NaN(dataset_names_classification, name_models_classification, percentuals_NaN)
+    # create_plot(dataset_names_classification, name_models_classification, classification=True)
+    # create_plot_NaN(dataset_names_classification, name_models_classification, percentuals_NaN)
 
     # Regression
     create_plot(dataset_names_regression, name_models_regression, classification=False)

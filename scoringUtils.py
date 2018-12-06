@@ -15,7 +15,6 @@ import seaborn as sns
 import imgkit
 import training
 import __init__
-from resultAnalysis import case_full_dataset
 from __init__ import weight_explained_variance, weight_neg_mean_absolute_error, weight_neg_mean_squared_error, weight_r2
 
 
@@ -108,15 +107,10 @@ def create_dictionary_classification_scoring():
     scoring = {
         'accuracy': 'accuracy',
         'precision_micro': 'precision_micro',
-        # 'precision_weighted': 'precision_weighted',
         'recall_micro': 'recall_micro',
-        # 'recall_weighted': 'recall_weighted', #uguale alla accuracy
         'roc_auc_micro': make_scorer(roc_auc_micro),
-        # 'roc_auc_weighted': make_scorer(roc_auc_weighted),
         'f1_micro': 'f1_micro',
-        # 'f1_weighted': 'f1_weighted',
         'average_precision_micro': make_scorer(average_precision_micro),
-        # 'average_precision_weighted': make_scorer(average_precision_weighted),
     }
     return scoring
 
@@ -130,7 +124,6 @@ def create_dictionary_regression_scoring():
         'explained_variance': 'explained_variance',
         'neg_mean_absolute_error_uniform_average': make_scorer(neg_mean_absolute_error_uniform_average),
         'neg_mean_squared_error_uniform_average': make_scorer(neg_mean_squared_error_uniform_average),
-        # 'neg_median_absolute_error_uniform_average': make_scorer(neg_median_absolute_error_uniform_average),
         'r2': 'r2',
     }
     return scoring
@@ -179,7 +172,6 @@ def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name="rada
     plt.suptitle(title_radar_plot, x=0.01, horizontalalignment='left')
     ax = plt.subplot(111, polar=True)
     plt.rc('axes', titlesize=25)
-    # plt.title(name_plot,loc='right')
     # If you want the first axis to be on top:
     ax.set_theta_offset(pi / 2)
     ax.set_theta_direction(-1)
@@ -189,7 +181,6 @@ def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name="rada
 
     # Draw ylabels
     ax.set_rlabel_position(0)
-    # axis_grid = [0.62, 0.65, 0.68, 0.71, 0.74, 0.77, 0.8, 0.83, 0.86, 0.89, 0.92, 0.95, 0.98]
     axis_grid = [round(0.55 + i * 0.05, 2) for i in range(10)]
     plt.yticks(axis_grid, [str(i) for i in axis_grid], color="grey", size=7)
     plt.ylim(0.5, 1)
@@ -208,7 +199,6 @@ def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name="rada
     # Add legend
     plt.legend(bbox_to_anchor=(0.1, 0.2))
 
-    # plt.show()
     path = os.path.abspath('')
     fig.savefig(path + radar_plot_classification_dir + file_name + file_format)
     plt.close(fig)
@@ -348,13 +338,13 @@ def table_plot(dict_name_scoring, list_dict_scores, list_name_model, title_table
             if type(value) is str:
                 dict[(title_table_plot, value)][list_name_model[i]] = list_dict_scores[i][value]
             else:
-                dict[(title_table_plot, str(value)[12:-19])][list_name_model[i]] = list_dict_scores[i][str(value)[12:-1]]
+                dict[(title_table_plot, str(value)[12:-19])][list_name_model[i]] = list_dict_scores[i][
+                    str(value)[12:-1]]
     table = pd.DataFrame(dict)
     cm = sns.light_palette("seagreen", as_cmap=True)
     styled_table = table.style.background_gradient(cmap=cm)
     html = styled_table.render()
     imgkit.from_string(html, path)
-
 
 # if __name__ == "__main__":
 #     seed = 100

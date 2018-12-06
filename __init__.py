@@ -19,13 +19,13 @@ rand_forest = 'RANDFOREST'
 dec_tree = 'CART'
 knn = 'KNN'
 svc = 'SVC'
-list_classification_model=[rand_forest,dec_tree,knn,svc]
+list_classification_model = [rand_forest, dec_tree, knn, svc]
 
 rand_forest_regressor = 'RANDFORESTRegressor'
 dec_tree_regressor = 'CARTRegressor'
 knr = 'KNR'
 svr = 'SVR'
-list_regression_model=[rand_forest_regressor,dec_tree_regressor,knr,svr]
+list_regression_model = [rand_forest_regressor, dec_tree_regressor, knr, svr]
 
 # datasets'names
 seed = 'seed'

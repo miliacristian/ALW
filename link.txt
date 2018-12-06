@@ -66,17 +66,20 @@ in teoria se non esistono variabili da predirre si può fare regressione su qual
                                 'r2' (tra -inf e 0)
 
 #TODO
-	- eliminare p.py
 	- link.txt serve per la relazione
 	- scrivere relazione
 	- preparare la presentazione
-	- eliminare cartella model_setting_test
-	- formattare i commenti entro i margini -> cri
+
+
 	- commentare funzioni da riga 10 a 79 in file main.py -> ema
-	- vedere parti di codice inutilizzate(es radarplot_regression_dir in init.py) -> cri
 	- completare docstring(mancano i commenti sui parametri e sui valori di ritorno) da riga 1 fino a riga 91 nel file scoringUtils.py -> ema
-	- rivedere tutti i file ed eliminare codice commentato -> cri
+
 	- cosa fa e dove è utilizzata la funzione build_models riga 648 file training?
+	- eliminare p.py
+	- eliminare main scoringUtils.py
+	- eliminare SVC_default_training riga 102 file training.py
+	- eliminare cartella model_setting_test
+
 	- fare training dataset regression
 		airfoil 1500 -> ema
 		auto 400 -> ema

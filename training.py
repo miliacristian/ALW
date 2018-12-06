@@ -57,7 +57,8 @@ def KNN_training(X, Y, k, scoring, seed, n_split, mean):
 
 def RANDOMFOREST_training(X, Y, list_n_trees, scoring, seed, n_split, mean):
     """
-     do the training of a Random Forest with dataset X, Y and K_Fold_Cross_Validation.Find the best setting iterating on the number of features up to max_features
+     do the training of a Random Forest with dataset X, Y and K_Fold_Cross_Validation.Find the best setting iterating
+      on the number of features up to max_features
     :param X: feature set
     :param Y: label set
     :param scoring: dict of scoring used
@@ -99,34 +100,35 @@ def RANDOMFOREST_training(X, Y, list_n_trees, scoring, seed, n_split, mean):
     return best_n_trees, best_max_features, best_scores, best_total_score
 
 
-def SVC_default_training(X, Y, scoring, seed, n_split, mean):
-    """
-    do the training of a SVC with dataset X, Y and K_Fold_Cross_Validation. Find the best setting iterating on the type
-    of kernel function use (linear, rbf, polynomial or sigmoid)
-    :param X: feature set
-    :param Y: label set
-    :param scoring: dict of scoring use
-    :return: the best parameter C, gamma and degree with the best kernel function
-    """
-    if printValue:
-        print("Start training of SVC")
-        start_time = time()
-    best_kernel = None
-    best_C = None
-    best_gamma = None
-    best_degree = None
-    best_total_score = None
-
-    if printValue:
-        print("Start training of default SVC")
-        start_time_linear = time()
-    model = OneVsRestClassifier(SVC(random_state=seed, max_iter=1000))
-    result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
-    harmonic_mean = scoringUtils.hmean_scores(scoring, result)
-
-    if printValue:
-        print("End training of default SVC after", time() - start_time_linear, "s.")
-    return best_C, best_degree, best_gamma, best_kernel
+# def SVC_default_training(X, Y, scoring, seed, n_split, mean):
+#     """
+#     do the training of a SVC with dataset X, Y and K_Fold_Cross_Validation.
+#  Find the best setting iterating on the type
+#     of kernel function use (linear, rbf, polynomial or sigmoid)
+#     :param X: feature set
+#     :param Y: label set
+#     :param scoring: dict of scoring use
+#     :return: the best parameter C, gamma and degree with the best kernel function
+#     """
+#     if printValue:
+#         print("Start training of SVC")
+#         start_time = time()
+#     best_kernel = None
+#     best_C = None
+#     best_gamma = None
+#     best_degree = None
+#     best_total_score = None
+#
+#     if printValue:
+#         print("Start training of default SVC")
+#         start_time_linear = time()
+#     model = OneVsRestClassifier(SVC(random_state=seed, max_iter=1000))
+#     result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
+#     harmonic_mean = scoringUtils.hmean_scores(scoring, result)
+#
+#     if printValue:
+#         print("End training of default SVC after", time() - start_time_linear, "s.")
+#     return best_C, best_degree, best_gamma, best_kernel
 
 
 def SVC_training(X, Y, scoring, seed, n_split, mean):
@@ -153,10 +155,6 @@ def SVC_training(X, Y, scoring, seed, n_split, mean):
     C_range = np.logspace(-2, 2, 5)
     gamma_range = np.logspace(-5, 0, 6)
     degree_range = range(2, 4, 1)
-    # default parameter
-    # C_range = [0.1, 1.0]
-    # gamma_range = [0.01, 0.1, 1]
-    # degree_range = [3]
 
     # case kernel is linear
 
@@ -406,11 +404,6 @@ def SVR_training(X, Y, scoring, seed, n_split, mean, multilabel=False):
     eps_range = [0.0, 0.1, 1]
     gamma_range = np.logspace(-5, 0, 6)
     degree_range = range(2, 4, 1)
-    # default parameter
-    # C_range = [1.0]
-    # eps_range = [0.1]
-    # gamma_range = ['auto']
-    # degree_range = [3]
 
     # case kernel is linear
 
@@ -843,13 +836,15 @@ def check_strategies(dataset_name, strategy):
         print('invalid dataset_name', dataset_name)
         exit(1)
 
+
 if __name__ == '__main__':
-    dataset_name = __init__.auto #dataset to train
-    case_full_dataset=True #if true we work with full dataset,else work with nan dataset
-    standardize=False #considered only if case_full_dataset is true
-    normalize=False #considered only if case_full_dataset is true
-    nan_percentage = 0.05 #list possible values=[0.05,0.1,0.15]considered only if case_full_dataset is false
-    strategy='mode' #list possible values=['mean','eliminate_row','median','mode']considered only if case_full_dataset is true
+    dataset_name = __init__.auto  # dataset to train
+    case_full_dataset = True  # if true we work with full dataset,else work with nan dataset
+    standardize = False  # considered only if case_full_dataset is true
+    normalize = False  # considered only if case_full_dataset is true
+    nan_percentage = 0.05  # possible values=[0.05,0.1,0.15]considered only if case_full_dataset is false
+    strategy = 'mode'  # possible values=['mean','eliminate_row','median','mode']
+    # considered only if case_full_dataset is true
 
     seed = 100
     k_range = range(3, 21, 1)
@@ -860,13 +855,15 @@ if __name__ == '__main__':
     multilabel = is_a_multilabel_dataset(dataset_name)
     if case_full_dataset:
         X, Y, scoring, name_setting_file, name_plot_file, title_plot = \
-        resultAnalysis.case_full_dataset(name_models_classification, dataset_name, standardize=standardize, normalize=normalize,
-                                         classification=classification,
-                                         multilabel=multilabel)
+            resultAnalysis.case_full_dataset(name_models_classification, dataset_name, standardize=standardize,
+                                             normalize=normalize,
+                                             classification=classification,
+                                             multilabel=multilabel)
     else:
-     X, Y, scoring, name_setting_file, name_radar_plot_file, title_radar_plot = \
-         resultAnalysis.case_NaN_dataset(name_models_regression, dataset_name, strategy, seed,nan_percentage, classification=classification,
-                               multilabel=multilabel)
+        X, Y, scoring, name_setting_file, name_radar_plot_file, title_radar_plot = \
+            resultAnalysis.case_NaN_dataset(name_models_regression, dataset_name, strategy, seed, nan_percentage,
+                                            classification=classification,
+                                            multilabel=multilabel)
 
     if classification:
         training(X, Y, name_models_classification, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,
