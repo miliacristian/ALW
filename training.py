@@ -9,7 +9,7 @@ from sklearn.svm import SVC, SVR
 import scoringUtils
 import numpy as np
 from __init__ import printValue
-from __init__ import model_setting_test_dir,regression_model_settings_dir,classification_model_settings_dir
+from __init__ import model_setting_test_dir, regression_model_settings_dir, classification_model_settings_dir
 from time import time
 import os
 import main
@@ -713,7 +713,7 @@ def build_models(name_models, file_name):
     return models
 
 
-def read_setting(file_name,classification):
+def read_setting(file_name, classification):
     """
     Return the best scoring of a test
     :param file_name:name of settings file
@@ -724,7 +724,7 @@ def read_setting(file_name,classification):
     if classification:
         fl = open(path + classification_model_settings_dir + file_name, "r")  # aggiungere path
     else:
-        fl = open(path + regression_model_settings_dir+ file_name, "r")  # aggiungere path
+        fl = open(path + regression_model_settings_dir + file_name, "r")  # aggiungere path
     setting = {}
     while 1:
         line = fl.readline()
