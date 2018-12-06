@@ -333,7 +333,8 @@ def K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=True):
     return result
 
 
-def table_plot(dict_name_scoring, list_dict_scores, list_name_model, file_name='prova', file_format=".png"):
+def table_plot(dict_name_scoring, list_dict_scores, list_name_model, title_table_plot="title",
+               file_name='prova', file_format=".png"):
     """
     Create table for regression result
     :param dict_name_scoring: dictionary with name of scoring
@@ -343,26 +344,27 @@ def table_plot(dict_name_scoring, list_dict_scores, list_name_model, file_name='
     :param file_format: format of file
     """
     path = os.path.abspath('') + __init__.table_plot_regression_dir + file_name + file_format
+    print(title_table_plot)
+    title_table_plot = title_table_plot.replace('\n', " - ")
+    print(title_table_plot)
     dict = {}
     for key, value in dict_name_scoring.items():
         if type(value) is str:
-            dict[value] = {}
+            dict[(title_table_plot, value)] = {}
         else:
-            dict[str(value)[12:-19]] = {}
+            dict[(title_table_plot, str(value)[12:-19])] = {}
     for i in range(len(list_dict_scores)):
         for key, value in dict_name_scoring.items():
             if type(value) is str:
-                dict[value][list_name_model[i]] = list_dict_scores[i][value]
+                dict[(title_table_plot, value)][list_name_model[i]] = list_dict_scores[i][value]
             else:
-                dict[str(value)[12:-19]][list_name_model[i]] = list_dict_scores[i][str(value)[12:-1]]
+                dict[(title_table_plot, str(value)[12:-19])][list_name_model[i]] = list_dict_scores[i][str(value)[12:-1]]
 
     table = pd.DataFrame(dict)
 
     cm = sns.light_palette("seagreen", as_cmap=True)
     styled_table = table.style.background_gradient(cmap=cm)
     html = styled_table.render()
-
-    print(path)
     imgkit.from_string(html, path)
 
 

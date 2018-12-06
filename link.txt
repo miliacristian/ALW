@@ -71,10 +71,15 @@ in teoria se non esistono variabili da predirre si può fare regressione su qual
 	- scrivere relazione
 	- preparare la presentazione
 	- eliminare cartella model_setting_test
-	- formattare i commenti entro i margini
-	- commentare funzioni da riga 10 a 79 in file main.py
-	- vedere parti di codice inutilizzate(es radarplot_regression_dir in init.py)
-	- completare docstring(mancano i commenti sui parametri e sui valori di ritorno) da riga 1 fino a riga 91 nel file scoringUtils.py
-	- rivedere tutti i file ed eliminare codice commentato
+	- formattare i commenti entro i margini -> cri
+	- commentare funzioni da riga 10 a 79 in file main.py -> ema
+	- vedere parti di codice inutilizzate(es radarplot_regression_dir in init.py) -> cri
+	- completare docstring(mancano i commenti sui parametri e sui valori di ritorno) da riga 1 fino a riga 91 nel file scoringUtils.py -> ema
+	- rivedere tutti i file ed eliminare codice commentato -> cri
 	- cosa fa e dove è utilizzata la funzione build_models riga 648 file training?
-	- sistemare nomi label delle tabelle
+	- fare training dataset regression
+		airfoil 1500 -> ema
+		auto 400 -> ema
+		energy 800 -> ema
+		plant 9500 -> cri
+		compressive 1000 -> ema

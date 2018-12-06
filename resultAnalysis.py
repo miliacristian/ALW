@@ -8,7 +8,7 @@ import __init__
 
 
 def create_plot_istance(name_models, scoring, setting_file_name, name_plot_file, classification=True,
-                        title_radar_plot=""):
+                        title_plot=""):
     list_scores = []
     list_names = []
     setting = training.read_setting(setting_file_name, classification)
@@ -21,9 +21,9 @@ def create_plot_istance(name_models, scoring, setting_file_name, name_plot_file,
 
     if classification:
         scoringUtils.radar_plot(list_names, scoring, list_scores, file_name=name_plot_file,
-                                classification=classification, title_radar_plot=title_radar_plot)
+                                classification=classification, title_radar_plot=title_plot)
     else:
-        scoringUtils.table_plot(scoring, list_scores, list_names, file_name=name_plot_file)
+        scoringUtils.table_plot(scoring, list_scores, list_names, title_table_plot=title_plot, file_name=name_plot_file)
 
 
 def create_plot(dataset_names, name_models, classification=True):
@@ -38,7 +38,7 @@ def create_plot(dataset_names, name_models, classification=True):
                     case_full_dataset(name_models, dataset_name, standardize=stand, normalize=norm,
                                       classification=classification)
                 create_plot_istance(name_models, scoring, name_setting_file, name_plot_file,
-                                    classification=classification, title_radar_plot=title_radar_plot)
+                                    classification=classification, title_plot=title_radar_plot)
 
 
 def create_plot_NaN(dataset_names, name_models, percentuals_NaN):
@@ -88,7 +88,7 @@ def create_plot_NaN_cycle(dataset_name, name_models, percentuals_NaN, strategies
                 case_NaN_dataset(name_models, dataset_name, strategy=strategy, seed=seed, perc_NaN=perc_NaN,
                                  classification=classification)
             create_plot_istance(name_models, scoring, name_setting_file, name_radar_plot_file,
-                                classification=classification, title_radar_plot=title_radar_plot)
+                                classification=classification, title_plot=title_radar_plot)
 
 
 def case_full_dataset(name_models, dataset_name, standardize=False, normalize=False, classification=True,
