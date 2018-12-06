@@ -7,20 +7,24 @@ import pandas as pd
 from math import pi, sqrt
 from scipy.stats import hmean
 from sklearn import model_selection
-from __init__ import radar_plot_classification_dir, radar_plot_regression_dir
+from __init__ import radar_plot_classification_dir
 import warnings
 import os
 from numpy import mean
+import seaborn as sns
+import imgkit
 import training
+import __init__
+from resultAnalysis import case_full_dataset
 from __init__ import weight_explained_variance, weight_neg_mean_absolute_error, weight_neg_mean_squared_error, weight_r2
 
 
 def roc_auc_micro(y_true, y_pred):
     """
     Call roc_auc_score function with average=micro
-    :param y_true:
-    :param y_pred:
-    :return:
+    :param y_true: true value
+    :param y_pred: predicted value
+    :return: roc_auc score
     """
     return metrics.roc_auc_score(y_true, y_pred, average="micro")
 
@@ -28,8 +32,8 @@ def roc_auc_micro(y_true, y_pred):
 def roc_auc_weighted(y_true, y_pred):
     """
     Call roc_auc_score function with average=weighted
-    :param y_true:
-    :param y_pred:
+    :param y_true: true value
+    :param y_pred: predicted value
     :return:
     """
     return metrics.roc_auc_score(y_true, y_pred, average="weighted")
@@ -206,10 +210,7 @@ def radar_plot(name_models, dict_name_scoring, list_dict_scores, file_name="rada
 
     # plt.show()
     path = os.path.abspath('')
-    if classification:
-        fig.savefig(path + radar_plot_classification_dir + file_name + file_format)
-    else:
-        fig.savefig(path + radar_plot_regression_dir + file_name + file_format)
+    fig.savefig(path + radar_plot_classification_dir + file_name + file_format)
     plt.close(fig)
 
 
@@ -331,3 +332,47 @@ def K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=True):
                 result[name] = scores['test_' + str(value)[12:-1]]
     return result
 
+
+def table_plot(dict_name_scoring, list_dict_scores, list_name_model, file_name='prova', file_format=".png"):
+
+    path = os.path.abspath('') + __init__.table_plot_regression_dir + file_name + file_format
+    dict = {}
+    for key, value in dict_name_scoring.items():
+        if type(value) is str:
+            dict[value] = {}
+        else:
+            dict[str(value)[12:-1]] = {}
+    for i in range(len(list_dict_scores)):
+        for key, value in dict_name_scoring.items():
+            if type(value) is str:
+                dict[value][list_name_model[i]] = list_dict_scores[i][value]
+            else:
+                dict[str(value)[12:-1]][list_name_model[i]] = list_dict_scores[i][str(value)[12:-1]]
+
+    table = pd.DataFrame(dict)
+
+    cm = sns.light_palette("seagreen", as_cmap=True)
+    styled_table = table.style.background_gradient(cmap=cm)
+    html = styled_table.render()
+
+    print(path)
+    imgkit.from_string(html, path)
+
+
+if __name__ == "__main__":
+    seed = 100
+    name_models_regression = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
+    X, Y, scoring, name_setting_file, name_radar_plot_file, title_radar_plot = \
+        case_full_dataset(name_models_regression, __init__.auto, standardize=False, normalize=False,
+                                      classification=False)
+    list_scores = []
+    list_names = []
+    setting = training.read_setting(name_setting_file, classification=False)
+    for m in name_models_regression:
+        scores = {}
+        for s in scoring:
+            scores[s] = float(setting[s + "_" + m])
+        list_names.append(m)
+        list_scores.append(scores)
+
+    table_plot(scoring, list_scores, list_names, file_name=name_radar_plot_file)

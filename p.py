@@ -52,4 +52,4 @@ if __name__== '__main__':
     styled_table = table.style.background_gradient(cmap=cm)
     html = styled_table.render()
 
-    imgkit.from_string(html, 'styled_table.png')
+    imgkit.from_string(html, 'styled_table.jpeg')

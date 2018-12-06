@@ -483,11 +483,3 @@ def one_hot_encoding(Y):
     Y_onehot_encoded = onehot_encoder.fit_transform(integer_encoded)
     inverted = label_encoder.inverse_transform(integer_encoded)
     return Y_onehot_encoded
-
-
-if __name__ == '__main__':
-    X = numpy.array([[1], [numpy.nan], [1], [5]])
-    imputer = Imputer(strategy="most_frequent")
-    X[:, 0]
-    print(imputer.fit_transform(X[:, 0].reshape(-1, 1))[:, 0])
-    print(X)
