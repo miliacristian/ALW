@@ -11,7 +11,7 @@ def create_radar_plot_istance(name_models, scoring, setting_file_name, radar_plo
                               title_radar_plot=""):
     list_scores = []
     list_names = []
-    setting = training.read_setting(setting_file_name)
+    setting = training.read_setting(setting_file_name,classification)
     for m in name_models:
         scores = {}
         for s in scoring:
