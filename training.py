@@ -853,8 +853,7 @@ mode = 'mode'
 if __name__ == '__main__':
     seed = 100
     name_models_classification = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
-    # name_models_regression = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
-    name_models_regression = [__init__.knr]
+    name_models_regression = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
     dataset_name = __init__.auto
     classification = is_a_classification_dataset(dataset_name)
     multilabel = is_a_multilabel_dataset(dataset_name)
