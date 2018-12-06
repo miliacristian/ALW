@@ -11,7 +11,7 @@ def create_radar_plot_istance(name_models, scoring, setting_file_name, radar_plo
                               title_radar_plot=""):
     list_scores = []
     list_names = []
-    setting = training.read_setting(setting_file_name,classification)
+    setting = training.read_setting(setting_file_name, classification)
     for m in name_models:
         scores = {}
         for s in scoring:
@@ -23,6 +23,7 @@ def create_radar_plot_istance(name_models, scoring, setting_file_name, radar_plo
 
     scoringUtils.radar_plot(list_names, scoring, list_scores, file_name=radar_plot_file_name,
                             classification=classification, title_radar_plot=title_radar_plot)
+
 
 def create_radar_plot(dataset_names, name_models, classification=True):
     for dataset_name in dataset_names:
@@ -88,6 +89,7 @@ def create_radar_plot_NaN_cycle(dataset_name, name_models, percentuals_NaN, stra
             create_radar_plot_istance(name_models, scoring, name_setting_file, name_radar_plot_file,
                                       classification=classification, title_radar_plot=title_radar_plot)
 
+
 def case_full_dataset(name_models, dataset_name, standardize=False, normalize=False, classification=True,
                       multilabel=False):
     """
@@ -130,12 +132,12 @@ def case_full_dataset(name_models, dataset_name, standardize=False, normalize=Fa
     else:
         scoring = scoringUtils.create_dictionary_regression_scoring()
 
-    # if scoringUtils.getBestModel(name_models, name_setting_file,classification) == __init__.rand_forest:
-    #     title_radar_plot += "Best model: RF"
-    # elif scoringUtils.getBestModel(name_models, name_setting_file,classification) == __init__.rand_forest_regressor:
-    #     title_radar_plot += "Best model: RFRegressor"
-    # else:
-    #     title_radar_plot += "Best model: " + scoringUtils.getBestModel(name_models, name_setting_file,classification)
+    if scoringUtils.getBestModel(name_models, name_setting_file, classification) == __init__.rand_forest:
+        title_radar_plot += "Best model: RF"
+    elif scoringUtils.getBestModel(name_models, name_setting_file, classification) == __init__.rand_forest_regressor:
+        title_radar_plot += "Best model: RFRegressor"
+    else:
+        title_radar_plot += "Best model: " + scoringUtils.getBestModel(name_models, name_setting_file, classification)
 
     return X, Y, scoring, name_setting_file, name_radar_plot_file, title_radar_plot
 
@@ -194,19 +196,23 @@ def case_NaN_dataset(name_models, dataset_name, strategy, seed=100, perc_NaN=0.1
     else:
         scoring = scoringUtils.create_dictionary_regression_scoring()
 
-    if scoringUtils.getBestModel(name_models, name_setting_file,classification) == __init__.rand_forest:
+    if scoringUtils.getBestModel(name_models, name_setting_file, classification) == __init__.rand_forest:
         title_radar_plot += "Best model: RF"
-    elif scoringUtils.getBestModel(name_models, name_setting_file,classification) == __init__.rand_forest_regressor:
+    elif scoringUtils.getBestModel(name_models, name_setting_file, classification) == __init__.rand_forest_regressor:
         title_radar_plot += "Best model: RFRegressor"
     else:
-        title_radar_plot += "Best model: " + scoringUtils.getBestModel(name_models, name_setting_file,classification)
+        title_radar_plot += "Best model: " + scoringUtils.getBestModel(name_models, name_setting_file, classification)
 
     return X, Y, scoring, name_setting_file, name_radar_plot_file, title_radar_plot
 
 
-
-
 if __name__ == '__main__':
+    """
+        It takes best models' settings from files in directories regression_model_settings and 
+        classification_model_settings to create the radar_plots of all classification best models and the tables of 
+        all regression best models.
+    """
+
     seed = 100
     name_models_classification = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
     dataset_names_classification = [__init__.seed, __init__.tris, __init__.zoo, __init__.balance, __init__.eye,

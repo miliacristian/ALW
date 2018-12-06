@@ -5,3 +5,4 @@ explained_variance_KNR 0.7238739597905428
 neg_mean_absolute_error_uniform_average_KNR -2.963320630366328
 neg_mean_squared_error_uniform_average_KNR -16.46066978422671
 r2_KNR 0.7178100258629253
+total_score_KNR 11.829367623901106

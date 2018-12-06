@@ -4,7 +4,7 @@ from sklearn.metrics import make_scorer
 import matplotlib.pyplot as plt
 import matplotlib.text
 import pandas as pd
-from math import pi
+from math import pi, sqrt
 from scipy.stats import hmean
 from sklearn import model_selection
 from __init__ import radar_plot_classification_dir, radar_plot_regression_dir
@@ -12,6 +12,7 @@ import warnings
 import os
 from numpy import mean
 import training
+from __init__ import weight_explained_variance, weight_neg_mean_absolute_error, weight_neg_mean_squared_error, weight_r2
 
 
 def roc_auc_micro(y_true, y_pred):
@@ -64,6 +65,7 @@ def neg_mean_absolute_error_uniform_average(y_true, y_pred):
 
     return -metrics.mean_absolute_error(y_true, y_pred, multioutput='uniform_average')
 
+
 def neg_median_absolute_error_uniform_average(y_true, y_pred):
     """
     Call neg_median_absolute_error function with multioutput='uniform_average'
@@ -92,7 +94,6 @@ def neg_mean_squared_error_uniform_average(y_true, y_pred):
     """
 
     return -metrics.mean_squared_error(y_true, y_pred, multioutput='uniform_average')
-
 
 
 def create_dictionary_classification_scoring():
@@ -264,23 +265,31 @@ def total_score_regression(dict_name_scoring, dict_scores):
     """
 
     print(dict_scores)
-    values = scores_to_list(dict_name_scoring, dict_scores)
-    min_value, max_value = -100, 1
-    result = 0
-    for e in values:
-        normalize_value = (e - min_value) / (max_value - min_value)
-        result += normalize_value
+    # values = scores_to_list(dict_name_scoring, dict_scores)
+    # min_value, max_value = -100, 1
+    # result = 0
+    # for e in values:
+    #     normalize_value = (e - min_value) / (max_value - min_value)
+    #     result += normalize_value
+    if dict_scores['neg_mean_squared_error_uniform_average'] < 0:
+        RMSE = -sqrt(-dict_scores['neg_mean_squared_error_uniform_average'])
+    else:
+        RMSE = sqrt(dict_scores['neg_mean_squared_error_uniform_average'])
+    result = dict_scores['explained_variance'] * weight_explained_variance + \
+             dict_scores['r2'] * weight_r2 + \
+             RMSE * weight_neg_mean_squared_error + \
+             dict_scores['neg_mean_absolute_error_uniform_average'] * weight_neg_mean_absolute_error
     return result
 
 
-def getBestModel(name_models, file_name,classification):
+def getBestModel(name_models, file_name, classification):
     """
     Read from file the best model for this setting
     :param name_models:name models
     :param file_name:filename
     :return:best_model readed from file
     """
-    settings_dict = training.read_setting(file_name,classification)
+    settings_dict = training.read_setting(file_name, classification)
     best_model = ""
     if not settings_dict:
         return best_model
@@ -322,35 +331,3 @@ def K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=True):
                 result[name] = scores['test_' + str(value)[12:-1]]
     return result
 
-
-def comparingFunction(m_A, m_B):
-    """
-    Applying formula (m_A-m_B)/(|m_A|+|m_B|)
-    :param m_A: metric regressor A
-    :param m_B: metric regressor B
-    :return: (m_A-m_B)/(|m_A|+|m_B|)
-    """
-    return (m_A - m_B) / (abs(m_A) + abs(m_B))
-
-
-def compareRegressorScores(best_scores, result, dict_name_scoring):
-    """
-    Compare best_scores with result from two different regressor using the formula
-    sum{i in list of metrics} {(mi_A - mi_B)/(|mi_A| + |mi_B|)},
-    where mi_A is the scores of metrics i with regressor A and mi_B is the scores of metrics i with regressor B
-    :param best_scores: list of scores of actual best regressor
-    :param result: list of scores of new regressor
-    :param dict_name_scoring: dict with scoring's name
-    :return: True if the new regressor is better, False otherwise
-    """
-    if best_scores is None:
-        return True
-    best_values = scores_to_list(dict_name_scoring, best_scores)
-    new_values = scores_to_list(dict_name_scoring, result)
-    result = 0
-    for i in range(len(best_values)):
-        result += comparingFunction(best_values[i], new_values[i])
-
-    if result >= 0:
-        return False
-    return True
