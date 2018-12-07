@@ -54,3 +54,6 @@ weight_explained_variance = 20
 weight_r2 = 20
 weight_neg_mean_absolute_error = 3
 weight_neg_mean_squared_error = 2
+
+training='training'
+result_analysis='result_analysis'

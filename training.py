@@ -838,7 +838,7 @@ def check_strategies(dataset_name, strategy):
 
 
 if __name__ == '__main__':
-    dataset_name = __init__.auto  # dataset to train
+    dataset_name = __init__.power_plant  # dataset to train
     case_full_dataset = True  # if true we work with full dataset,else work with nan dataset
     standardize = False  # considered only if case_full_dataset is true
     normalize = False  # considered only if case_full_dataset is true
@@ -854,16 +854,16 @@ if __name__ == '__main__':
     classification = is_a_classification_dataset(dataset_name)
     multilabel = is_a_multilabel_dataset(dataset_name)
     if case_full_dataset:
-        X, Y, scoring, name_setting_file, name_plot_file, title_plot = \
+        X, Y, scoring, name_setting_file,name_plot_file, title_plot= \
             resultAnalysis.case_full_dataset(name_models_classification, dataset_name, standardize=standardize,
                                              normalize=normalize,
                                              classification=classification,
-                                             multilabel=multilabel)
+                                             multilabel=multilabel,mode=__init__.training)
     else:
-        X, Y, scoring, name_setting_file, name_radar_plot_file, title_radar_plot = \
+        X, Y, scoring, name_setting_file,name_plot_file, title_plot = \
             resultAnalysis.case_NaN_dataset(name_models_regression, dataset_name, strategy, seed, nan_percentage,
                                             classification=classification,
-                                            multilabel=multilabel)
+                                            multilabel=multilabel,mode=__init__.training)
 
     if classification:
         training(X, Y, name_models_classification, scoring, k=k_range, list_n_trees=n_trees_range, seed=seed,

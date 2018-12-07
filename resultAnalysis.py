@@ -36,7 +36,7 @@ def create_plot(dataset_names, name_models, classification=True):
                     print("Cycle with dataset =", dataset_name + ", standardize =", stand, "and normalize =", norm)
                 X, Y, scoring, name_setting_file, name_plot_file, title_radar_plot = \
                     case_full_dataset(name_models, dataset_name, standardize=stand, normalize=norm,
-                                      classification=classification)
+                                      classification=classification,mode=__init__.result_analysis)
                 create_plot_istance(name_models, scoring, name_setting_file, name_plot_file,
                                     classification=classification, title_plot=title_radar_plot)
 
@@ -86,13 +86,13 @@ def create_plot_NaN_cycle(dataset_name, name_models, percentuals_NaN, strategies
                       strategy)
             X, Y, scoring, name_setting_file, name_radar_plot_file, title_radar_plot = \
                 case_NaN_dataset(name_models, dataset_name, strategy=strategy, seed=seed, perc_NaN=perc_NaN,
-                                 classification=classification)
+                                 classification=classification,mode=__init__.result_analysis)
             create_plot_istance(name_models, scoring, name_setting_file, name_radar_plot_file,
                                 classification=classification, title_plot=title_radar_plot)
 
 
 def case_full_dataset(name_models, dataset_name, standardize=False, normalize=False, classification=True,
-                      multilabel=False):
+                      multilabel=False,mode='training'):
     """
     Do testing in the case of classification/regression with full dataset.
     :param dataset_name: name of dataset use
@@ -135,19 +135,18 @@ def case_full_dataset(name_models, dataset_name, standardize=False, normalize=Fa
         scoring = scoringUtils.create_dictionary_classification_scoring()
     else:
         scoring = scoringUtils.create_dictionary_regression_scoring()
-
-    if scoringUtils.getBestModel(name_models, name_setting_file, classification) == __init__.rand_forest:
-        title_plot += "Best model: RF"
-    elif scoringUtils.getBestModel(name_models, name_setting_file, classification) == __init__.rand_forest_regressor:
-        title_plot += "Best model: RFRegressor"
-    else:
-        title_plot += "Best model: " + scoringUtils.getBestModel(name_models, name_setting_file, classification)
-
+    if mode == __init__.result_analysis:
+        if scoringUtils.getBestModel(name_models, name_setting_file, classification) == __init__.rand_forest:
+            title_plot += "Best model: RF"
+        elif scoringUtils.getBestModel(name_models, name_setting_file, classification) == __init__.rand_forest_regressor:
+            title_plot += "Best model: RFRegressor"
+        else:
+            title_plot += "Best model: " + scoringUtils.getBestModel(name_models, name_setting_file, classification)
     return X, Y, scoring, name_setting_file, name_plot_file, title_plot
 
 
 def case_NaN_dataset(name_models, dataset_name, strategy, seed=100, perc_NaN=0.1, classification=True,
-                     multilabel=False):
+                     multilabel=False,mode='training'):
     """
     Do testing in the case of classification with dataset having value NaN.
     :param dataset_name: name of dataset use
@@ -202,14 +201,13 @@ def case_NaN_dataset(name_models, dataset_name, strategy, seed=100, perc_NaN=0.1
         scoring = scoringUtils.create_dictionary_classification_scoring()
     else:
         scoring = scoringUtils.create_dictionary_regression_scoring()
-
-    if scoringUtils.getBestModel(name_models, name_setting_file, classification) == __init__.rand_forest:
-        title_plot += "Best model: RF"
-    elif scoringUtils.getBestModel(name_models, name_setting_file, classification) == __init__.rand_forest_regressor:
-        title_plot += "Best model: RFRegressor"
-    else:
-        title_plot += "Best model: " + scoringUtils.getBestModel(name_models, name_setting_file, classification)
-
+    if mode==__init__.result_analysis:
+        if scoringUtils.getBestModel(name_models, name_setting_file, classification) == __init__.rand_forest:
+            title_plot += "Best model: RF"
+        elif scoringUtils.getBestModel(name_models, name_setting_file, classification) == __init__.rand_forest_regressor:
+            title_plot += "Best model: RFRegressor"
+        else:
+            title_plot += "Best model: " + scoringUtils.getBestModel(name_models, name_setting_file, classification)
     return X, Y, scoring, name_setting_file, name_plot_file, title_plot
 
 
