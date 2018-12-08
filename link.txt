@@ -30,10 +30,6 @@ in teoria se non esistono variabili da predirre si può fare regressione su qual
     energy --> index 4, 5, 6, 7 + mean/median, eliminate_row
 
    -    REGRESSIONE:
-        -   aggiustare dataset  energy (sembra fattibile. multilabel ?, anche se supportato dalle metriche sembra)
-                                com (ok),
-                                auto (ok, attenzione valori mancanti),
-                                airfull (ok)
         -   scegliere modelli:  SVR (idem SVC per regressione),
                                 KNeighborsRegressor (KNN per regressione),
                                 RadiusNeighborsRegressor (idem KNN ma non vede i K elementi più vicini,
