@@ -1,23 +1,10 @@
 link documento word condiviso:
  https://drive.google.com/open?id=1Zjj1wYKzFirIboGaJ9OLSTUKZlPfEqawaxehFHtSugk
 
-passare alla funzione load dataset i booleani standardized e normalized per caricare un dataset e renderlo normalizato/standardizzato
-ha senso rendere un dataset sia normalizzato sia standardizzato?
-
-i warning non sono spariti?sono attivi i warning ignore?
-def fxn()://devono stare necessariamente in 2 file??
-    warnings.warn("Undefined metric", UndefinedMetricWarning)
-
-
-with warnings.catch_warnings()://devono stare necessariamente in 2 file??
-    warnings.simplefilter("ignore")
-    fxn()
-
 http://scikit-learn.org/0.18/auto_examples/missing_values.html #missign value scikit learn
 http://scikit-learn.org/dev/modules/impute.html
 http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.Imputer.html
 https://machinelearningmastery.com/handle-missing-data-python/ #master machine learning
-
 https://www.datacamp.com/community/tutorials/random-forests-classifier-python#findingfeatures link per vedere l'importanza delle features
 
 in teoria se non esistono variabili da predirre si può fare regressione su qualsiasi variabile continua(sfruttando le altre?)
@@ -29,11 +16,7 @@ in teoria se non esistono variabili da predirre si può fare regressione su qual
         -   dataset con NaN (rimuovi righe con NaN, stategia media, mediana, moda)
             dataset con NaN generati con percentuali di NaN pari a 0.05, 0.1, 0.15.
 
-    Che radar plot creiamo? esempio, RF al variare della strategia usata per il filling?
-
-    problema: dataset piccoli (seed e zoo), strategia eliminate_row da problemi con KNN (Fold con pochissimi elementi)
-
-    balance --> all    FATTO
+    balance --> all
     eye --> mean, median, eliminate_row
     page --> mean, median, eliminate_row
     seed --> mean, median  FATTO
@@ -61,8 +44,6 @@ in teoria se non esistono variabili da predirre si può fare regressione su qual
         -   scegliere metriche: 'explained_variance' (tra -inf e 1),
                                 'neg_mean_absolute_error' (tra -inf e 0),
                                 'neg_mean_squared_error' (tra -inf e 0),
-                                'neg_mean_squared_log_error',
-                                'neg_median_absolute_error',
                                 'r2' (tra -inf e 0)
 
 #TODO
@@ -84,5 +65,4 @@ in teoria se non esistono variabili da predirre si può fare regressione su qual
 		airfoil 1500 -> ema
 		auto 400 -> ema
 		energy 800 -> ema
-		plant 9500 -> cri
 		compressive 1000 -> ema
