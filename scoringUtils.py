@@ -23,7 +23,8 @@ def roc_auc_micro(y_true, y_pred):
     Call roc_auc_score function with average=micro
     :param y_true: true value
     :param y_pred: predicted value
-    :return: roc_auc score
+    :return: roc_auc score with micro strategy: Calculate metrics globally by considering each element of the label
+            indicator matrix as a label
     """
     return metrics.roc_auc_score(y_true, y_pred, average="micro")
 
@@ -33,7 +34,8 @@ def roc_auc_weighted(y_true, y_pred):
     Call roc_auc_score function with average=weighted
     :param y_true: true value
     :param y_pred: predicted value
-    :return:
+    :return: roc_auc score with weighted strategy: Calculate metrics for each label, and find their average, weighted
+            by support
     """
     return metrics.roc_auc_score(y_true, y_pred, average="weighted")
 
@@ -41,9 +43,10 @@ def roc_auc_weighted(y_true, y_pred):
 def average_precision_micro(y_true, y_pred):
     """
     Call average_precision_score function with average=micro
-    :param y_true:
-    :param y_pred:
-    :return:
+    :param y_true: true value
+    :param y_pred: predicted value
+    :return: average of precision score with micro strategy: Calculate metrics globally by considering each element
+    of the label indicator matrix as a label
     """
     return metrics.average_precision_score(y_true, y_pred, average="micro")
 
@@ -51,9 +54,10 @@ def average_precision_micro(y_true, y_pred):
 def average_precision_weighted(y_true, y_pred):
     """
     Call average_precision_score function with average=weigthed
-    :param y_true:
-    :param y_pred:
-    :return:
+    :param y_true: true value
+    :param y_pred: predicted value
+    :return: average of precision score with weighted strategy: Calculate metrics for each label, and find their
+    average, weighted by support
     """
     return metrics.average_precision_score(y_true, y_pred, average="weighted")
 
@@ -61,9 +65,9 @@ def average_precision_weighted(y_true, y_pred):
 def neg_mean_absolute_error_uniform_average(y_true, y_pred):
     """
     Call neg_mean_absolute_error function with multioutput='uniform_average'
-    :param y_true:
-    :param y_pred:
-    :return:
+    :param y_true: true value
+    :param y_pred: predicted value
+    :return: the uniform average of negative mean absolute error
     """
 
     return -metrics.mean_absolute_error(y_true, y_pred, multioutput='uniform_average')
@@ -72,9 +76,9 @@ def neg_mean_absolute_error_uniform_average(y_true, y_pred):
 def neg_median_absolute_error_uniform_average(y_true, y_pred):
     """
     Call neg_median_absolute_error function with multioutput='uniform_average'
-    :param y_true:
-    :param y_pred:
-    :return:
+    :param y_true: true value
+    :param y_pred: predicted value
+    :return: the uniform average of negative median absolute error
     """
 
     # case monolabel
@@ -91,9 +95,9 @@ def neg_median_absolute_error_uniform_average(y_true, y_pred):
 def neg_mean_squared_error_uniform_average(y_true, y_pred):
     """
     Call neg_mean_squared_error function with multioutput='uniform_average'
-    :param y_true:
-    :param y_pred:
-    :return:
+    :param y_true: true value
+    :param y_pred: predicted value
+    :return: the uniform average of the negative mean squared error
     """
 
     return -metrics.mean_squared_error(y_true, y_pred, multioutput='uniform_average')

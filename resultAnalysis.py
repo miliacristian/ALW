@@ -9,6 +9,17 @@ import __init__
 
 def create_plot_istance(name_models, scoring, setting_file_name, name_plot_file, classification=True,
                         title_plot=""):
+    """
+    Create one plot (table or radar plot) for a set of models and best settings
+    :param name_models: list with the name of models
+    :param scoring: list of scores used
+    :param setting_file_name: name of file contains the best settings
+    :param name_plot_file: name of the output file
+    :param classification: True if classification case, False if regression case
+    :param title_plot: Title of table or radar plot
+    :return: None
+    """
+    
     list_scores = []
     list_names = []
     setting = training.read_setting(setting_file_name, classification)
@@ -27,6 +38,14 @@ def create_plot_istance(name_models, scoring, setting_file_name, name_plot_file,
 
 
 def create_plot(dataset_names, name_models, classification=True):
+    """
+    Create all plot (table or radar) for a specific set of dataset
+    :param dataset_names: list of dataset's name
+    :param name_models: list of model's name
+    :param classification: True if classification case, False if regression case
+    :return: None
+    """
+    
     for dataset_name in dataset_names:
         for stand in [True, False]:
             for norm in [True, False]:
@@ -42,6 +61,15 @@ def create_plot(dataset_names, name_models, classification=True):
 
 
 def create_plot_NaN(dataset_names, name_models, percentuals_NaN):
+    """
+    Create a plot (table or radar) in the case of dataset with NaN value. In particular decides what strategies use to
+    fill the dataset.
+    :param dataset_names: list of dataset names 
+    :param name_models: list of model used
+    :param percentuals_NaN: percentage of NaN value in dataset
+    :return: None
+    """
+    
     for dataset_name in dataset_names:
         if dataset_name == __init__.balance:
             create_plot_NaN_cycle(dataset_name, name_models, percentuals_NaN,
@@ -79,6 +107,16 @@ def create_plot_NaN(dataset_names, name_models, percentuals_NaN):
 
 
 def create_plot_NaN_cycle(dataset_name, name_models, percentuals_NaN, strategies, classification=True):
+    """
+    Create a particolar istance of plot with strategies decides in function "create_plot_NaN".
+    :param dataset_name: list of dataset name
+    :param name_models: list of model's name
+    :param percentuals_NaN: percentage of NaN value in dataset
+    :param strategies: list of strategies use to fill dataset
+    :param classification: True if classification case, False if regression case
+    :return: None
+    """
+    
     for perc_NaN in percentuals_NaN:
         for strategy in strategies:
             if printValue:
