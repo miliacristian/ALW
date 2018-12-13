@@ -1,9 +1,0 @@
-seed 100
-n_split 10
-best_n_trees 13
-best_max_features 1
-best_k 4
-best_C 100.0
-best_degree 0
-best_gamma 0.1
-best_kernel rbf

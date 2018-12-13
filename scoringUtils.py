@@ -349,21 +349,3 @@ def table_plot(dict_name_scoring, list_dict_scores, list_name_model, title_table
     styled_table = table.style.background_gradient(cmap=cm)
     html = styled_table.render()
     imgkit.from_string(html, path)
-
-# if __name__ == "__main__":
-#     seed = 100
-#     name_models_regression = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
-#     X, Y, scoring, name_setting_file, name_radar_plot_file, title_radar_plot = \
-#         case_full_dataset(name_models_regression, __init__.auto, standardize=False, normalize=False,
-#                                       classification=False)
-#     list_scores = []
-#     list_names = []
-#     setting = training.read_setting(name_setting_file, classification=False)
-#     for m in name_models_regression:
-#         scores = {}
-#         for s in scoring:
-#             scores[s] = float(setting[s + "_" + m])
-#         list_names.append(m)
-#         list_scores.append(scores)
-#
-#     table_plot(scoring, list_scores, list_names, file_name=name_radar_plot_file)

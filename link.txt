@@ -46,8 +46,3 @@ in teoria se non esistono variabili da predirre si può fare regressione su qual
 	- link.txt serve per la relazione
 	- scrivere relazione
 	- preparare la presentazione
-	- cosa fa e dove è utilizzata la funzione build_models riga 648 file training?
-	- eliminare p.py
-	- eliminare main scoringUtils.py
-	- eliminare SVC_default_training riga 102 file training.py
-	- eliminare cartella model_setting_test

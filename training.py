@@ -100,37 +100,6 @@ def RANDOMFOREST_training(X, Y, list_n_trees, scoring, seed, n_split, mean):
     return best_n_trees, best_max_features, best_scores, best_total_score
 
 
-# def SVC_default_training(X, Y, scoring, seed, n_split, mean):
-#     """
-#     do the training of a SVC with dataset X, Y and K_Fold_Cross_Validation.
-#  Find the best setting iterating on the type
-#     of kernel function use (linear, rbf, polynomial or sigmoid)
-#     :param X: feature set
-#     :param Y: label set
-#     :param scoring: dict of scoring use
-#     :return: the best parameter C, gamma and degree with the best kernel function
-#     """
-#     if printValue:
-#         print("Start training of SVC")
-#         start_time = time()
-#     best_kernel = None
-#     best_C = None
-#     best_gamma = None
-#     best_degree = None
-#     best_total_score = None
-#
-#     if printValue:
-#         print("Start training of default SVC")
-#         start_time_linear = time()
-#     model = OneVsRestClassifier(SVC(random_state=seed, max_iter=1000))
-#     result = scoringUtils.K_Fold_Cross_validation(model, X, Y, scoring, n_split, seed, mean=mean)
-#     harmonic_mean = scoringUtils.hmean_scores(scoring, result)
-#
-#     if printValue:
-#         print("End training of default SVC after", time() - start_time_linear, "s.")
-#     return best_C, best_degree, best_gamma, best_kernel
-
-
 def SVC_training(X, Y, scoring, seed, n_split, mean):
     """
     do the training of a SVC with dataset X, Y and K_Fold_Cross_Validation. Find the best setting iterating on the type
@@ -639,74 +608,6 @@ def training(X, Y, name_models, scoring, k=[5], list_n_trees=[10], seed=111, n_s
 
     fl.close()
     print("End training after", time() - start_time, "s.")
-
-
-# def build_models(name_models, file_name):
-#     """
-#     build the list of models using the setting specifying in file_name.
-#     :param name_models: name of models used
-#     :param file_name: name of settings file
-#     :return: the list of models training
-#     """
-#     models = {}
-#     path = os.path.abspath('')
-#     if name_models in __init__.list_classification_model:
-#         fl = open(path + classification_model_settings_dir + file_name, "r")
-#     else:
-#         fl = open(path + regression_model_settings_dir + file_name, "r")
-#     settings = {}
-#     while 1:
-#         line = fl.readline()
-#         line = line[:-1]
-#         if len(line) == 0:
-#             break
-#         parameter, value = str.split(line, " ")
-#         settings[parameter] = value
-#
-#     if __init__.dec_tree in name_models:
-#         models[__init__.dec_tree] = DecisionTreeClassifier(random_state=int(settings["seed"]))
-#
-#     if __init__.rand_forest in name_models:
-#         models[__init__.rand_forest] = RandomForestClassifier(random_state=int(settings["seed"]),
-#                                                               max_features=int(settings["best_max_features"]),
-#                                                               n_estimators=int(settings["best_n_trees"]))
-#
-#     if __init__.knn in name_models:
-#         models[__init__.knn] = KNeighborsClassifier(n_neighbors=int(settings["best_k"]), weights='distance')
-#
-#     if __init__.svc in name_models:
-#         if settings["best_gamma"] == "'auto'":
-#             models[__init__.svc] = OneVsRestClassifier(SVC(kernel=settings["best_kernel"], C=float(settings["best_C"]),
-#                                                            degree=int(settings["best_degree"])))
-#         else:
-#             models[__init__.svc] = OneVsRestClassifier(SVC(kernel=settings["best_kernel"], C=float(settings["best_C"]),
-#                                                            gamma=float(settings["best_gamma"]),
-#                                                            degree=int(settings["best_degree"])))
-#     if __init__.dec_tree_regressor in name_models:
-#         models[__init__.dec_tree_regressor] = DecisionTreeRegressor(random_state=int(settings["seed"]))
-#
-#     if __init__.rand_forest_regressor in name_models:
-#         models[__init__.rand_forest_regressor] = RandomForestRegressor(random_state=int(settings["seed"]),
-#                                                                        max_features=int(settings["best_max_features"]),
-#                                                                        n_estimators=int(settings["best_n_trees"]))
-#
-#     if __init__.knr in name_models:
-#         models[__init__.knr] = KNeighborsRegressor(n_neighbors=int(settings["best_k"]), weights='distance')
-#
-#     if __init__.svr in name_models:
-#         if settings["best_gamma"] == "'auto'":
-#             models[__init__.svr] = OneVsRestClassifier(SVR(kernel=settings["best_kernel"], C=float(settings["best_C"]),
-#                                                            degree=int(settings["best_degree"]),
-#                                                            epsilon=float(settings["best_eps"])))
-#         else:
-#             models[__init__.svr] = OneVsRestClassifier(SVR(kernel=settings["best_kernel"], C=float(settings["best_C"]),
-#                                                            gamma=float(settings["best_gamma"]),
-#                                                            degree=int(settings["best_degree"]),
-#                                                            epsilon=float(settings["best_eps"])))
-#
-#     fl.close()
-#
-#     return models
 
 
 def read_setting(file_name, classification):

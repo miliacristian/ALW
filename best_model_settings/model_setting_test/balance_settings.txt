@@ -1,9 +1,0 @@
-seed 100
-n_split 10
-accuracy_CART 0.775857654889913
-precision_micro_CART 0.775857654889913
-recall_micro_CART 0.775857654889913
-roc_auc_micro_CART 0.8318932411674347
-f1_micro_CART 0.775857654889913
-average_precision_micro_CART 0.6779612561870627
-total_score_CART 0.7660220451254155
