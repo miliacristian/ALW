@@ -294,7 +294,7 @@ def create_table_classification_analysis():
             table[dataset_name] = {}
         table[dataset_name][strategy] = best_model
 
-    f = open("temp_table_classification.csv", "w")
+    f = open("./tables_for_analysis/temp_table_classification.csv", "w")
     all_strategies = ["full", "normalize", "standardize", "5.0%_eliminate_row", "5.0%_mean", "5.0%_median", "5.0%_mode",
                       "10.0%_eliminate_row", "10.0%_mean", "10.0%_median", "10.0%_mode",
                       "15.0%_eliminate_row", "15.0%_mean", "15.0%_median", "15.0%_mode"]
@@ -309,9 +309,9 @@ def create_table_classification_analysis():
             else:
                 f.write(",")
     f.close()
-    pd.read_csv('temp_table_classification.csv').T.to_csv('table_classification.csv', header=False)
-    os.remove('temp_table_classification.csv')
-    df = pd.read_csv('table_classification.csv')
+    pd.read_csv('./tables_for_analysis/temp_table_classification.csv').T.to_csv('./tables_for_analysis/table_classification.csv', header=False)
+    os.remove('./tables_for_analysis/temp_table_classification.csv')
+    df = pd.read_csv('./tables_for_analysis/table_classification.csv')
     df = df.replace(np.nan, '', regex=True)
     trace = go.Table(
         header=dict(values=list(df.columns),
@@ -322,7 +322,7 @@ def create_table_classification_analysis():
                    align=['center'] * 5)
     )
     data = [trace]
-    plot(data, filename='table_classification.html', image_filename='table_classification', image='jpeg',
+    plot(data, filename='./tables_for_analysis/table_classification.html', image_filename='table_classification', image='jpeg',
          auto_open=False)
 
 def create_table_regression_analysis():
@@ -366,7 +366,7 @@ def create_table_regression_analysis():
             table[dataset_name] = {}
         table[dataset_name][strategy] = best_model
 
-    f = open("temp_table_regression.csv", "w")
+    f = open("./tables_for_analysis/temp_table_regression.csv", "w")
     all_strategies = ["full", "normalize", "standardize", "5.0%_eliminate_row", "5.0%_mean", "5.0%_median",
                       "10.0%_eliminate_row", "10.0%_mean", "10.0%_median",
                       "15.0%_eliminate_row", "15.0%_mean", "15.0%_median"]
@@ -381,9 +381,9 @@ def create_table_regression_analysis():
             else:
                 f.write(",")
     f.close()
-    pd.read_csv('temp_table_regression.csv').T.to_csv('table_regression.csv', header=False)
-    os.remove('temp_table_regression.csv')
-    df = pd.read_csv('table_regression.csv')
+    pd.read_csv('./tables_for_analysis/temp_table_regression.csv').T.to_csv('./tables_for_analysis/table_regression.csv', header=False)
+    os.remove('./tables_for_analysis/temp_table_regression.csv')
+    df = pd.read_csv('./tables_for_analysis/table_regression.csv')
     df = df.replace(np.nan, '', regex=True)
     trace = go.Table(
         header=dict(values=list(df.columns),
@@ -394,7 +394,7 @@ def create_table_regression_analysis():
                    align=['center'] * 5)
     )
     data = [trace]
-    plot(data, filename='table_regression.html', image_filename='table_regression', image='jpeg',
+    plot(data, filename='./tables_for_analysis/table_regression.html', image_filename='table_regression', image='jpeg',
          auto_open=False)
 
 
