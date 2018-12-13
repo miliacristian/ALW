@@ -4,9 +4,14 @@ import dataset
 import training
 import scoringUtils
 from __init__ import setting
-from __init__ import radar_plot, printValue, table_plot
+from __init__ import radar_plot, printValue, table_plot, seed
 import __init__
+import plotly.plotly as py
+import plotly.graph_objs as go
+import plotly.figure_factory as FF
 
+import numpy as np
+import pandas as pd
 
 def create_plot_istance(name_models, scoring, setting_file_name, name_plot_file, classification=True,
                         title_plot=""):
@@ -391,5 +396,10 @@ if __name__ == '__main__':
     # create_plot(dataset_names_regression, name_models_regression, classification=False)
     # create_plot_NaN(dataset_names_regression, name_models_regression, percentuals_NaN)
 
-    create_table_classification_analysis()
-    create_table_regression_analysis()
+    # create_table_classification_analysis()
+    # create_table_regression_analysis()
+
+    # df = pd.read_csv('table_classification.csv')
+    #
+    # sample_data_table = FF.create_table(df.head(), height_constant=50,annotation_offset=.85)
+    # py.iplot(sample_data_table, filename='table_classification')
