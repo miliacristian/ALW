@@ -1,0 +1,7 @@
+classification, full, normalize, standardize, 5.0%_eliminate_row, 5.0%_mean, 5.0%_median, 5.0%_mode, 10.0%_eliminate_row, 10.0%_mean, 10.0%_median, 10.0%_mode, 15.0%_eliminate_row, 15.0%_mean, 15.0%_median, 15.0%_mode
+seed, SVC, SVC, SVC, , SVC, SVC, , , RANDFOREST, RANDFOREST, , , RANDFOREST, SVC, 
+tris, SVC, SVC, SVC, SVC, , , RANDFOREST, RANDFOREST, , , RANDFOREST, RANDFOREST, , , RANDFOREST
+zoo, RANDFOREST, RANDFOREST, RANDFOREST, , , , SVC, , , , SVC, , , , SVC
+balance, SVC, SVC, SVC, SVC, SVC, SVC, SVC, SVC, SVC, SVC, SVC, SVC, SVC, SVC, SVC
+eye, KNN, RANDFOREST, RANDFOREST, KNN, KNN, KNN, , SVC, KNN, KNN, , SVC, KNN, KNN, 
+page, RANDFOREST, RANDFOREST, RANDFOREST, RANDFOREST, RANDFOREST, RANDFOREST, , RANDFOREST, RANDFOREST, RANDFOREST, , RANDFOREST, RANDFOREST, RANDFOREST, 

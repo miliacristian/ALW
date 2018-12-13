@@ -1,3 +1,4 @@
+import os
 import sys
 import dataset
 import training
@@ -249,6 +250,122 @@ def case_NaN_dataset(name_models, dataset_name, strategy, seed=100, perc_NaN=0.1
     return X, Y, scoring, name_setting_file, name_plot_file, title_plot
 
 
+def create_table_classification_analysis():
+    """
+    create a summary table of all best_model in all classification dataset with all strategies
+    :return: create a csv file with the table name table_classification.csv
+    """
+    name_models_classification = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
+    dataset_names_classification = [__init__.seed, __init__.tris, __init__.zoo, __init__.balance, __init__.eye,
+                                    __init__.page]
+    strategies = ['mean', 'eliminate_row', 'mode', 'median']
+    l = os.listdir('./best_model_settings/classification_model_settings')
+    table = {}
+    for name in l:
+        best_model = scoringUtils.getBestModel(name_models_classification, name, classification=True)
+        for dataset in dataset_names_classification:
+            if name.__contains__(dataset):
+                dataset_name = dataset
+        if name.__contains__('normalize'):
+            strategy = "normalize"
+        elif name.__contains__("standardize"):
+            strategy = "standardize"
+        elif name.__contains__('15.0%'):
+            strategy = "15.0%_"
+            for s in strategies:
+                if name.__contains__(s):
+                    strategy += s
+        elif name.__contains__('5.0%'):
+            strategy = "5.0%_"
+            for s in strategies:
+                if name.__contains__(s):
+                    strategy += s
+        elif name.__contains__('10.0%'):
+            strategy = "10.0%_"
+            for s in strategies:
+                if name.__contains__(s):
+                    strategy += s
+        else:
+            strategy = "full"
+        if not dataset_name in table.keys():
+            table[dataset_name] = {}
+        table[dataset_name][strategy] = best_model
+
+    f = open("table_classification.csv", "w")
+    all_strategies = ["full", "normalize", "standardize", "5.0%_eliminate_row", "5.0%_mean", "5.0%_median", "5.0%_mode",
+                      "10.0%_eliminate_row", "10.0%_mean", "10.0%_median", "10.0%_mode",
+                      "15.0%_eliminate_row", "15.0%_mean", "15.0%_median", "15.0%_mode"]
+    f.write("classification")
+    for s in all_strategies:
+        f.write(", " + s)
+    for dataset in dataset_names_classification:
+        f.write("\n" + dataset)
+        for s in all_strategies:
+            if s in table[dataset].keys():
+                f.write(", " + table[dataset][s])
+            else:
+                f.write(", ")
+    f.close()
+
+
+def create_table_regression_analysis():
+    """
+        create a summary table of all best_model in all regression dataset with all strategies
+        :return: create a csv file with the table name table_regression.csv
+        """
+    name_models_regression = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
+    strategies = ['mean', 'eliminate_row', 'median']
+    dataset_names_regression = [__init__.airfoil, __init__.auto, __init__.power_plant, __init__.compress_strength,
+                                __init__.energy]
+    l = os.listdir('./best_model_settings/regression_model_settings')
+    table = {}
+    for name in l:
+        best_model = scoringUtils.getBestModel(name_models_regression, name, classification=False)
+        for dataset in dataset_names_regression:
+            if name.__contains__(dataset):
+                dataset_name = dataset
+        if name.__contains__('normalize'):
+            strategy = "normalize"
+        elif name.__contains__("standardize"):
+            strategy = "standardize"
+        elif name.__contains__('15.0%'):
+            strategy = "15.0%_"
+            for s in strategies:
+                if name.__contains__(s):
+                    strategy += s
+        elif name.__contains__('5.0%'):
+            strategy = "5.0%_"
+            for s in strategies:
+                if name.__contains__(s):
+                    strategy += s
+        elif name.__contains__('10.0%'):
+            strategy = "10.0%_"
+            for s in strategies:
+                if name.__contains__(s):
+                    strategy += s
+        else:
+            strategy = "full"
+        if not dataset_name in table.keys():
+            table[dataset_name] = {}
+        table[dataset_name][strategy] = best_model
+
+    f = open("table_regression.csv", "w")
+    all_strategies = ["full", "normalize", "standardize", "5.0%_eliminate_row", "5.0%_mean", "5.0%_median",
+                      "10.0%_eliminate_row", "10.0%_mean", "10.0%_median",
+                      "15.0%_eliminate_row", "15.0%_mean", "15.0%_median"]
+    f.write("regression")
+    for s in all_strategies:
+        f.write(", " + s)
+    for dataset in dataset_names_regression:
+        f.write("\n" + dataset)
+        for s in all_strategies:
+            if s in table[dataset].keys():
+                f.write(", " + table[dataset][s])
+            else:
+                f.write(", ")
+    f.close()
+
+
 if __name__ == '__main__':
     """
         It takes best models' settings from files in directories regression_model_settings and 
@@ -256,20 +373,23 @@ if __name__ == '__main__':
         all regression best models.
     """
 
-    seed = 100
-    name_models_classification = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
-    dataset_names_classification = [__init__.seed, __init__.tris, __init__.zoo, __init__.balance, __init__.eye,
-                                    __init__.page]
-    name_models_regression = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
-    dataset_names_regression = [__init__.airfoil, __init__.auto, __init__.power_plant, __init__.compress_strength,
-                                __init__.energy]
-    strategies = ['mean', 'eliminate_row', 'mode', 'median']
-    percentuals_NaN = __init__.percentuals_NaN
+    # seed = 100
+    # name_models_classification = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
+    # dataset_names_classification = [__init__.seed, __init__.tris, __init__.zoo, __init__.balance, __init__.eye,
+    #                                 __init__.page]
+    # name_models_regression = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
+    # dataset_names_regression = [__init__.airfoil, __init__.auto, __init__.power_plant, __init__.compress_strength,
+    #                             __init__.energy]
+    # strategies = ['mean', 'eliminate_row', 'mode', 'median']
+    # percentuals_NaN = __init__.percentuals_NaN
+    #
+    # # # Classification
+    # # create_plot(dataset_names_classification, name_models_classification, classification=True)
+    # # create_plot_NaN(dataset_names_classification, name_models_classification, percentuals_NaN)
+    #
+    # # Regression
+    # create_plot(dataset_names_regression, name_models_regression, classification=False)
+    # create_plot_NaN(dataset_names_regression, name_models_regression, percentuals_NaN)
 
-    # # Classification
-    # create_plot(dataset_names_classification, name_models_classification, classification=True)
-    # create_plot_NaN(dataset_names_classification, name_models_classification, percentuals_NaN)
-
-    # Regression
-    create_plot(dataset_names_regression, name_models_regression, classification=False)
-    create_plot_NaN(dataset_names_regression, name_models_regression, percentuals_NaN)
+    create_table_classification_analysis()
+    create_table_regression_analysis()
