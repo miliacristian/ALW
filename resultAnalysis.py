@@ -405,23 +405,23 @@ if __name__ == '__main__':
         all regression best models.
     """
 
-    # seed = 100
-    # name_models_classification = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
-    # dataset_names_classification = [__init__.seed, __init__.tris, __init__.zoo, __init__.balance, __init__.eye,
-    #                                 __init__.page]
-    # name_models_regression = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
-    # dataset_names_regression = [__init__.airfoil, __init__.auto, __init__.power_plant, __init__.compress_strength,
-    #                             __init__.energy]
-    # strategies = ['mean', 'eliminate_row', 'mode', 'median']
-    # percentuals_NaN = __init__.percentuals_NaN
-    #
-    # # # Classification
-    # # create_plot(dataset_names_classification, name_models_classification, classification=True)
-    # # create_plot_NaN(dataset_names_classification, name_models_classification, percentuals_NaN)
-    #
-    # # Regression
-    # create_plot(dataset_names_regression, name_models_regression, classification=False)
-    # create_plot_NaN(dataset_names_regression, name_models_regression, percentuals_NaN)
+    seed = 100
+    name_models_classification = [__init__.rand_forest, __init__.dec_tree, __init__.knn, __init__.svc]
+    dataset_names_classification = [__init__.seed, __init__.tris, __init__.zoo, __init__.balance, __init__.eye,
+                                    __init__.page]
+    name_models_regression = [__init__.rand_forest_regressor, __init__.dec_tree_regressor, __init__.knr, __init__.svr]
+    dataset_names_regression = [__init__.airfoil, __init__.auto, __init__.power_plant, __init__.compress_strength,
+                                __init__.energy]
+    strategies = ['mean', 'eliminate_row', 'mode', 'median']
+    percentuals_NaN = __init__.percentuals_NaN
+
+    # Classification
+    create_plot(dataset_names_classification, name_models_classification, classification=True)
+    create_plot_NaN(dataset_names_classification, name_models_classification, percentuals_NaN)
+
+    # Regression
+    create_plot(dataset_names_regression, name_models_regression, classification=False)
+    create_plot_NaN(dataset_names_regression, name_models_regression, percentuals_NaN)
 
     create_table_classification_analysis()
     create_table_regression_analysis()
