@@ -6,10 +6,8 @@ import scoringUtils
 from __init__ import setting
 from __init__ import radar_plot, printValue, table_plot, seed
 import __init__
-import plotly.plotly as py
 import plotly.graph_objs as go
-import plotly.figure_factory as FF
-
+from plotly.offline import plot
 import numpy as np
 import pandas as pd
 
@@ -296,22 +294,36 @@ def create_table_classification_analysis():
             table[dataset_name] = {}
         table[dataset_name][strategy] = best_model
 
-    f = open("table_classification.csv", "w")
+    f = open("temp_table_classification.csv", "w")
     all_strategies = ["full", "normalize", "standardize", "5.0%_eliminate_row", "5.0%_mean", "5.0%_median", "5.0%_mode",
                       "10.0%_eliminate_row", "10.0%_mean", "10.0%_median", "10.0%_mode",
                       "15.0%_eliminate_row", "15.0%_mean", "15.0%_median", "15.0%_mode"]
     f.write("classification")
     for s in all_strategies:
-        f.write(", " + s)
+        f.write("," + s)
     for dataset in dataset_names_classification:
         f.write("\n" + dataset)
         for s in all_strategies:
             if s in table[dataset].keys():
-                f.write(", " + table[dataset][s])
+                f.write("," + table[dataset][s])
             else:
-                f.write(", ")
+                f.write(",")
     f.close()
-
+    pd.read_csv('temp_table_classification.csv').T.to_csv('table_classification.csv', header=False)
+    os.remove('temp_table_classification.csv')
+    df = pd.read_csv('table_classification.csv')
+    df = df.replace(np.nan, '', regex=True)
+    trace = go.Table(
+        header=dict(values=list(df.columns),
+                    fill=dict(color='#C2D4FF'),
+                    align=['center'] * 5),
+        cells=dict(values=[df.classification, df.seed, df.tris, df.zoo, df.balance, df.eye, df.page],
+                   fill=dict(color='#F5F8FF'),
+                   align=['center'] * 5)
+    )
+    data = [trace]
+    plot(data, filename='table_classification.html', image_filename='table_classification', image='jpeg',
+         auto_open=False)
 
 def create_table_regression_analysis():
     """
@@ -354,21 +366,36 @@ def create_table_regression_analysis():
             table[dataset_name] = {}
         table[dataset_name][strategy] = best_model
 
-    f = open("table_regression.csv", "w")
+    f = open("temp_table_regression.csv", "w")
     all_strategies = ["full", "normalize", "standardize", "5.0%_eliminate_row", "5.0%_mean", "5.0%_median",
                       "10.0%_eliminate_row", "10.0%_mean", "10.0%_median",
                       "15.0%_eliminate_row", "15.0%_mean", "15.0%_median"]
     f.write("regression")
     for s in all_strategies:
-        f.write(", " + s)
+        f.write("," + s)
     for dataset in dataset_names_regression:
         f.write("\n" + dataset)
         for s in all_strategies:
             if s in table[dataset].keys():
-                f.write(", " + table[dataset][s])
+                f.write("," + table[dataset][s])
             else:
-                f.write(", ")
+                f.write(",")
     f.close()
+    pd.read_csv('temp_table_regression.csv').T.to_csv('table_regression.csv', header=False)
+    os.remove('temp_table_regression.csv')
+    df = pd.read_csv('table_regression.csv')
+    df = df.replace(np.nan, '', regex=True)
+    trace = go.Table(
+        header=dict(values=list(df.columns),
+                    fill=dict(color='#C2D4FF'),
+                    align=['center'] * 5),
+        cells=dict(values=[df.regression, df.airfoil, df.auto, df.power_plant, df.compressive_strength, df.energy],
+                   fill=dict(color='#F5F8FF'),
+                   align=['center'] * 5)
+    )
+    data = [trace]
+    plot(data, filename='table_regression.html', image_filename='table_regression', image='jpeg',
+         auto_open=False)
 
 
 if __name__ == '__main__':
@@ -396,10 +423,5 @@ if __name__ == '__main__':
     # create_plot(dataset_names_regression, name_models_regression, classification=False)
     # create_plot_NaN(dataset_names_regression, name_models_regression, percentuals_NaN)
 
-    # create_table_classification_analysis()
-    # create_table_regression_analysis()
-
-    # df = pd.read_csv('table_classification.csv')
-    #
-    # sample_data_table = FF.create_table(df.head(), height_constant=50,annotation_offset=.85)
-    # py.iplot(sample_data_table, filename='table_classification')
+    create_table_classification_analysis()
+    create_table_regression_analysis()
