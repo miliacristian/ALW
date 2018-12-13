@@ -51,9 +51,3 @@ in teoria se non esistono variabili da predirre si può fare regressione su qual
 	- eliminare main scoringUtils.py
 	- eliminare SVC_default_training riga 102 file training.py
 	- eliminare cartella model_setting_test
-
-	- fare training dataset regression
-		airfoil 1500 -> ema
-		auto 400 -> ema
-		energy 800 -> ema
-		compressive 1000 -> ema
