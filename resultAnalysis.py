@@ -319,11 +319,29 @@ def create_table_classification_analysis():
                     align=['center'] * 5),
         cells=dict(values=[df.classification, df.seed, df.tris, df.zoo, df.balance, df.eye, df.page],
                    fill=dict(color='#F5F8FF'),
-                   align=['center'] * 5)
+                   align=['center'] * 5),arg=None,
+        columnorder=None,
+        columnordersrc=None,
+        columnwidth=None,
+        columnwidthsrc=None,
+        customdata=None,
+        customdatasrc=None,
+        domain=None,
+        hoverinfo=['name'],
+        hoverinfosrc='qqq',
+        hoverlabel=None,
+        ids=None,
+        idssrc=None,
+        legendgroup='pop',
+        name='name',
+        opacity=None,
     )
     data = [trace]
-    plot(data, filename='./tables_for_analysis/table_classification.html', image_filename='table_classification', image='jpeg',
-         auto_open=False)
+    layout= dict(
+        title='Summary table classification',
+    )
+    fig = dict(data=[trace], layout=layout)
+    plot(fig,filename='./tables_for_analysis/table_classification.html', image_filename='table_classification', image='jpeg',auto_open=False)
 
 def create_table_regression_analysis():
     """
@@ -394,7 +412,11 @@ def create_table_regression_analysis():
                    align=['center'] * 5)
     )
     data = [trace]
-    plot(data, filename='./tables_for_analysis/table_regression.html', image_filename='table_regression', image='jpeg',
+    layout = dict(
+        title='Summary table regression',
+    )
+    fig = dict(data=[trace], layout=layout)
+    plot(fig, filename='./tables_for_analysis/table_regression.html', image_filename='table_regression', image='jpeg',
          auto_open=False)
 
 
