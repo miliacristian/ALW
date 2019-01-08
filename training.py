@@ -739,12 +739,12 @@ def check_strategies(dataset_name, strategy):
 
 
 if __name__ == '__main__':
-    dataset_name = __init__.energy  # dataset to train
+    dataset_name = __init__.zoo  # dataset to train
     case_full_dataset = False  # if true we work with full dataset,else work with nan dataset
-    standardize = True  # considered only if case_full_dataset is true
+    standardize = False  # considered only if case_full_dataset is true
     normalize = False  # considered only if case_full_dataset is true
     nan_percentage = 0.1  # possible values=[0.05,0.1,0.15]considered only if case_full_dataset is false
-    strategy = 'eliminate_row'  # possible values=['mean','eliminate_row','median','mode']
+    strategy = 'mode'  # possible values=['mean','eliminate_row','median','mode']
     # considered only if case_full_dataset is false
 
     seed = 100
